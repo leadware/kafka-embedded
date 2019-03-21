@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	
+	<!-- Pom model version -->
+	<modelVersion>4.0.0</modelVersion>
+	
+	<!-- Parent Project -->
+	<parent>
+		
+		<!-- Parent group ID -->
+		<groupId>org.springframework.boot</groupId>
+		
+		<!-- Parent artifact ID -->
+		<artifactId>spring-boot-starter-parent</artifactId>
+		
+		<!-- Parent Version -->
+		<version>2.1.3.RELEASE</version>
+		
+		<!-- Parent relative path -->
+		<relativePath/>
+		
+	</parent>
+	
+	<!-- Project group ID -->
+	<groupId>ratp.info.sga</groupId>
+	
+	<!-- Project artifact ID -->
+	<artifactId>kafka-simulator</artifactId>
+	
+	<!-- Project version -->
+	<version>0.0.1-SNAPSHOT</version>
+	
+	<!-- Project name -->
+	<name>kafka-simulator</name>
+	
+	<!-- Project description -->
+	<description>Apache KAFKA Simulator for tes purposes</description>
+	
+	<!-- Project source URL -->
+	<url>git@</url>
+	
+	<!-- Project scm -->
+	<scm>
+		<connection>scm:git@</connection>
+		<developerConnection>scm:git@</developerConnection>
+		<url>git@</url>
+	</scm>
+	
+	<!-- Project issue managment -->
+	<issueManagement>
+		<system>REDMINE</system>
+		<url>https://</url>
+	</issueManagement>
+	
+	<!-- Project Continuous integration system -->
+	<ciManagement>
+		<system>JENKINS</system>
+		<url>https://</url>
+	</ciManagement>
+	
+	<!-- Project organisation -->
+	<organization>
+		<name>RATP</name>
+		<url>http://www.ratp.fr</url>
+	</organization>
+	
+	<!-- Project properties -->
+	<properties>
+		
+		<!-- Enforcer maven Plugin version property -->
+		<maven-enforcer-plugin.version>1.4.1</maven-enforcer-plugin.version>
+		
+		<!-- JRE Source version Property -->
+		<jre-source.version>1.8</jre-source.version>
+		
+		<!-- JRE Target version Property  -->
+		<jre-target.version>1.8</jre-target.version>
+		
+		<!-- Required OS Family -->
+		<os.family>unix</os.family>
+		
+		<!-- Minimal Maven version property -->
+		<maven.version>3.0</maven.version>
+		
+		<!-- Maven compiler plugin version property -->
+		<maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
+		
+		<!-- Maven Javadoc Version property -->
+		<maven-javadoc-plugin.version>3.1.0</maven-javadoc-plugin.version>
+		
+		<!-- Maven Source Plugin Version Property -->
+		<maven-source-plugin.version>3.0.1</maven-source-plugin.version>
+		
+		<!-- m2e lifecycle mapping version property -->
+		<lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
+		
+		<!-- Maven Surefire plugin -->
+		<maven-surefire-plugin.version>2.22.1</maven-surefire-plugin.version>
+		
+		<!-- Maven Failsafe plugin -->
+		<maven-failsafe-plugin.version>2.22.1</maven-failsafe-plugin.version>
+		
+		<!-- Maven Site Plugin Version Property -->
+		<maven-site-plugins.version>3.3</maven-site-plugins.version>
+		
+		<!-- Swagger Version -->
+		<springfox-swagger.version>2.9.2</springfox-swagger.version>
+		
+	</properties>
+	
+	<!-- Project build configuration -->
+	<build>
+		
+		<!-- Plugins Management -->
+		<pluginManagement>
+			
+			<!-- Plugins -->
+			<plugins>
+				
+				<!-- Enforcer Maven plugin -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-enforcer-plugin</artifactId>
+					<version>${maven-enforcer-plugin.version}</version>
+					<executions>
+				    	<execution>
+				    		<id>enforce-maven-3</id>
+				    		<goals>
+				    			<goal>enforce</goal>
+				    		</goals>
+				    		<configuration>
+				    			<rules>
+				    				
+				    				<!-- Required Maven version -->
+				    				<requireMavenVersion>
+				    					<version>${maven.version}</version>
+				    				</requireMavenVersion>
+				    				
+				    				<!-- Required Java version -->
+				    				<requireJavaVersion>
+										<version>${jre-source.version}</version>
+									</requireJavaVersion>
+									
+				    				<!-- Required OS Family -->
+				    				<requireOS>
+										<family>${os.family}</family>
+									</requireOS>
+									
+				    			</rules>
+				    		</configuration>
+				    	</execution>
+				    </executions>
+				</plugin>
+				
+				<!-- Maven Compiler plugin -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>${maven-compiler-plugin.version}</version>
+					<configuration>
+						<source>${jre-source.version}</source>
+						<target>${jre-target.version}</target>
+					</configuration>
+				</plugin>
+				
+				<!-- Maven Source plugin -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-source-plugin</artifactId>
+					<version>${maven-source-plugin.version}</version>
+					<executions>
+				    	<execution>
+				    		<phase>verify</phase>
+				    		<goals>
+				    			<goal>jar-no-fork</goal>
+				    			<goal>test-jar-no-fork</goal>
+				    		</goals>
+				    	</execution>
+				    </executions>
+				</plugin>
+				
+				<!-- Maven Javadoc plugin -->
+				<plugin>
+				    <groupId>org.apache.maven.plugins</groupId>
+				    <artifactId>maven-javadoc-plugin</artifactId>
+				    <version>${maven-javadoc-plugin.version}</version>
+				    <configuration>
+				        <show>private</show>
+				        <nohelp>false</nohelp>
+				    </configuration>
+				    <executions>
+				    	<execution>
+				    		<goals>
+				    			<goal>jar</goal>
+				    		</goals>
+				    	</execution>
+				    </executions>
+				</plugin>
+				
+				<!-- Maven Surefire Plugin -->
+				<plugin>
+					<groupId>org.apache.maven.plugin</groupId>
+					<artifactId>maven-surefire-plugins</artifactId>
+					<version>${maven-surefire-plugin.version}</version>
+					<configuration>
+						<excludes>
+							<exclude>**/*TestIT.java</exclude>
+							<exclude>**/*ITCase.java</exclude>
+						</excludes>
+					</configuration>
+				</plugin>
+				
+				<!-- maven failsafe -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-failsafe-plugin</artifactId>
+					<version>${maven-failsafe-plugin.version}</version>
+					<configuration>
+						<includes>
+							<include>**/*TestIT.java</include>
+							<include>**/*ITCase.java</include>
+						</includes>
+					</configuration>
+				</plugin>
+				
+				<!-- Maven Site Plugin -->
+				<plugin>
+					<groupId>org.apache.maven.plugin</groupId>
+					<artifactId>maven-site-plugins</artifactId>
+					<version>${maven-site-plugins.version}</version>
+				</plugin>
+				
+			</plugins>
+			
+		</pluginManagement>
+		
+		<!-- Plugins -->
+		<plugins>
+					
+			<!-- Enforcer Maven plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+			</plugin>
+			
+			<!-- Maven Compiler plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+			</plugin>
+			
+			<!-- Maven Javadoc plugin -->
+			<plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-javadoc-plugin</artifactId>
+			</plugin>
+			
+			<!-- Maven Surefire Plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugin</groupId>
+				<artifactId>maven-surefire-plugins</artifactId>
+			</plugin>
+			
+			<!-- maven failsafe -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+			</plugin>
+			
+			<!-- Maven Site Plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugin</groupId>
+				<artifactId>maven-site-plugins</artifactId>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+		
+	</build>
+	
+	<!-- Project dependencies -->
+	<dependencies>
+		
+		<!-- Spring Boot Starter dependency -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+		</dependency>
+		
+		<!-- Spring Boot Starter test dependency -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		
+		<!-- Spring Kafka dependency -->
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka</artifactId>
+		</dependency>
+		
+		<!-- Spring Kafka Test dependency -->
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka-test</artifactId>
+		</dependency>
+		
+		<!-- Swagger dependency -->
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>${springfox-swagger.version}</version>
+		</dependency>
+		
+		<!-- Swagger dependency -->
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>${springfox-swagger.version}</version>
+		</dependency>
+		
+	</dependencies>
+	
+</project>

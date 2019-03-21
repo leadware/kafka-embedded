@@ -1,0 +1,51 @@
+.idea/
+.classpath
+.project
+.settings
+.attach*
+.springBeans
+bin/
+*APPLI_LOG_IS_UNDEFINED/
+.mvn
+.gradle
+**/*.DS_Store
+**/target
+# Fichier de configuration personnel
+src/main/resources/application.properties
+src/main/resources/config/dmi/dmi-consumer.properties
+src/main/resources/config/dmi/dmi-topics.properties
+src/main/resources/config/logs/logback-spring.xml
+
+# Cache of project
+.gradletasknamecache
+
+### Gradle template
+.gradle
+/build/
+.idea
+# Ignore Gradle GUI config
+gradle-app.setting
+
+# CMake
+cmake-build-*/
+
+# File-based project format
+*.iws
+
+# IntelliJ
+out/
+
+# mpeltonen/sbt-idea plugin
+.idea_modules/
+
+# JIRA plugin
+atlassian-ide-plugin.xml
+
+# Crashlytics plugin (for Android Studio and IntelliJ)
+com_crashlytics_export_strings.xml
+crashlytics.properties
+crashlytics-build.properties
+fabric.properties
+
+**/build/
+**/*.iml
