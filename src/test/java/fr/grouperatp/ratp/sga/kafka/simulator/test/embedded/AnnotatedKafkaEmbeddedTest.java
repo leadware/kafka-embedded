@@ -23,9 +23,9 @@ import org.springframework.kafka.test.utils.KafkaTestUtils;
 import org.springframework.test.context.junit4.SpringRunner;
 
 /**
- * Test Class for deprecated KafkaEmbedded
- * @author jetune
- *
+ * Classe de test du broker Kafka Embarqué en mode Annotation (SANDBOX)
+ * @author <a href="mailto:jean-jacques.etune-ngi@ratp.fr">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
+ * @since 21 mars 2019 - 08:32:51
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
