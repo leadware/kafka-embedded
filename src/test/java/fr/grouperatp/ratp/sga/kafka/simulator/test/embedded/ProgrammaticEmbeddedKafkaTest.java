@@ -1,3 +1,6 @@
+/**
+ * RATP :: SIT :: I2V :: SGA
+ */
 package fr.grouperatp.ratp.sga.kafka.simulator.test.embedded;
 
 import java.util.Collection;
@@ -82,6 +85,9 @@ public class ProgrammaticEmbeddedKafkaTest {
 		// Set Instances Ports
 		embeddedKafkaBroker.kafkaPorts(BROKER_1_PORT, BROKER_2_PORT);
 		
+		// Initialize
+		embeddedKafkaBroker.afterPropertiesSet();
+		
 		// Get Admin Properties
 		Map<String, Object> adminConfigs = new HashMap<>();
 		
@@ -111,7 +117,7 @@ public class ProgrammaticEmbeddedKafkaTest {
 	 */
 	@Test
 	public void printProperties() throws InterruptedException {
-
+		
 		// Get Broker Admin Client
 		AdminClient adminClient = AdminClient.create(kafkaAdmin.getConfig());
 		

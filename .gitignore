@@ -4,6 +4,7 @@
 .settings
 .attach*
 .springBeans
+.factorypath
 bin/
 *APPLI_LOG_IS_UNDEFINED/
 .mvn

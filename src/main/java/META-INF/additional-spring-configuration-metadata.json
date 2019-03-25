@@ -1,0 +1,54 @@
+{
+	"properties": [
+		{
+			"name": "embedded.kafka.simulator.enabled",
+			"type": "java.lang.Boolean",
+			"description": "État d'activation du simulateur KAFKA"
+		},
+		{
+			"name": "embedded.kafka.simulator.controlled-shutdown",
+			"type": "java.lang.Boolean",
+			"description": "État de controle du Shutdown des Brokers"
+		},
+		{
+			"name": "embedded.kafka.simulator.partition-count",
+			"type": "java.lang.Integer",
+			"description": "Nombre de partitions par topics"
+		},
+		{
+			"name": "embedded.kafka.simulator.initial.topics",
+			"type": "java.util.ArrayList",
+			"description": "Liste initiale des topics à créer"
+		},
+		{
+			"name": "embedded.kafka.simulator.broker-config",
+			"type": "fr.grouperatp.ratp.sga.kafka.simulator.properties.BrokerProperties",
+			"description": "Configuration des Brokers KAFKA"
+		},
+		{
+			"name": "embedded.kafka.simulator.broker-config.network-thread-count",
+			"type": "java.lang.Integer",
+			"description": "Nombre de Theads réseau"
+		},
+		{
+			"name": "embedded.kafka.simulator.broker-config.io-thread-count",
+			"type": "java.lang.Integer",
+			"description": "Nombre de Theads I/O"
+		},
+		{
+			"name": "embedded.kafka.simulator.broker-config.send-buffer-size",
+			"type": "java.lang.Integer",
+			"description": "Taille du buffer d'envoi'"
+		},
+		{
+			"name": "embedded.kafka.simulator.broker-config.ssl-protocol",
+			"type": "java.lang.String",
+			"description": "Protocole SSL"
+		},
+		{
+			"name": "embedded.kafka.simulator.broker-config.ports",
+			"type": "java.util.ArrayList<java.lang.Integer>",
+			"description": "Liste des ports des instances KAFKA"
+		}
+	]
+}

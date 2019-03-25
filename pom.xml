@@ -94,17 +94,20 @@
 		<!-- m2e lifecycle mapping version property -->
 		<lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
 		
-		<!-- Maven Surefire plugin -->
+		<!-- Maven Surefire plugin version propery -->
 		<maven-surefire-plugin.version>2.22.1</maven-surefire-plugin.version>
 		
-		<!-- Maven Failsafe plugin -->
+		<!-- Maven Failsafe plugin version propery -->
 		<maven-failsafe-plugin.version>2.22.1</maven-failsafe-plugin.version>
 		
 		<!-- Maven Site Plugin Version Property -->
 		<maven-site-plugins.version>3.3</maven-site-plugins.version>
 		
-		<!-- Swagger Version -->
+		<!-- Swagger version propery -->
 		<springfox-swagger.version>2.9.2</springfox-swagger.version>
+		
+		<!-- Hibernate validator version propery -->
+		<hibernate-validator.version>6.0.16.Final</hibernate-validator.version>
 		
 	</properties>
 	
@@ -290,6 +293,12 @@
 			<artifactId>spring-boot-starter</artifactId>
 		</dependency>
 		
+		<!-- Spring Boot Configuration Processor dependency -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+		</dependency>
+		
 		<!-- Spring Boot Starter test dependency -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -321,6 +330,17 @@
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger-ui</artifactId>
 			<version>${springfox-swagger.version}</version>
+		</dependency>
+		
+		<!-- Lombok dependency -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
 		
 	</dependencies>
