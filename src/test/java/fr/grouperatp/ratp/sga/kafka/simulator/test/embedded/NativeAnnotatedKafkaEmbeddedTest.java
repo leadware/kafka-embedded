@@ -14,6 +14,7 @@ import org.apache.kafka.clients.admin.TopicListing;
 import org.apache.kafka.common.KafkaFuture;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,13 +35,14 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 @EnableKafka
 @EmbeddedKafka(
-		count = AnnotatedKafkaEmbeddedTest.BROKER_NUMBER,
-		controlledShutdown = AnnotatedKafkaEmbeddedTest.COTROLLED_SHUTDOWN,
-		ports = {AnnotatedKafkaEmbeddedTest.BROKER_1_PORT, AnnotatedKafkaEmbeddedTest.BROKER_2_PORT},
-		partitions = AnnotatedKafkaEmbeddedTest.PARTITION_NUMBER,
+		count = NativeAnnotatedKafkaEmbeddedTest.BROKER_NUMBER,
+		controlledShutdown = NativeAnnotatedKafkaEmbeddedTest.COTROLLED_SHUTDOWN,
+		ports = {NativeAnnotatedKafkaEmbeddedTest.BROKER_1_PORT, NativeAnnotatedKafkaEmbeddedTest.BROKER_2_PORT},
+		partitions = NativeAnnotatedKafkaEmbeddedTest.PARTITION_NUMBER,
 		topics = {"HCPA", "DMES"}
 )
-public class AnnotatedKafkaEmbeddedTest {
+@Ignore
+public class NativeAnnotatedKafkaEmbeddedTest {
 	
 	/**
 	 * Number of Brokers

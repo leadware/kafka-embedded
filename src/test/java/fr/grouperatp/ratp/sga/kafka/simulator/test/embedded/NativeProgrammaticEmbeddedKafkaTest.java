@@ -31,7 +31,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @Ignore
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class ProgrammaticEmbeddedKafkaTest {
+public class NativeProgrammaticEmbeddedKafkaTest {
 	
 	/**
 	 * Number of Brokers
