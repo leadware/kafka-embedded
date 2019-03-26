@@ -80,13 +80,7 @@ public class KafkaSimulator {
 	@PreDestroy
 	public void destroy() {
 		
-		// Close Admin Client
-		adminClient.close();
-		
-		// Shutdown Kafka Servers
-		embeddedKafkaBroker.getKafkaServers().forEach(kafkaServer -> kafkaServer.shutdown());
-		
-		// Awiting Shutdown Kafka Servers
-		embeddedKafkaBroker.getKafkaServers().forEach(kafkaServer -> kafkaServer.awaitShutdown());
+		// Destroy Embedded Broker
+		embeddedKafkaBroker.destroy();		
 	}
 }

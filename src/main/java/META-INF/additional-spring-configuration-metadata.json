@@ -16,7 +16,7 @@
 			"description": "Nombre de partitions par topics"
 		},
 		{
-			"name": "embedded.kafka.simulator.initial.topics",
+			"name": "embedded.kafka.simulator.initial-topics",
 			"type": "java.util.ArrayList",
 			"description": "Liste initiale des topics à créer"
 		},

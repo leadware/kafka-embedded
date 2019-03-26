@@ -14,16 +14,15 @@ import org.apache.kafka.clients.admin.TopicListing;
 import org.apache.kafka.common.KafkaFuture;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.kafka.test.utils.KafkaTestUtils;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 /**
@@ -33,7 +32,7 @@ import org.springframework.test.context.junit4.SpringRunner;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@EnableKafka
+@TestPropertySource(locations = {"classpath:native-kafka-emdebbed-application.properties"})
 @EmbeddedKafka(
 		count = NativeAnnotatedKafkaEmbeddedTest.BROKER_NUMBER,
 		controlledShutdown = NativeAnnotatedKafkaEmbeddedTest.COTROLLED_SHUTDOWN,
@@ -41,7 +40,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 		partitions = NativeAnnotatedKafkaEmbeddedTest.PARTITION_NUMBER,
 		topics = {"HCPA", "DMES"}
 )
-@Ignore
 public class NativeAnnotatedKafkaEmbeddedTest {
 	
 	/**
@@ -52,7 +50,7 @@ public class NativeAnnotatedKafkaEmbeddedTest {
 	/**
 	 * Controlled Shutdown
 	 */
-	protected static final boolean COTROLLED_SHUTDOWN = false;
+	protected static final boolean COTROLLED_SHUTDOWN = true;
 	
 	/**
 	 * First Broker Port (0 for Random)
@@ -81,6 +79,11 @@ public class NativeAnnotatedKafkaEmbeddedTest {
 	private KafkaAdmin kafkaAdmin;
 	
 	/**
+	 * Broker Admin Client
+	 */
+	private AdminClient adminClient = null;
+	
+	/**
 	 * Before Test
 	 */
 	@Before
@@ -94,6 +97,9 @@ public class NativeAnnotatedKafkaEmbeddedTest {
 		
 		// Instantiate Admin
 		kafkaAdmin = new KafkaAdmin(adminConfigs);
+
+		// Get Broker Admin Client
+		adminClient = AdminClient.create(kafkaAdmin.getConfig());
 	}
 	
 	/**
@@ -102,11 +108,8 @@ public class NativeAnnotatedKafkaEmbeddedTest {
 	@After
 	public void after() {
 		
-		// Shutdown Kafka Servers
-		embeddedKafkaBroker.getKafkaServers().forEach(kafkaServer -> kafkaServer.shutdown());
-		
-		// Awiting Shutdown Kafka Servers
-		embeddedKafkaBroker.getKafkaServers().forEach(kafkaServer -> kafkaServer.awaitShutdown());
+		// Destroy Embedded Broker
+		embeddedKafkaBroker.destroy();		
 	}
 	
 	/**
@@ -116,9 +119,6 @@ public class NativeAnnotatedKafkaEmbeddedTest {
 	 */
 	@Test
 	public void printProperties() throws InterruptedException, ExecutionException {
-		
-		// Get Broker Admin Client
-		AdminClient adminClient = AdminClient.create(kafkaAdmin.getConfig());
 		
 		// Get Admin Configuration
 		Map<String, Object> adminConfigs = kafkaAdmin.getConfig();

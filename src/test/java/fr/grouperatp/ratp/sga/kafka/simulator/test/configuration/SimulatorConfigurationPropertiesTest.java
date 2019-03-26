@@ -58,13 +58,37 @@ public class SimulatorConfigurationPropertiesTest {
 		// Assert Simulator properties is not null
 		assertThat(simulatorProperties, is(notNullValue()));
 		
+		// Assert Controlled Shutdown is false
+		assertThat(simulatorProperties.getControlledShutdown(), is(false));
+		
+		// Assert that there is 4 partition per topics
+		assertThat(simulatorProperties.getPartitionCount(), is(4));
+		
 		// Assert Initial topic List is set
 		assertThat(simulatorProperties.getInitialTopics(), is(notNullValue()));
 		
-		// Assert there are 2 topics in initial list
-		assertThat(simulatorProperties.getInitialTopics(), hasSize(2));
+		// Assert there are 3 topics in initial list
+		assertThat(simulatorProperties.getInitialTopics(), hasSize(3));
 		
 		// Assert that initial topics list contains some elements
-		assertThat(simulatorProperties.getInitialTopics(), hasItems("HCPA", "DMES"));
+		assertThat(simulatorProperties.getInitialTopics(), hasItems("HCPA", "DMES", "IC"));
+		
+		// Assert that there is 3 network threads count
+		assertThat(simulatorProperties.getBrokerConfig().getNetworkThreadCount(), is(3));
+		
+		// Assert that there is 4 I/O threads count
+		assertThat(simulatorProperties.getBrokerConfig().getIoThreadCount(), is(4));
+		
+		// Assert that there is send buffer size
+		assertThat(simulatorProperties.getBrokerConfig().getSendBufferSize(), is(102400L));
+		
+		// Assert that the default SSL protocol is TLS
+		assertThat(simulatorProperties.getBrokerConfig().getSslProtocol(), is("TLS"));
+		
+		// Assert that there are 2 ports configured
+		assertThat(simulatorProperties.getBrokerConfig().getPorts(), hasSize(2));
+		
+		// Assert that initial ports list contains some elements
+		assertThat(simulatorProperties.getBrokerConfig().getPorts(), hasItems(9090, 9190));
 	}
 }

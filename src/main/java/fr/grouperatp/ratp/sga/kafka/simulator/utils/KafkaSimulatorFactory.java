@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
@@ -74,6 +75,33 @@ public class KafkaSimulatorFactory {
 	 * @return	Instance du simulateur KAFKA
 	 */
 	public KafkaSimulator getInstance() {
+
+		// Listener Chain
+		String listenersChain = brokersPorts.stream().map(port -> "PLAINTEXT://localhost:" + String.valueOf(port)).collect(Collectors.joining(",", "listeners=", ""));
+		
+		System.out.println("--------------------------------------------");
+		System.out.println("--------------------------------------------");
+		System.out.println("-----------LISTENERS : " + listenersChain);
+		System.out.println("--------------------------------------------");
+		System.out.println("--------------------------------------------");
+		
+		System.out.println("--------------------------------------------");
+		System.out.println("--------------------------------------------");
+		System.out.println("-----------LISTENERS : " + listenersChain);
+		System.out.println("--------------------------------------------");
+		System.out.println("--------------------------------------------");
+		
+		System.out.println("--------------------------------------------");
+		System.out.println("--------------------------------------------");
+		System.out.println("-----------LISTENERS : " + listenersChain);
+		System.out.println("--------------------------------------------");
+		System.out.println("--------------------------------------------");
+		
+		System.out.println("--------------------------------------------");
+		System.out.println("--------------------------------------------");
+		System.out.println("-----------LISTENERS : " + listenersChain);
+		System.out.println("--------------------------------------------");
+		System.out.println("--------------------------------------------");
 		
 		// Instantiation d'un Embedded broker
 		EmbeddedKafkaBroker embeddedKafkaBroker = 
