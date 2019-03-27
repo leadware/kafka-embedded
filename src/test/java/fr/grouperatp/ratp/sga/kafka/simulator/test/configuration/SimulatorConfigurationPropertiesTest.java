@@ -112,10 +112,10 @@ public class SimulatorConfigurationPropertiesTest {
 		assertThat(simulatorProperties.getBrokerConfigs().get(0).getBrokerId(), is(equalTo("KAFKA_01")));
 		
 		// Assert that broker first config port map 9090 is set to PLAINTEXT
-		assertThat(simulatorProperties.getBrokerConfigs().get(0).getListeners().get(9090), is(equalTo(ListenerProtocol.PLAINTEXT)));
+		assertThat(simulatorProperties.getBrokerConfigs().get(0).getListener().getPort(), is(equalTo(9090)));
 		
 		// Assert that broker first config port map 9091 is set to SSL
-		assertThat(simulatorProperties.getBrokerConfigs().get(0).getListeners().get(9091), is(equalTo(ListenerProtocol.SSL)));
+		assertThat(simulatorProperties.getBrokerConfigs().get(0).getListener().getProtocol(), is(equalTo(ListenerProtocol.PLAINTEXT)));
 		
 	}
 }

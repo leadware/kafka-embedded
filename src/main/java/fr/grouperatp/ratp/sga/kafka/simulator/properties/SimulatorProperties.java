@@ -53,6 +53,12 @@ public class SimulatorProperties {
 	 */
 	@NotNull(message = "Veuillez renseigner l'état de contrôle d'arrêt des brokers")
 	private Boolean controlledShutdown = Boolean.TRUE;
+
+	/**
+	 * Etat d'activation de la capacité de suppression de topics du Simulateur KAFKA
+	 */
+	@NotNull(message = "Veuillez renseigner l'etat d'activation de la suppression de topics du simulateur KAFKA")
+	private Boolean enableDeleteTopics = Boolean.TRUE;
 	
 	/**
 	 * Nombre de partitions par topic
@@ -133,7 +139,17 @@ public class SimulatorProperties {
 		// Renvoi de la valeur du champ "controlledShutdown"
 		return (controlledShutdown == null) ? Boolean.TRUE : controlledShutdown;
 	}
-
+	
+	/**
+	 * Méthode d'obtention de la valeur du champ "enableDeleteTopics"
+	 * @return Valeur du champ "enableDeleteTopics"
+	 */
+	public Boolean getEnableDeleteTopics() {
+	
+		// Renvoi de la valeur du champ "enableDeleteTopics"
+		return (enableDeleteTopics == null) ? Boolean.TRUE : enableDeleteTopics;
+	}
+	
 	/**
 	 * Méthode d'obtention de la valeur du champ "partitionCount"
 	 * @return Valeur du champ "partitionCount"

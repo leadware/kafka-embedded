@@ -3,11 +3,8 @@
  */
 package fr.grouperatp.ratp.sga.kafka.simulator.properties;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,6 +25,16 @@ import lombok.ToString;
 public class BrokerProperties {
 	
 	/**
+	 * Default Listener
+	 */
+	private ListenerProperties DEFAULT_LISTENER = new ListenerProperties();
+
+	/**
+	 * Default Logs Directory
+	 */
+	private List<String> DEFAULT_LOGS_DIRECTORIES = Collections.singletonList(System.getProperty("java.io.tmpdir"));
+	
+	/**
 	 * Identifiant du Broker
 	 */
 	private String brokerId;
@@ -45,7 +52,35 @@ public class BrokerProperties {
 	/**
 	 * Broker Endpoints Listeners
 	 */
-	@NotNull(message = "Veuillez renseigner les propriétés du(des) listeners du broker")
-	@Size(min = 1, message = "Veuillez renseigner au moins un listener")
-	private Map<Integer, ListenerProtocol> listeners = null;
+	private ListenerProperties listener = null;
+	
+	/**
+	 * Méthode d'obtention de la valeur du champ "logsDirectory"
+	 * @return Valeur du champ "logsDirectory"
+	 */
+	public String getLogsDirectory() {
+		
+		// Renvoi de la valeur du champ "logsDirectory"
+		return (logsDirectory == null || logsDirectory.trim().isEmpty()) ? DEFAULT_LOGS_DIRECTORIES.get(0) : logsDirectory.trim();
+	}
+	
+	/**
+	 * Méthode d'obtention de la valeur du champ "logsDirectories"
+	 * @return Valeur du champ "logsDirectories"
+	 */
+	public List<String> getLogsDirectories() {
+	
+		// Renvoi de la valeur du champ "logsDirectories"
+		return (logsDirectories == null || logsDirectories.isEmpty()) ? DEFAULT_LOGS_DIRECTORIES : logsDirectories;
+	}
+	
+	/**
+	 * Méthode d'obtention de la valeur du champ "listener"
+	 * @return Valeur du champ "listener"
+	 */
+	public ListenerProperties getListener() {
+	
+		// Renvoi de la valeur du champ "listener"
+		return (listener == null) ? DEFAULT_LISTENER : listener;
+	}
 }

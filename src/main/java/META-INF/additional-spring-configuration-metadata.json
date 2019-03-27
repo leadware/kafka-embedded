@@ -16,6 +16,11 @@
 			"description": "État de controle du Shutdown des Brokers"
 		},
 		{
+			"name": "embedded.kafka.simulator.enable-delete-topics",
+			"type": "java.lang.Boolean",
+			"description": "État de controle du suppression des topics dans le simulateur"
+		},
+		{
 			"name": "embedded.kafka.simulator.partition-count",
 			"type": "java.lang.Integer",
 			"description": "Nombre de partitions par topics"
@@ -91,9 +96,19 @@
 			"description": "Liste de répertoires de logs de l'instance de brokers KAFKA"
 		},
 		{
-			"name": "embedded.kafka.simulator.broker-configs[0].listeners",
-			"type": "java.util.Map<java.lang.Integer, fr.grouperatp.ratp.sga.kafka.simulator.properties.ListenerProtocol>",
-			"description": "MAP (PORT/PROTOCOLE) de configuration des endpoints de l'instance de brokers KAFKA"
+			"name": "embedded.kafka.simulator.broker-configs[0].listener",
+			"type": "fr.grouperatp.ratp.sga.kafka.simulator.properties.ListenerProperties",
+			"description": "Propriétés du Listener du broker"
+		},
+		{
+			"name": "embedded.kafka.simulator.broker-configs[0].listener.port",
+			"type": "java.lang.Integer",
+			"description": "Port du Listener du broker"
+		},
+		{
+			"name": "embedded.kafka.simulator.broker-configs[0].listener.protocol",
+			"type": "fr.grouperatp.ratp.sga.kafka.simulator.properties.ListenerProtocol",
+			"description": "Protocole du Listener du broker (PLAINTEXT, SSL, SASL, SASL_SSL, etc...)"
 		}
 	]
 }

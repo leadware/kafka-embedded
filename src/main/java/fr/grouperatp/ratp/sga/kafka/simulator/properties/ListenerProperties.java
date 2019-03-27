@@ -3,10 +3,7 @@
  */
 package fr.grouperatp.ratp.sga.kafka.simulator.properties;
 
-import java.util.Map;
-
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
@@ -18,7 +15,6 @@ import lombok.ToString;
  */
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
 @Setter
 @ToString
 public class ListenerProperties {
@@ -29,12 +25,28 @@ public class ListenerProperties {
 	private Integer port = 9090; 
 	
 	/**
-	 * Broker listener URL
+	 * Broker listener protocol
 	 */
-	private String url = "";
-	
+	private ListenerProtocol protocol = ListenerProtocol.PLAINTEXT;
+
 	/**
-	 * Broker listener Security protocol MAP
+	 * Méthode d'obtention de la valeur du champ "port"
+	 * @return Valeur du champ "port"
 	 */
-	private Map<String, String> securityProtocolMap = null;
+	public Integer getPort() {
+	
+		// Renvoi de la valeur du champ "port"
+		return (port == null) ? 9090 : port;
+	}
+
+	/**
+	 * Méthode d'obtention de la valeur du champ "protocol"
+	 * @return Valeur du champ "protocol"
+	 */
+	public ListenerProtocol getProtocol() {
+	
+		// Renvoi de la valeur du champ "protocol"
+		return (protocol == null) ? ListenerProtocol.PLAINTEXT : protocol;
+	}
+	
 }
