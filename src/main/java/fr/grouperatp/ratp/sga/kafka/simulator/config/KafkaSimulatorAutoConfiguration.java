@@ -3,8 +3,6 @@
  */
 package fr.grouperatp.ratp.sga.kafka.simulator.config;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -25,12 +23,6 @@ import fr.grouperatp.ratp.sga.kafka.simulator.utils.KafkaSimulatorFactory;
  * @since 24 mars 2019 - 14:11:54
  */
 @Configuration
-@ConditionalOnProperty(
-		prefix = SimulatorProperties.SIMULATOR_PROPERTIES_PREFIX,
-		name = "enabled",
-		havingValue = "true",
-		matchIfMissing = false
-)
 @ConditionalOnClass({
 	KafkaSimulator.class,
 	KafkaSimulatorFactory.class
@@ -48,30 +40,31 @@ public class KafkaSimulatorAutoConfiguration {
 	 * Méthode permettant de créer un bean kafkaSimulator Factory
 	 * @return Bean kafkaSimulatorFactory
 	 */
+	@ConditionalOnProperty(
+			prefix = SimulatorProperties.SIMULATOR_PROPERTIES_PREFIX,
+			name = "enabled",
+			havingValue = "true",
+			matchIfMissing = false
+	)
 	@Bean
 	@ConditionalOnMissingBean
 	@Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
 	public KafkaSimulatorFactory kafkaSimulatorFactory() {
 		
-		// Liste des ports
-		List<Integer> ports = simulatorProperties.getBrokerConfig().getPorts();
-		
-		// Broker Count
-		int brokerCount = ports == null ? 0 : ports.size();
-		
 		// On retourne l'instance du Bean
-		return new KafkaSimulatorFactory(brokerCount,
-										 simulatorProperties.getControlledShutdown(),
-										 simulatorProperties.getPartitionCount(),
-										 simulatorProperties.getInitialTopics(),
-										 ports,
-										 null);
+		return new KafkaSimulatorFactory(simulatorProperties);
 	}
 	
 	/**
 	 * Méthode permettant de créer un bean kafkaSimulator 
 	 * @return	Bean kafkaSimulator
 	 */
+	@ConditionalOnProperty(
+			prefix = SimulatorProperties.SIMULATOR_PROPERTIES_PREFIX,
+			name = "enabled",
+			havingValue = "true",
+			matchIfMissing = false
+	)
 	@Bean
 	@ConditionalOnMissingBean
 	@Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)

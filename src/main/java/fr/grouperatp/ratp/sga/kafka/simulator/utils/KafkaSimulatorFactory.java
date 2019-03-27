@@ -3,17 +3,10 @@
  */
 package fr.grouperatp.ratp.sga.kafka.simulator.utils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import javax.annotation.PostConstruct;
 
-import org.springframework.kafka.test.EmbeddedKafkaBroker;
-
 import fr.grouperatp.ratp.sga.kafka.simulator.KafkaSimulator;
+import fr.grouperatp.ratp.sga.kafka.simulator.properties.SimulatorProperties;
 import lombok.AllArgsConstructor;
 
 /**
@@ -25,99 +18,24 @@ import lombok.AllArgsConstructor;
 public class KafkaSimulatorFactory {
 
 	/**
-	 * Nombre d'instances de Brokers KAFKA
+	 * Proprietes de configuration du simulateur
 	 */
-	private int brokerCount = 1;
-	
-	/**
-	 * Etat de contrôle d'arrêt des brokers
-	 */
-	private boolean controlledShutdown = Boolean.TRUE;
-	
-	/**
-	 * Nombre de partitions par topic
-	 */
-	private int partitionCount = 1;
-	
-	/**
-	 * Liste initiale des topics
-	 */
-	private List<String> initialTopics = null;
-	
-	/**
-	 * Liste des ports des brokers
-	 */
-	private List<Integer> brokersPorts = null;
-	
-	/**
-	 * MAP des propriétés communes des instances de brokers
-	 */
-	private Map<String, String> brokerProperties = null;
+	private final SimulatorProperties simulatorProperties;
 	
 	/**
 	 * Méthode permettant d'initialiser le simulateur KAFKA
 	 */
 	@PostConstruct
-	public void initialize() {
-		
-		// If initialTopics is null
-		if(initialTopics == null) initialTopics = new ArrayList<>();
-		
-		// If Brokers Ports is null
-		if(brokersPorts == null) brokersPorts = new ArrayList<>();
-		
-		// if Brokers properties is null
-		if(brokerProperties == null) brokerProperties = new HashMap<>();
-	}
+	public void initialize() {}
 	
 	/**
 	 * Méthode permettant de construire une instance de Simulateur KAFKA
 	 * @return	Instance du simulateur KAFKA
 	 */
 	public KafkaSimulator getInstance() {
-
-		// Listener Chain
-		String listenersChain = brokersPorts.stream().map(port -> "PLAINTEXT://localhost:" + String.valueOf(port)).collect(Collectors.joining(",", "listeners=", ""));
-		
-		System.out.println("--------------------------------------------");
-		System.out.println("--------------------------------------------");
-		System.out.println("-----------LISTENERS : " + listenersChain);
-		System.out.println("--------------------------------------------");
-		System.out.println("--------------------------------------------");
-		
-		System.out.println("--------------------------------------------");
-		System.out.println("--------------------------------------------");
-		System.out.println("-----------LISTENERS : " + listenersChain);
-		System.out.println("--------------------------------------------");
-		System.out.println("--------------------------------------------");
-		
-		System.out.println("--------------------------------------------");
-		System.out.println("--------------------------------------------");
-		System.out.println("-----------LISTENERS : " + listenersChain);
-		System.out.println("--------------------------------------------");
-		System.out.println("--------------------------------------------");
-		
-		System.out.println("--------------------------------------------");
-		System.out.println("--------------------------------------------");
-		System.out.println("-----------LISTENERS : " + listenersChain);
-		System.out.println("--------------------------------------------");
-		System.out.println("--------------------------------------------");
-		
-		// Instantiation d'un Embedded broker
-		EmbeddedKafkaBroker embeddedKafkaBroker = 
-				new EmbeddedKafkaBroker(brokerCount, 
-										controlledShutdown, 
-										partitionCount, 
-										initialTopics.stream().toArray(String[]::new));
-		
-		// Set the broker properties
-		embeddedKafkaBroker.brokerProperties(brokerProperties);
-		
-		// Set the brokers Ports
-		embeddedKafkaBroker.kafkaPorts(brokersPorts.stream().mapToInt(i -> i.intValue()).toArray());
 		
 		// Instantiate Kafka Simulator
-		KafkaSimulator kafkaSimulator = new KafkaSimulator(embeddedKafkaBroker, null, null, null);
+		KafkaSimulator kafkaSimulator = new KafkaSimulator(simulatorProperties);
 		
 		// On retourne l'instance du simulateur KAFKA
 		return kafkaSimulator;

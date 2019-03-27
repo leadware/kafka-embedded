@@ -3,6 +3,7 @@
  */
 package fr.grouperatp.ratp.sga.kafka.simulator.test.configuration;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -18,7 +19,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import fr.grouperatp.ratp.sga.kafka.simulator.properties.KeymanagerAlgorithm;
+import fr.grouperatp.ratp.sga.kafka.simulator.properties.KeystoreType;
+import fr.grouperatp.ratp.sga.kafka.simulator.properties.ListenerProtocol;
 import fr.grouperatp.ratp.sga.kafka.simulator.properties.SimulatorProperties;
+import fr.grouperatp.ratp.sga.kafka.simulator.properties.SslProtocol;
 
 /**
  * Classe de test de chargement des propriétés de configuration du Simulateur
@@ -64,6 +69,30 @@ public class SimulatorConfigurationPropertiesTest {
 		// Assert that there is 4 partition per topics
 		assertThat(simulatorProperties.getPartitionCount(), is(4));
 		
+		// Assert that there is 3 network threads count
+		assertThat(simulatorProperties.getNetworkThreadCount(), is(3));
+		
+		// Assert that there is 4 I/O threads count
+		assertThat(simulatorProperties.getIoThreadCount(), is(4));
+		
+		// Assert that there is send buffer size
+		assertThat(simulatorProperties.getSendBufferSize(), is(102400L));
+		
+		// Assert that the default SSL protocol is TLS
+		assertThat(simulatorProperties.getSslProtocol(), is(SslProtocol.TLS));
+		
+		// Assert Keystore configuration is set
+		assertThat(simulatorProperties.getKeystoreConfig(), is(notNullValue()));
+		
+		// Assert Keystore password is equal to certain value
+		assertThat(simulatorProperties.getKeystoreConfig().getPassword(), is(equalTo("r@tp!k@fk@#")));
+		
+		// Assert Keystore type is JKS
+		assertThat(simulatorProperties.getKeystoreConfig().getType(), is(equalTo(KeystoreType.JKS)));
+		
+		// Assert Keymanager algorithm type is SunX509
+		assertThat(simulatorProperties.getKeystoreConfig().getKeymanagerAlgorithm(), is(equalTo(KeymanagerAlgorithm.SunX509)));
+		
 		// Assert Initial topic List is set
 		assertThat(simulatorProperties.getInitialTopics(), is(notNullValue()));
 		
@@ -73,22 +102,20 @@ public class SimulatorConfigurationPropertiesTest {
 		// Assert that initial topics list contains some elements
 		assertThat(simulatorProperties.getInitialTopics(), hasItems("HCPA", "DMES", "IC"));
 		
-		// Assert that there is 3 network threads count
-		assertThat(simulatorProperties.getBrokerConfig().getNetworkThreadCount(), is(3));
+		// Assert that broker configs is not null
+		assertThat(simulatorProperties.getBrokerConfigs(), is(notNullValue()));
 		
-		// Assert that there is 4 I/O threads count
-		assertThat(simulatorProperties.getBrokerConfig().getIoThreadCount(), is(4));
+		// Assert that broker configs is not null has one entry
+		assertThat(simulatorProperties.getBrokerConfigs(), hasSize(1));
 		
-		// Assert that there is send buffer size
-		assertThat(simulatorProperties.getBrokerConfig().getSendBufferSize(), is(102400L));
+		// Assert that broker first config id has some value
+		assertThat(simulatorProperties.getBrokerConfigs().get(0).getBrokerId(), is(equalTo("KAFKA_01")));
 		
-		// Assert that the default SSL protocol is TLS
-		assertThat(simulatorProperties.getBrokerConfig().getSslProtocol(), is("TLS"));
+		// Assert that broker first config port map 9090 is set to PLAINTEXT
+		assertThat(simulatorProperties.getBrokerConfigs().get(0).getListeners().get(9090), is(equalTo(ListenerProtocol.PLAINTEXT)));
 		
-		// Assert that there are 2 ports configured
-		assertThat(simulatorProperties.getBrokerConfig().getPorts(), hasSize(2));
+		// Assert that broker first config port map 9091 is set to SSL
+		assertThat(simulatorProperties.getBrokerConfigs().get(0).getListeners().get(9091), is(equalTo(ListenerProtocol.SSL)));
 		
-		// Assert that initial ports list contains some elements
-		assertThat(simulatorProperties.getBrokerConfig().getPorts(), hasItems(9090, 9190));
 	}
 }

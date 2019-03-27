@@ -21,7 +21,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class BrokerListenerProperties {
+public class ListenerProperties {
 	
 	/**
 	 * Broker listener port

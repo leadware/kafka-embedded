@@ -4,9 +4,10 @@
 package fr.grouperatp.ratp.sga.kafka.simulator.properties;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,34 +28,24 @@ import lombok.ToString;
 public class BrokerProperties {
 	
 	/**
-	 * Broker instance network thread count (used for receive and send messages)
+	 * Identifiant du Broker
 	 */
-	@NotNull(message = "Veuillez renseigner le nombre de threads réseaux")
-	@Positive(message = "Le nombre de threads réseaux doit être une valeur supérieure à 0")
-	private Integer networkThreadCount = 2;
+	private String brokerId;
 	
 	/**
-	 * Broker instance I/O thread count (used for process messages with disk I/O)
+	 * Répertoire de stockage des logs
 	 */
-	@NotNull(message = "Veuillez renseigner le nombre de threads d'I/O")
-	@Positive(message = "Le nombre de threads I/O doit être une valeur supérieure à 0")
-	private Integer ioThreadCount = 2;
+	private String logsDirectory;
 	
 	/**
-	 * Broker instance send buffer max size (in byte)
+	 * Liste de répertoires de logs
 	 */
-	@NotNull(message = "Veuillez renseigner la taille du buffer")
-	@Positive(message = "La taille du buffer doit être une valeur supérieure à 0")
-	private Long sendBufferSize = 102400L;
+	private List<String> logsDirectories;
 	
 	/**
-	 * Broker SSL protocol 
+	 * Broker Endpoints Listeners
 	 */
-	private String sslProtocol = "TLS";
-	
-	/**
-	 * Broker Endpoints ports
-	 */
-	private List<Integer> ports = null;
-	
+	@NotNull(message = "Veuillez renseigner les propriétés du(des) listeners du broker")
+	@Size(min = 1, message = "Veuillez renseigner au moins un listener")
+	private Map<Integer, ListenerProtocol> listeners = null;
 }
