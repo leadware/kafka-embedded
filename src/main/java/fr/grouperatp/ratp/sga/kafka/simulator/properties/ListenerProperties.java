@@ -22,7 +22,7 @@ public class ListenerProperties {
 	/**
 	 * Broker listener port
 	 */
-	private Integer port = 9090; 
+	private Integer port = 0; 
 	
 	/**
 	 * Broker listener protocol
@@ -36,7 +36,7 @@ public class ListenerProperties {
 	public Integer getPort() {
 	
 		// Renvoi de la valeur du champ "port"
-		return (port == null) ? 9090 : port;
+		return (port == null) ? 0 : port;
 	}
 
 	/**

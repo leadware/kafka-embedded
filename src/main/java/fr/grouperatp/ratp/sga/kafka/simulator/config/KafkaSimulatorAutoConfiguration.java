@@ -56,7 +56,8 @@ public class KafkaSimulatorAutoConfiguration {
 	}
 	
 	/**
-	 * Méthode permettant de créer un bean kafkaSimulator 
+	 * Méthode permettant de créer un bean kafkaSimulator
+	 * @param kafkaSimulatorFactory Fabrique de simulateur Kafka
 	 * @return	Bean kafkaSimulator
 	 */
 	@ConditionalOnProperty(
