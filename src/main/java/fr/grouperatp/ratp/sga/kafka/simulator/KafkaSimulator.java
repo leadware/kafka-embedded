@@ -8,10 +8,13 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -23,13 +26,14 @@ import org.I0Itec.zkclient.ZkClient;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.admin.CreateTopicsResult;
-import org.apache.kafka.clients.admin.ListTopicsOptions;
+import org.apache.kafka.clients.admin.DeleteTopicsResult;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.admin.TopicListing;
 import org.apache.kafka.common.KafkaFuture;
 import org.apache.kafka.common.security.auth.SecurityProtocol;
 import org.apache.kafka.common.utils.Time;
 import org.springframework.kafka.core.KafkaAdmin;
+import org.springframework.util.Assert;
 import org.springframework.util.ResourceUtils;
 
 import fr.grouperatp.ratp.sga.kafka.simulator.properties.BrokerProperties;
@@ -112,13 +116,21 @@ public class KafkaSimulator {
 	 * Répertoire temporaire de stockage
 	 */
 	private File temporairyDir;
-
+	
+	/**
+	 * Chemin vers le magasin de clés de confiance
+	 */
+	private File truststoreLocation;
+	
 	/**
 	 * Chemin vers le magasin de clés
 	 */
 	private File keystoreLocation;
 	
-	private List<String> createdTopics;
+	/**
+	 * Ensemble de noms de topics creees
+	 */
+	private Set<String> createdTopics = new HashSet<>();
 	
 	/**
 	 * Méthode permettant d'initialiser le simulateur KAFKA
@@ -170,39 +182,20 @@ public class KafkaSimulator {
 				simulatorProperties.getBrokerConfigs().isEmpty()) 
 			throw new RuntimeException("Veuillez renseigner la configuration d'au moins un Broker");
 		
-		try {
-			
-			// Obtention du File sur le repertoire temporaire
-			temporairyDir = ResourceUtils.getFile(simulatorProperties.getJavaTemporaryDirectory());
-			
-		} catch (FileNotFoundException e) {
-			
-			// Print exception stack trace
-			e.printStackTrace();
-			
-			// On relance
-			throw new RuntimeException("Le répertoire temporaire (java-temporary-directory) n'existe pas");
-		}
-		
-		try {
-			
-			// Obtention du File sur le magasin de clés
-			keystoreLocation = ResourceUtils.getFile(simulatorProperties.getKeystoreConfig().getLocation());
-			
-		} catch (FileNotFoundException e) {
-			
-			// Print exception stack trace
-			e.printStackTrace();
-			
-			// On relance
-			throw new RuntimeException("Le chemin vers le magasin de clés (keystore-config.location) n'existe pas");
-		}
+		// Verification de l'existence des repertoires et des fichiers
+		checkFileAndDirectories();
 		
 		// Parcours de la liste de configurations de brokers
 		for(int index = 0; index < simulatorProperties.getBrokerConfigs().size(); index++) {
 			
 			// Obtention de la config
 			BrokerProperties brokerProperties = simulatorProperties.getBrokerConfigs().get(index);
+			
+			// Controle du répertoire de logs
+			checkFiles(Collections.singletonList(brokerProperties.getLogsDirectory()));
+			
+			// Controle de la liste de logs
+			checkFiles(brokerProperties.getLogsDirectories());
 			
 			// Construction des propriétés de base
 			Properties properties = createBrokerProperties(index, brokerProperties);
@@ -213,17 +206,8 @@ public class KafkaSimulator {
 			// Ajout du serveur Kafka dans la liste des serveurs
 			kafkaServers.add(server);
 			
-			// Calcul du prorocol de securite
-			SecurityProtocol securityProtocol = SecurityProtocol.valueOf(brokerProperties.getListener().getProtocol().getValue());
-			
-			// Si la configuration du listener n'a pas prevue de port
-			if(brokerProperties.getListener().getPort() == 0) {
-				
-				// Obtantion d'un port libre
-				brokerProperties.getListener().setPort(TestUtils.boundPort(server, securityProtocol));
-			}
 		}
-
+		
 		// MAP des configurations administrateur
 		Map<String, Object> adminConfigs = new HashMap<>();
 		
@@ -233,14 +217,56 @@ public class KafkaSimulator {
 		// Instanciation du client d.administration
 		adminClient = AdminClient.create(adminConfigs);
 	}
+
+	/**
+	 * Méthode permettant verifier l'existence d'une liste de fichiers 
+	 * @param paths	Chemins source
+	 */
+	private void checkFiles(List<String> paths) {
+		
+		// Parcours
+		for (String path : paths) {
+			
+			// Tentative de chargement
+			buildFile(path);
+		}
+	}
 	
 	/**
-	 * Méthode permettant d'initialiser les topics
+	 * Méthode permettant de construire un fichier à partir d'un chemin 
+	 * @param path	Chemin source
+	 * @return Fichier construit en cas d'existence
 	 */
-	private void initializeTopics() {
+	private File buildFile(String path) {
+
+		try {
+			
+			// Obtention du File sur le repertoire temporaire
+			return ResourceUtils.getFile(path);
+			
+		} catch (FileNotFoundException e) {
+			
+			// Print exception stack trace
+			e.printStackTrace();
+			
+			// On relance
+			throw new RuntimeException("Le chemin n'existe pas : " + path);
+		}
+	}
+	
+	/**
+	 * Méthode permettant de vérifier l'existence des répertoires et fichiers configurés
+	 */
+	private void checkFileAndDirectories() {
 		
-		// Creation des topic de la liste parametrée
-		createTopics(simulatorProperties.getInitialTopics());
+		// Obtention du File sur le repertoire temporaire
+		temporairyDir = buildFile(simulatorProperties.getJavaTemporaryDirectory());
+		
+		// Obtention du File sur le magasin de clés
+		keystoreLocation = buildFile(simulatorProperties.getKeystoreConfig().getLocation());
+		
+		// Obtention du File sur le magasin de clés de confiance
+		truststoreLocation = buildFile(simulatorProperties.getTruststoreConfig().getLocation());
 	}
 	
 	/**
@@ -257,7 +283,7 @@ public class KafkaSimulator {
 															 simulatorProperties.getControlledShutdown(),
 															 simulatorProperties.getEnableDeleteTopics(), brokerConfig.getListener().getPort(),
 															 scala.Option.apply(SecurityProtocol.valueOf(brokerConfig.getListener().getProtocol().getValue())),
-															 scala.Option.apply(keystoreLocation),
+															 scala.Option.apply(truststoreLocation),
 															 scala.Option.apply(null),
 															 
 															 // Activation du PLAINTEXT
@@ -285,7 +311,7 @@ public class KafkaSimulator {
 															 scala.Option.apply(null),
 															 
 															 // Nombre de Log Dirs
-															 1,
+															 brokerConfig.getLogsDirectories().size(),
 															 
 															 // Activation d'un Token
 															 false);
@@ -303,15 +329,101 @@ public class KafkaSimulator {
 		properties.setProperty(KafkaConfig.ReplicaHighWatermarkCheckpointIntervalMsProp(),
 							   String.valueOf(Long.MAX_VALUE));
 		
+		// Ajout du Nombre de Threads d'entree/sortie
+		properties.setProperty(KafkaConfig.NumIoThreadsProp(), 
+							   String.valueOf(simulatorProperties.getIoThreadCount()));
+		
+		// Ajout du Nombre de Threads network
+		properties.setProperty(KafkaConfig.NumNetworkThreadsProp(), 
+							   String.valueOf(simulatorProperties.getNetworkThreadCount()));
+		
+		// Ajout Send Buffer Size
+		properties.setProperty(KafkaConfig.SocketSendBufferBytesProp(), 
+							   String.valueOf(simulatorProperties.getSendBufferSize()));
+		
+		// Ajout du LogDir
+		properties.setProperty(KafkaConfig.LogDirProp(), brokerConfig.getLogsDirectory());
+		
+		// Ajout de la liste des LogsDirs
+		properties.setProperty(KafkaConfig.LogDirsProp(), 
+							   brokerConfig.getLogsDirectories()
+							   			   .stream()
+							   			   .collect(Collectors.joining(",")));
+		
+		// Ajout etat activation SSL Enabled
+		properties.setProperty(KafkaConfig.SslEnabledProtocolsProp(), 
+							   String.valueOf(brokerConfig.getListener()
+									   					  .getProtocol()
+									   					  .equals(ListenerProtocol.SSL)));
+		
+		// Ajout Truststore location
+		properties.setProperty(KafkaConfig.SslTruststoreLocationProp(), 
+							   simulatorProperties.getTruststoreConfig().getLocation());
+		
+		// Ajout Truststore password
+		properties.setProperty(KafkaConfig.SslTruststorePasswordProp(), 
+							   simulatorProperties.getTruststoreConfig().getPassword());
+		
+		// Ajout Truststore type
+		properties.setProperty(KafkaConfig.SslTruststoreTypeProp(), 
+							   simulatorProperties.getTruststoreConfig().getType().getValue());
+		
+		// Ajout KeyManager Algorithm
+		properties.setProperty(KafkaConfig.SslKeyManagerAlgorithmProp(), 
+							   simulatorProperties.getTruststoreConfig().getKeymanagerAlgorithm().getValue());
+		
+		
+		
+		
+		// Ajout Truststore location
+		properties.setProperty(KafkaConfig.SslKeystoreLocationProp(), 
+							   simulatorProperties.getTruststoreConfig().getLocation());
+		
+		// Ajout Truststore password
+		properties.setProperty(KafkaConfig.SslKeystorePasswordProp(), 
+							   simulatorProperties.getKeystoreConfig().getPassword());
+		
+		// Ajout Keystore type
+		properties.setProperty(KafkaConfig.SslKeystoreTypeProp(), 
+							   simulatorProperties.getKeystoreConfig().getType().getValue());
+		
+		// Ajout KeyManager Algorithm
+		properties.setProperty(KafkaConfig.SslKeyManagerAlgorithmProp(), 
+							   simulatorProperties.getKeystoreConfig().getKeymanagerAlgorithm().getValue());
+		
+		
+		
+		
+		
+		// Ajout Protocole SSL
+		properties.setProperty(KafkaConfig.SslProtocolProp(), 
+							   simulatorProperties.getSslProtocol().getValue());
+		
+		// Ajout Send Buffer Size
+		properties.setProperty(KafkaConfig.SocketSendBufferBytesProp(), 
+							   String.valueOf(simulatorProperties.getSendBufferSize()));
+		
 		// On retourne le liste
 		return properties;
 	}
-
+		
+	/**
+	 * Méthode permettant d'initialiser les topics
+	 */
+	private void initializeTopics() {
+		
+		// Vidage de la liste de topics
+		createdTopics.clear();
+		
+		// Creation des topic de la liste parametrée
+		internalCreateTopics(simulatorProperties.getInitialTopics());
+	}
+	
 	/**
 	 * Méthode permettant d'exécuter ine action sur le broker en mode Admin 
 	 * @param callback	Callback de l'action
 	 */
-	public void doWithAdmin(Consumer<AdminClient> callback) {
+	private void doWithAdmin(Consumer<AdminClient> callback) {
 		
 		// MAP des configurations administrateur
 		Map<String, Object> adminConfigs = new HashMap<>();
@@ -343,37 +455,12 @@ public class KafkaSimulator {
 								  .map(brokerProperty -> "127.0.0.1:" + brokerProperty.getListener().getPort())
 								  .collect(Collectors.joining(",", "", ""));
 	}
-
-	/**
-	 * Méthode permettant de créer une liste de topics à partir de leur noms
-	 * @param topicsNames	Tableau de noms de topics
-	 */
-	public void createTopics(String...topicsNames) {
-		
-		// Execution en tant qu'admin
-		doWithAdmin(adminClient -> {
-			
-			// Creation de topics
-			createTopics(adminClient,
-						 
-						 // Stream sur la liste des noms de topics
-						 Arrays.stream(topicsNames)
-						 			
-						 			// Transformation des noms en Topics
-						 			.map(topicName -> new NewTopic(topicName,
-						 										   simulatorProperties.getPartitionCount(), 
-						 										   (short) simulatorProperties.getBrokerConfigs().size()))
-						 			
-						 			// Collecte dans une liste
-						 			.collect(Collectors.toList()));
-		});
-	}
 	
 	/**
-	 * Méthode permettant de créer une liste de topics à partir de leur noms
+	 * Méthode interne permettant de créer une liste de topics à partir de leur noms
 	 * @param topicsNames	Liste des noms de topics
 	 */
-	public void createTopics(List<String> topicsNames) {
+	private void internalCreateTopics(List<String> topicsNames) {
 		
 		// Execution en tant qu'admin
 		doWithAdmin(adminClient -> {
@@ -401,6 +488,16 @@ public class KafkaSimulator {
 	 */
 	private void createTopics(AdminClient admin, List<NewTopic> newTopics) {
 		
+		// Verifier que ZooKeeper est actif
+		Assert.notNull(this.zookeeper, "Assurez-vous que le cluster ZooKeeper est actif avant toute opération.");
+		
+		// Parcours
+		for (NewTopic topic : newTopics) {
+			
+			// Si le topic est deja crée
+			Assert.isTrue(createdTopics.add(topic.name()), () -> "Ce topic existe déjà : " + topic.name());
+		}
+		
 		// Execution de la commande de creation des topics
 		CreateTopicsResult createTopics = admin.createTopics(newTopics);
 		
@@ -417,10 +514,27 @@ public class KafkaSimulator {
 	}
 	
 	/**
+	 * Méthode permettant de créer une liste de topics à partir de leur noms
+	 * @param topicsNames	Tableau de noms de topics
+	 */
+	public void createTopics(String...topicsNames) {
+		
+		// Creation de la liste de topics
+		internalCreateTopics(
+
+				 // Stream sur la liste des noms de topics
+				 Arrays.stream(topicsNames).collect(Collectors.toList())
+		);
+	}
+	
+	/**
 	 * Méthode permettant de lister les topics 
 	 * @return	Liste de topics
 	 */
 	public List<String> listTopics() {
+		
+		// Verifier que ZooKeeper est actif
+		Assert.notNull(this.zookeeper, "Assurez-vous que le cluster ZooKeeper est actif avant toute opération.");
 		
 		// Future
 		KafkaFuture<Collection<TopicListing>> topicListingFuture = adminClient.listTopics().listings();
@@ -441,6 +555,51 @@ public class KafkaSimulator {
 			throw new KafkaException(e);
 			
 		}
+	}
+	
+	/**
+	 * Méthode permettant de supprimer les topics 
+	 * @param topicsNames	Liste des noms des topics a supprimer
+	 */
+	public void deleteTopics(List<String> topicsNames) {
+		
+		// Verifier que ZooKeeper est actif
+		Assert.notNull(this.zookeeper, "Assurez-vous que le cluster ZooKeeper est actif avant toute opération.");
+
+		// Parcours
+		for (String topicName : topicsNames) {
+			
+			// Si le topic est deja crée
+			Assert.isTrue(createdTopics.remove(topicName), () -> "Ce topic n'existe pas : " + topicName);
+		}
+		
+		// Requete de suppression des topics
+		DeleteTopicsResult result = adminClient.deleteTopics(topicsNames);
+		
+		try {
+			
+			// Attendre la fin de la suppression
+			result.all().get(DEFAULT_ADMIN_TIMEOUT, TimeUnit.SECONDS);
+			
+		} catch (Exception e) {
+			
+			// Print exception stack trace
+			e.printStackTrace();
+			
+			// On relance
+			throw new KafkaException(e);
+			
+		}
+	}
+	
+	/**
+	 * Méthode permettant de supprimer une liste de noms de topics 
+	 * @param topicsNames	Liste de noms de topics
+	 */
+	public void deleteTopics(String...topicsNames) {
+		
+		// Suppression
+		deleteTopics(topicsNames);	
 	}
 	
 	/**

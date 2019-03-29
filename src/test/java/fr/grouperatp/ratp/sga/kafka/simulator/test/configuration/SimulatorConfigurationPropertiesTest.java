@@ -82,16 +82,16 @@ public class SimulatorConfigurationPropertiesTest {
 		assertThat(simulatorProperties.getSslProtocol(), is(SslProtocol.TLS));
 		
 		// Assert Keystore configuration is set
-		assertThat(simulatorProperties.getKeystoreConfig(), is(notNullValue()));
+		assertThat(simulatorProperties.getTruststoreConfig(), is(notNullValue()));
 		
 		// Assert Keystore password is equal to certain value
-		assertThat(simulatorProperties.getKeystoreConfig().getPassword(), is(equalTo("r@tp!k@fk@#")));
+		assertThat(simulatorProperties.getTruststoreConfig().getPassword(), is(equalTo("r@tp!k@fk@#")));
 		
 		// Assert Keystore type is JKS
-		assertThat(simulatorProperties.getKeystoreConfig().getType(), is(equalTo(KeystoreType.JKS)));
+		assertThat(simulatorProperties.getTruststoreConfig().getType(), is(equalTo(KeystoreType.JKS)));
 		
 		// Assert Keymanager algorithm type is SunX509
-		assertThat(simulatorProperties.getKeystoreConfig().getKeymanagerAlgorithm(), is(equalTo(KeymanagerAlgorithm.SunX509)));
+		assertThat(simulatorProperties.getTruststoreConfig().getKeymanagerAlgorithm(), is(equalTo(KeymanagerAlgorithm.SunX509)));
 		
 		// Assert Initial topic List is set
 		assertThat(simulatorProperties.getInitialTopics(), is(notNullValue()));

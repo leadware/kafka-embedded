@@ -149,7 +149,7 @@ public class NativeProgrammaticEmbeddedKafkaTest {
 		
 		// Print properties
 		System.out.println(producerConfigs);
-
+		
 		// Future
 		KafkaFuture<Collection<TopicListing>> topicListingFuture = adminClient.listTopics().listings();
 		

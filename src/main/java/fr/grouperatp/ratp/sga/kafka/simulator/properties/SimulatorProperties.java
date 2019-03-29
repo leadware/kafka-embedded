@@ -97,11 +97,16 @@ public class SimulatorProperties {
 	 * Liste initiale des topics
 	 */
 	private List<String> initialTopics = null;
-
+	
 	/**
 	 * Broker Keystore properties
 	 */
 	private KeystoreProperties keystoreConfig;
+
+	/**
+	 * Broker Truststore properties
+	 */
+	private KeystoreProperties truststoreConfig;
 	
 	/**
 	 * Liste des proprietes des brokers du cluster
