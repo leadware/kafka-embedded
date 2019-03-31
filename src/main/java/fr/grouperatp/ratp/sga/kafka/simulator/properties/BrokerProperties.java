@@ -35,11 +35,6 @@ public class BrokerProperties {
 	private List<String> DEFAULT_LOGS_DIRECTORIES = Collections.singletonList(System.getProperty("java.io.tmpdir"));
 	
 	/**
-	 * Identifiant du Broker
-	 */
-	private String brokerId;
-	
-	/**
 	 * Répertoire de stockage des logs
 	 */
 	private String logsDirectory;

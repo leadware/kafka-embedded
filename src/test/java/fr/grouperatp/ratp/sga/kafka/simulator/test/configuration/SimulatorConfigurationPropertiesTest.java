@@ -108,14 +108,13 @@ public class SimulatorConfigurationPropertiesTest {
 		// Assert that broker configs is not null has one entry
 		assertThat(simulatorProperties.getBrokerConfigs(), hasSize(1));
 		
-		// Assert that broker first config id has some value
-		assertThat(simulatorProperties.getBrokerConfigs().get(0).getBrokerId(), is(equalTo("KAFKA_01")));
-		
 		// Assert that broker first config port map 9090 is set to PLAINTEXT
 		assertThat(simulatorProperties.getBrokerConfigs().get(0).getListener().getPort(), is(equalTo(9090)));
 		
 		// Assert that broker first config port map 9091 is set to SSL
 		assertThat(simulatorProperties.getBrokerConfigs().get(0).getListener().getProtocol(), is(equalTo(ListenerProtocol.PLAINTEXT)));
 		
+		// Validate Configuration
+		simulatorProperties.validate();
 	}
 }

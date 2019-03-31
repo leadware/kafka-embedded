@@ -4,11 +4,9 @@
 package fr.grouperatp.ratp.sga.kafka.simulator;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -138,6 +136,9 @@ public class KafkaSimulator {
 	@PostConstruct
 	public void initialize() {
 		
+		// Validation des contraintes
+		simulatorProperties.validate();
+		
 		// Initialisation de ZooKeeper
 		initializeZookeeper();
 		
@@ -182,20 +183,11 @@ public class KafkaSimulator {
 				simulatorProperties.getBrokerConfigs().isEmpty()) 
 			throw new RuntimeException("Veuillez renseigner la configuration d'au moins un Broker");
 		
-		// Verification de l'existence des repertoires et des fichiers
-		checkFileAndDirectories();
-		
 		// Parcours de la liste de configurations de brokers
 		for(int index = 0; index < simulatorProperties.getBrokerConfigs().size(); index++) {
 			
 			// Obtention de la config
 			BrokerProperties brokerProperties = simulatorProperties.getBrokerConfigs().get(index);
-			
-			// Controle du répertoire de logs
-			checkFiles(Collections.singletonList(brokerProperties.getLogsDirectory()));
-			
-			// Controle de la liste de logs
-			checkFiles(brokerProperties.getLogsDirectories());
 			
 			// Construction des propriétés de base
 			Properties properties = createBrokerProperties(index, brokerProperties);
@@ -216,57 +208,6 @@ public class KafkaSimulator {
 		
 		// Instanciation du client d.administration
 		adminClient = AdminClient.create(adminConfigs);
-	}
-
-	/**
-	 * Méthode permettant verifier l'existence d'une liste de fichiers 
-	 * @param paths	Chemins source
-	 */
-	private void checkFiles(List<String> paths) {
-		
-		// Parcours
-		for (String path : paths) {
-			
-			// Tentative de chargement
-			buildFile(path);
-		}
-	}
-	
-	/**
-	 * Méthode permettant de construire un fichier à partir d'un chemin 
-	 * @param path	Chemin source
-	 * @return Fichier construit en cas d'existence
-	 */
-	private File buildFile(String path) {
-
-		try {
-			
-			// Obtention du File sur le repertoire temporaire
-			return ResourceUtils.getFile(path);
-			
-		} catch (FileNotFoundException e) {
-			
-			// Print exception stack trace
-			e.printStackTrace();
-			
-			// On relance
-			throw new RuntimeException("Le chemin n'existe pas : " + path);
-		}
-	}
-	
-	/**
-	 * Méthode permettant de vérifier l'existence des répertoires et fichiers configurés
-	 */
-	private void checkFileAndDirectories() {
-		
-		// Obtention du File sur le repertoire temporaire
-		temporairyDir = buildFile(simulatorProperties.getJavaTemporaryDirectory());
-		
-		// Obtention du File sur le magasin de clés
-		keystoreLocation = buildFile(simulatorProperties.getKeystoreConfig().getLocation());
-		
-		// Obtention du File sur le magasin de clés de confiance
-		truststoreLocation = buildFile(simulatorProperties.getTruststoreConfig().getLocation());
 	}
 	
 	/**
@@ -348,6 +289,18 @@ public class KafkaSimulator {
 		properties.setProperty(KafkaConfig.LogDirsProp(), 
 							   brokerConfig.getLogsDirectories()
 							   			   .stream()
+							   			   .map(logDirectory -> {
+							   				   try {
+							   					   
+							   					   // Tentative d'obtention de l'URL
+							   					   return ResourceUtils.getURL(logDirectory).getFile();
+							   					
+							   				   } catch (Exception e) {
+							   					   
+							   					   // Return the original Path
+							   					   return logDirectory;
+							   				   }
+							   			   })
 							   			   .collect(Collectors.joining(",")));
 		
 		// Ajout etat activation SSL Enabled
@@ -356,44 +309,45 @@ public class KafkaSimulator {
 									   					  .getProtocol()
 									   					  .equals(ListenerProtocol.SSL)));
 		
-		// Ajout Truststore location
-		properties.setProperty(KafkaConfig.SslTruststoreLocationProp(), 
-							   simulatorProperties.getTruststoreConfig().getLocation());
+		// Si la configuration de truststore est definie
+		if(simulatorProperties.getTruststoreConfig() != null) {
+
+			// Ajout Truststore location
+			properties.setProperty(KafkaConfig.SslTruststoreLocationProp(), 
+								   simulatorProperties.getTruststoreConfig().getLocation());
+			
+			// Ajout Truststore password
+			properties.setProperty(KafkaConfig.SslTruststorePasswordProp(), 
+								   simulatorProperties.getTruststoreConfig().getPassword());
+			
+			// Ajout Truststore type
+			properties.setProperty(KafkaConfig.SslTruststoreTypeProp(), 
+								   simulatorProperties.getTruststoreConfig().getType().getValue());
+			
+			// Ajout KeyManager Algorithm
+			properties.setProperty(KafkaConfig.SslKeyManagerAlgorithmProp(), 
+								   simulatorProperties.getTruststoreConfig().getKeymanagerAlgorithm().getValue());
+		}
 		
-		// Ajout Truststore password
-		properties.setProperty(KafkaConfig.SslTruststorePasswordProp(), 
-							   simulatorProperties.getTruststoreConfig().getPassword());
-		
-		// Ajout Truststore type
-		properties.setProperty(KafkaConfig.SslTruststoreTypeProp(), 
-							   simulatorProperties.getTruststoreConfig().getType().getValue());
-		
-		// Ajout KeyManager Algorithm
-		properties.setProperty(KafkaConfig.SslKeyManagerAlgorithmProp(), 
-							   simulatorProperties.getTruststoreConfig().getKeymanagerAlgorithm().getValue());
-		
-		
-		
-		
-		// Ajout Truststore location
-		properties.setProperty(KafkaConfig.SslKeystoreLocationProp(), 
-							   simulatorProperties.getTruststoreConfig().getLocation());
-		
-		// Ajout Truststore password
-		properties.setProperty(KafkaConfig.SslKeystorePasswordProp(), 
-							   simulatorProperties.getKeystoreConfig().getPassword());
-		
-		// Ajout Keystore type
-		properties.setProperty(KafkaConfig.SslKeystoreTypeProp(), 
-							   simulatorProperties.getKeystoreConfig().getType().getValue());
-		
-		// Ajout KeyManager Algorithm
-		properties.setProperty(KafkaConfig.SslKeyManagerAlgorithmProp(), 
-							   simulatorProperties.getKeystoreConfig().getKeymanagerAlgorithm().getValue());
-		
-		
-		
-		
+		// Si la configuration de Keystore est definie
+		if(simulatorProperties.getKeystoreConfig() != null) {
+
+			// Ajout Truststore location
+			properties.setProperty(KafkaConfig.SslKeystoreLocationProp(), 
+								   simulatorProperties.getKeystoreConfig().getLocation());
+			
+			// Ajout Truststore password
+			properties.setProperty(KafkaConfig.SslKeystorePasswordProp(), 
+								   simulatorProperties.getKeystoreConfig().getPassword());
+			
+			// Ajout Keystore type
+			properties.setProperty(KafkaConfig.SslKeystoreTypeProp(), 
+								   simulatorProperties.getKeystoreConfig().getType().getValue());
+			
+			// Ajout KeyManager Algorithm
+			properties.setProperty(KafkaConfig.SslKeyManagerAlgorithmProp(), 
+								   simulatorProperties.getKeystoreConfig().getKeymanagerAlgorithm().getValue());
+		}
 		
 		// Ajout Protocole SSL
 		properties.setProperty(KafkaConfig.SslProtocolProp(), 
@@ -599,7 +553,7 @@ public class KafkaSimulator {
 	public void deleteTopics(String...topicsNames) {
 		
 		// Suppression
-		deleteTopics(topicsNames);	
+		deleteTopics(Arrays.stream(topicsNames).collect(Collectors.toList()));	
 	}
 	
 	/**

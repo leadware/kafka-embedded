@@ -4,14 +4,21 @@
 package fr.grouperatp.ratp.sga.kafka.simulator.properties;
 
 import java.util.List;
+import java.util.Set;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Valid;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.validation.annotation.Validated;
 
+import fr.grouperatp.ratp.sga.kafka.simulator.utils.jsr303.file.FileType;
+import fr.grouperatp.ratp.sga.kafka.simulator.utils.jsr303.file.FileValidator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,7 +36,6 @@ import lombok.ToString;
 @Setter
 @ToString
 @ConfigurationProperties(prefix = SimulatorProperties.SIMULATOR_PROPERTIES_PREFIX)
-@Validated
 public class SimulatorProperties {
 	
 	/**
@@ -46,6 +52,7 @@ public class SimulatorProperties {
 	/**
 	 * Répertoire temporaire de fichier (java.io.tmpdir)
 	 */
+	@FileValidator(fileType = FileType.DIRECTORY)
 	private String javaTemporaryDirectory;
 	
 	/**
@@ -101,11 +108,13 @@ public class SimulatorProperties {
 	/**
 	 * Broker Keystore properties
 	 */
+	@Valid
 	private KeystoreProperties keystoreConfig;
 
 	/**
 	 * Broker Truststore properties
 	 */
+	@Valid
 	private KeystoreProperties truststoreConfig;
 	
 	/**
@@ -113,6 +122,7 @@ public class SimulatorProperties {
 	 */
 	@NotNull(message = "Veuillez renseigner les propriétés des Borkers")
 	@Size(min = 1, message = "Veuillez configurer au moins un broker")
+	@Valid
 	private List<BrokerProperties> brokerConfigs = null;
 	
 	/**
@@ -193,5 +203,39 @@ public class SimulatorProperties {
 	
 		// Renvoi de la valeur du champ "sendBufferSize"
 		return (sendBufferSize == null) ? 102400L : sendBufferSize;
+	}
+	
+	/**
+	 * Méthode permettant de valider l'instance
+	 */
+	public void validate() {
+		
+		// Fabrique de validateurs
+		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+		
+		// Obtention d'un valiateur
+		Validator validator = factory.getValidator();
+		
+		// Execution de la validation
+		Set<ConstraintViolation<SimulatorProperties>> constraintViolations = validator.validate(this);
+		
+		// Si il ya pas d'erreur
+		if(constraintViolations == null || constraintViolations.size() == 0) return;
+		
+		// Affichage des violations
+		constraintViolations.forEach(constraintViolation -> {
+			
+			// Affichage du chemin de la propriete
+			System.out.println("-------> Propriete : " + constraintViolation.getRootBeanClass() + "." + constraintViolation.getPropertyPath());
+
+			// Affichage de la valeur de la propriete
+			System.out.println("-------> Valeur : " + constraintViolation.getInvalidValue());
+
+			// Affichage dela propriete
+			System.out.println("-------> Raison : " + constraintViolation.getMessage());
+		});
+		
+		// On leve une exception
+		throw new RuntimeException("Violation des contraintes de validation des propriété de configuration du Simulateur : " + constraintViolations);
 	}
 }

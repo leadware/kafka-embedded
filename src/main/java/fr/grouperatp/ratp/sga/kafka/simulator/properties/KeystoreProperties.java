@@ -5,6 +5,7 @@ package fr.grouperatp.ratp.sga.kafka.simulator.properties;
 
 import javax.validation.constraints.NotEmpty;
 
+import fr.grouperatp.ratp.sga.kafka.simulator.utils.jsr303.file.FileValidator;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,6 +26,7 @@ public class KeystoreProperties {
 	 * Broker keystore location 
 	 */
 	@NotEmpty(message = "Veuillez renseigner le chemin vers le magasin de clés (Keystore)")
+	@FileValidator
 	private String location = null;
 	
 	/**
