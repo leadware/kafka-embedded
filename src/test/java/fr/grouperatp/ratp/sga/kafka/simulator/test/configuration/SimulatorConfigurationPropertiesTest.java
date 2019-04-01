@@ -32,7 +32,7 @@ import fr.grouperatp.ratp.sga.kafka.simulator.properties.SslProtocol;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@TestPropertySource(locations = {"classpath:load-simulator-config-application.properties"})
+@TestPropertySource(locations = {"classpath:load-simulator-properties/load-simulator-config-application.properties"})
 public class SimulatorConfigurationPropertiesTest {
 	
 	/**
