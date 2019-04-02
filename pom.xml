@@ -109,6 +109,9 @@
 		<!-- Hibernate validator version propery -->
 		<hibernate-validator.version>6.0.16.Final</hibernate-validator.version>
 		
+		<!-- Bouncy Castle version property -->
+		<bouncy-castle.version>1.61</bouncy-castle.version>
+		
 	</properties>
 	
 	<!-- Project build configuration -->
@@ -294,17 +297,22 @@
 			<artifactId>spring-boot-starter</artifactId>
 		</dependency>
 		
+		<!-- Spring Boot Starter Validation -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
+		
+		<!-- Spring Boot Starter Web -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		
 		<!-- Spring Boot Configuration Processor dependency -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-configuration-processor</artifactId>
-		</dependency>
-		
-		<!-- Spring Boot Starter test dependency -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
 		</dependency>
 		
 		<!-- Spring Kafka dependency -->
@@ -333,15 +341,38 @@
 			<version>${springfox-swagger.version}</version>
 		</dependency>
 		
+		<!-- Swagger dependency -->
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-bean-validators</artifactId>
+			<version>${springfox-swagger.version}</version>
+		</dependency>
+		
 		<!-- Lombok dependency -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 		</dependency>
 		
+		<!-- Bouncy Castle BCProv -->
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcprov-jdk14</artifactId>
+			<version>${bouncy-castle.version}</version>
+		</dependency>
+		
+		<!-- Bouncy Castle BCPKIX -->
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcpkix-jdk14</artifactId>
+			<version>${bouncy-castle.version}</version>
+		</dependency>
+		
+		<!-- Spring Boot Starter test dependency -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-validation</artifactId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
 		</dependency>
 		
 	</dependencies>

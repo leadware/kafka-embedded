@@ -7,6 +7,7 @@ import javax.validation.constraints.NotEmpty;
 
 import fr.grouperatp.ratp.sga.kafka.simulator.utils.jsr303.file.FileValidator;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
@@ -19,6 +20,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
+@Getter
 @ToString
 public class KeystoreProperties {
 	
@@ -35,6 +37,11 @@ public class KeystoreProperties {
 	private String password = null;
 	
 	/**
+	 * Mot de passe de la clé
+	 */
+	private String keyPassword = null;
+	
+	/**
 	 * Broker keystore type
 	 */
 	private KeystoreType type = KeystoreType.JKS;
@@ -43,27 +50,7 @@ public class KeystoreProperties {
 	 * Broker keymanager algorithm
 	 */
 	private KeymanagerAlgorithm keymanagerAlgorithm = KeymanagerAlgorithm.SunX509;
-
-	/**
-	 * Méthode d'obtention de la valeur du champ "location"
-	 * @return Valeur du champ "location"
-	 */
-	public String getLocation() {
 	
-		// Renvoi de la valeur du champ "location"
-		return location;
-	}
-
-	/**
-	 * Méthode d'obtention de la valeur du champ "password"
-	 * @return Valeur du champ "password"
-	 */
-	public String getPassword() {
-	
-		// Renvoi de la valeur du champ "password"
-		return password;
-	}
-
 	/**
 	 * Méthode d'obtention de la valeur du champ "type"
 	 * @return Valeur du champ "type"

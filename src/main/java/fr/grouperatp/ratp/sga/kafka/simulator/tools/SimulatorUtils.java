@@ -166,4 +166,22 @@ public class SimulatorUtils {
 			throw new RuntimeException("Le chemin n'existe pas : " + path);
 		}
 	}
+	
+	/**
+	 * Méthode permettant d'obtenir un chemin resolu par Spring
+	 * @param rawPath	Chemin brut
+	 * @return Chemin de fichier resolu
+	 */
+	public static String getResolvedPath(String rawPath) {
+		try {
+			   
+			   // Tentative d'obtention de l'URL
+			   return ResourceUtils.getURL(rawPath).getFile();
+			
+		   } catch (Exception e) {
+			   
+			   // Return the original Path
+			   return rawPath;
+		   }
+	}
 }

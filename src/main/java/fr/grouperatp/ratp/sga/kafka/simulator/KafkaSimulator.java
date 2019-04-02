@@ -25,18 +25,19 @@ import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.admin.CreateTopicsResult;
 import org.apache.kafka.clients.admin.DeleteTopicsResult;
+import org.apache.kafka.clients.admin.ListTopicsOptions;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.admin.TopicListing;
 import org.apache.kafka.common.KafkaFuture;
-import org.apache.kafka.common.security.auth.SecurityProtocol;
 import org.apache.kafka.common.utils.Time;
 import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.util.Assert;
-import org.springframework.util.ResourceUtils;
 
+import fr.grouperatp.ratp.sga.kafka.simulator.model.Topic;
 import fr.grouperatp.ratp.sga.kafka.simulator.properties.BrokerProperties;
 import fr.grouperatp.ratp.sga.kafka.simulator.properties.ListenerProtocol;
 import fr.grouperatp.ratp.sga.kafka.simulator.properties.SimulatorProperties;
+import fr.grouperatp.ratp.sga.kafka.simulator.tools.SimulatorUtils;
 import kafka.common.KafkaException;
 import kafka.server.KafkaConfig;
 import kafka.server.KafkaServer;
@@ -197,7 +198,6 @@ public class KafkaSimulator {
 			
 			// Ajout du serveur Kafka dans la liste des serveurs
 			kafkaServers.add(server);
-			
 		}
 		
 		// MAP des configurations administrateur
@@ -205,6 +205,9 @@ public class KafkaSimulator {
 		
 		// Positionnement des URL de serveurs
 		adminConfigs.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, getBrokersAsString());
+		
+		// Positionnement de l'ID du client d'admin
+		adminConfigs.put(AdminClientConfig.CLIENT_ID_CONFIG, "simulator-admin-client");
 		
 		// Instanciation du client d.administration
 		adminClient = AdminClient.create(adminConfigs);
@@ -217,45 +220,80 @@ public class KafkaSimulator {
 	 * @return	Liste de proprietes
 	 */
 	private Properties createBrokerProperties(int brokerId, BrokerProperties brokerConfig) {
+		
+		// Instantiation des proprietes
+		Properties properties = new Properties();
 
-		// Construction des propriétés de base
-		Properties properties = TestUtils.createBrokerConfig(brokerId,
-															 zookeeperConnexionUrl,
-															 simulatorProperties.getControlledShutdown(),
-															 simulatorProperties.getEnableDeleteTopics(), brokerConfig.getListener().getPort(),
-															 scala.Option.apply(SecurityProtocol.valueOf(brokerConfig.getListener().getProtocol().getValue())),
-															 scala.Option.apply(truststoreLocation),
-															 scala.Option.apply(null),
-															 
-															 // Activation du PLAINTEXT
-															 brokerConfig.getListener().getProtocol().equals(ListenerProtocol.PLAINTEXT),
-															 
-															 // Activation du SASL
-															 false, 
-															 
-															 // Port SASL
-															 0, 
-															 
-															 // Activation du SSL
-															 brokerConfig.getListener().getProtocol().equals(ListenerProtocol.SSL),
-															 
-															 // Port SSL
-															 brokerConfig.getListener().getPort(),
-															 
-															 // Activation du SASLSSL
-															 false,
-															 
-															 // Port SASLSSL
-															 0,
-															 
-															 // Options RACK
-															 scala.Option.apply(null),
-															 
-															 // Nombre de Log Dirs
-															 brokerConfig.getLogsDirectories().size(),
-															 
-															 // Activation d'un Token
-															 false);
+		// Broker Zookeeper URL
+		properties.setProperty(KafkaConfig.ZkConnectProp(), zookeeperConnexionUrl);
+		
+		// Broker ID Generation Enabled
+		properties.setProperty(KafkaConfig.BrokerIdGenerationEnableProp(), String.valueOf(true));
+		
+		// Broker ID
+		properties.setProperty(KafkaConfig.BrokerIdProp(), String.valueOf(brokerId));
+		
+		// Broker Control Shut down
+		properties.setProperty(KafkaConfig.ControlledShutdownEnableProp(), String.valueOf(simulatorProperties.getControlledShutdown()));
+
+		// Broker Network Thread
+		properties.setProperty(KafkaConfig.NumNetworkThreadsProp(), String.valueOf(simulatorProperties.getNetworkThreadCount()));
+
+		// Broker IO Threads
+		properties.setProperty(KafkaConfig.NumIoThreadsProp(), String.valueOf(simulatorProperties.getIoThreadCount()));
+		
+		// Broker Port
+		properties.setProperty(KafkaConfig.PortProp(), String.valueOf(brokerConfig.getListener().getPort()));
+		
+		// Listeners
+		properties.setProperty(KafkaConfig.ListenersProp(), brokerConfig.getListener().getProtocol().getValue() + "://localhost:" + brokerConfig.getListener().getPort());
+		
+		// Inter Broker Listeners
+		//properties.setProperty(KafkaConfig.InterBrokerListenerNameProp(),"PLAINTEXT");
+		
+		// Inter Broker Listeners
+		properties.setProperty(KafkaConfig.InterBrokerSecurityProtocolProp(), brokerConfig.getListener().getProtocol().getValue());
+		
+		// Broker Socket Send Buffer
+		properties.setProperty(KafkaConfig.SocketSendBufferBytesProp(), String.valueOf(simulatorProperties.getSendBufferSize()));
+		
+		// Broker Socket Receive Buffer
+		properties.setProperty(KafkaConfig.SocketReceiveBufferBytesProp(), String.valueOf(simulatorProperties.getReceiveBufferSize()));
+		
+		// Broker Socket Max Request Size
+		properties.setProperty(KafkaConfig.SocketRequestMaxBytesProp(), String.valueOf(simulatorProperties.getMaxRequestSize()));
+		
+		// Broker Number of partition per topic
+		properties.setProperty(KafkaConfig.NumPartitionsProp(), String.valueOf(simulatorProperties.getPartitionCount()));
+		
+		// Broker Logs dirs
+		properties.setProperty(KafkaConfig.LogDirsProp(), 
+							   brokerConfig.getLogsDirectories()
+							   			   .stream()
+							   			   .map(logDirectory -> {
+							   				   
+							   				   // On retourne le chemin resolu
+							   				   return SimulatorUtils.getResolvedPath(logDirectory);
+							   			   })
+							   			   .collect(Collectors.joining(",")));
+		
+		// Broker Log dir
+		properties.setProperty(KafkaConfig.LogDirProp(), SimulatorUtils.getResolvedPath(brokerConfig.getLogsDirectory()));
+
+		// Broker Log Log Flush Interval
+		properties.setProperty(KafkaConfig.LogFlushIntervalMsProp(), String.valueOf(1000));
+		
+		// Broker Log Flush scheduler
+		properties.setProperty(KafkaConfig.LogFlushSchedulerIntervalMsProp(), String.valueOf(1000));
+		
+		// Broker Log Retention Time in minute
+		properties.setProperty(KafkaConfig.LogRetentionTimeMinutesProp(), String.valueOf(30));
+		
+		// Broker Log File size
+		properties.setProperty("log.file.size", String.valueOf(536870912));
+		
+		// Broker Log dir
+		properties.setProperty(KafkaConfig.LogCleanupIntervalMsProp(), String.valueOf(60000));
 		
 		// Timeout sur la socket de réplication
 		properties.setProperty(KafkaConfig.ReplicaSocketTimeoutMsProp(), "1000");
@@ -270,39 +308,6 @@ public class KafkaSimulator {
 		properties.setProperty(KafkaConfig.ReplicaHighWatermarkCheckpointIntervalMsProp(),
 							   String.valueOf(Long.MAX_VALUE));
 		
-		// Ajout du Nombre de Threads d'entree/sortie
-		properties.setProperty(KafkaConfig.NumIoThreadsProp(), 
-							   String.valueOf(simulatorProperties.getIoThreadCount()));
-		
-		// Ajout du Nombre de Threads network
-		properties.setProperty(KafkaConfig.NumNetworkThreadsProp(), 
-							   String.valueOf(simulatorProperties.getNetworkThreadCount()));
-		
-		// Ajout Send Buffer Size
-		properties.setProperty(KafkaConfig.SocketSendBufferBytesProp(), 
-							   String.valueOf(simulatorProperties.getSendBufferSize()));
-		
-		// Ajout du LogDir
-		properties.setProperty(KafkaConfig.LogDirProp(), brokerConfig.getLogsDirectory());
-		
-		// Ajout de la liste des LogsDirs
-		properties.setProperty(KafkaConfig.LogDirsProp(), 
-							   brokerConfig.getLogsDirectories()
-							   			   .stream()
-							   			   .map(logDirectory -> {
-							   				   try {
-							   					   
-							   					   // Tentative d'obtention de l'URL
-							   					   return ResourceUtils.getURL(logDirectory).getFile();
-							   					
-							   				   } catch (Exception e) {
-							   					   
-							   					   // Return the original Path
-							   					   return logDirectory;
-							   				   }
-							   			   })
-							   			   .collect(Collectors.joining(",")));
-		
 		// Ajout etat activation SSL Enabled
 		properties.setProperty(KafkaConfig.SslEnabledProtocolsProp(), 
 							   String.valueOf(brokerConfig.getListener()
@@ -311,10 +316,10 @@ public class KafkaSimulator {
 		
 		// Si la configuration de truststore est definie
 		if(simulatorProperties.getTruststoreConfig() != null) {
-
+			
 			// Ajout Truststore location
 			properties.setProperty(KafkaConfig.SslTruststoreLocationProp(), 
-								   simulatorProperties.getTruststoreConfig().getLocation());
+								   SimulatorUtils.getResolvedPath(simulatorProperties.getTruststoreConfig().getLocation()));
 			
 			// Ajout Truststore password
 			properties.setProperty(KafkaConfig.SslTruststorePasswordProp(), 
@@ -334,11 +339,15 @@ public class KafkaSimulator {
 
 			// Ajout Truststore location
 			properties.setProperty(KafkaConfig.SslKeystoreLocationProp(), 
-								   simulatorProperties.getKeystoreConfig().getLocation());
+								   SimulatorUtils.getResolvedPath(simulatorProperties.getKeystoreConfig().getLocation()));
 			
-			// Ajout Truststore password
+			// Ajout Keystore password
 			properties.setProperty(KafkaConfig.SslKeystorePasswordProp(), 
 								   simulatorProperties.getKeystoreConfig().getPassword());
+			
+			// Ajout Key password
+			properties.setProperty(KafkaConfig.SslKeyPasswordProp(), 
+								   simulatorProperties.getKeystoreConfig().getKeyPassword());
 			
 			// Ajout Keystore type
 			properties.setProperty(KafkaConfig.SslKeystoreTypeProp(), 
@@ -349,13 +358,13 @@ public class KafkaSimulator {
 								   simulatorProperties.getKeystoreConfig().getKeymanagerAlgorithm().getValue());
 		}
 		
+		// Ajout Client Auth
+		properties.setProperty(KafkaConfig.SslClientAuthProp(), 
+							   simulatorProperties.getSslClientAuthentication().getValue().toLowerCase());
+		
 		// Ajout Protocole SSL
 		properties.setProperty(KafkaConfig.SslProtocolProp(), 
 							   simulatorProperties.getSslProtocol().getValue());
-		
-		// Ajout Send Buffer Size
-		properties.setProperty(KafkaConfig.SocketSendBufferBytesProp(), 
-							   String.valueOf(simulatorProperties.getSendBufferSize()));
 		
 		// On retourne le liste
 		return properties;
@@ -406,7 +415,7 @@ public class KafkaSimulator {
 		// On retourne la chiane
 		return simulatorProperties.getBrokerConfigs()
 								  .parallelStream()
-								  .map(brokerProperty -> "127.0.0.1:" + brokerProperty.getListener().getPort())
+								  .map(brokerProperty -> brokerProperty.getListener().getProtocol().getValue() + "://127.0.0.1:" + brokerProperty.getListener().getPort())
 								  .collect(Collectors.joining(",", "", ""));
 	}
 	
@@ -485,19 +494,33 @@ public class KafkaSimulator {
 	 * Méthode permettant de lister les topics 
 	 * @return	Liste de topics
 	 */
-	public List<String> listTopics() {
+	public List<Topic> listTopics() {
+		
+		// On retourne la liste
+		return listTopics(false);
+	}
+
+	/**
+	 * Méthode permettant de lister les topics 
+	 * @param internal Etat interne ou non du topic
+	 * @return	Liste de topics
+	 */
+	public List<Topic> listTopics(boolean internal) {
 		
 		// Verifier que ZooKeeper est actif
 		Assert.notNull(this.zookeeper, "Assurez-vous que le cluster ZooKeeper est actif avant toute opération.");
 		
+		// Option de recherche
+		ListTopicsOptions options = new ListTopicsOptions().listInternal(internal);
+		
 		// Future
-		KafkaFuture<Collection<TopicListing>> topicListingFuture = adminClient.listTopics().listings();
+		KafkaFuture<Collection<TopicListing>> topicListingFuture = adminClient.listTopics(options).listings();
 		
 		try {
 			
 			// Attendre le resultat
 			return topicListingFuture.get(DEFAULT_ADMIN_TIMEOUT, TimeUnit.SECONDS)
-									 .stream().map(topicListing -> topicListing.name())
+									 .stream().map(topicListing -> new Topic(topicListing.name(), topicListing.isInternal()))
 									 		  .collect(Collectors.toList());
 			
 		} catch (Exception e) {

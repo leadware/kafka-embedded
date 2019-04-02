@@ -91,14 +91,33 @@ public class SimulatorProperties {
 	/**
 	 * Broker instance send buffer max size (in byte)
 	 */
-	@NotNull(message = "Veuillez renseigner la taille du buffer")
-	@Positive(message = "La taille du buffer doit être une valeur supérieure à 0")
+	@NotNull(message = "Veuillez renseigner la taille du buffer d'envoie")
+	@Positive(message = "La taille du buffer d'envoie doit être une valeur supérieure à 0")
 	private Long sendBufferSize = 102400L;
+
+	/**
+	 * Broker instance send buffer max size (in byte)
+	 */
+	@NotNull(message = "Veuillez renseigner la taille du buffer de reception")
+	@Positive(message = "La taille du buffer de reception doit être une valeur supérieure à 0")
+	private Long receiveBufferSize = 102400L;
+
+	/**
+	 * Broker instance send buffer max size (in byte)
+	 */
+	@NotNull(message = "Veuillez renseigner la taille max des requetes")
+	@Positive(message = "La taille du max des requetes doit être une valeur supérieure à 0")
+	private Long maxRequestSize = 104857600L;
 	
 	/**
 	 * Broker SSL protocol 
 	 */
 	private SslProtocol sslProtocol = SslProtocol.TLS;
+	
+	/**
+	 * SSL Client Authentication
+	 */
+	private SslClientAuthentication sslClientAuthentication = SslClientAuthentication.NONE;
 	
 	/**
 	 * Liste initiale des topics
@@ -144,7 +163,17 @@ public class SimulatorProperties {
 		// Renvoi de la valeur du champ "sslProtocol"
 		return (sslProtocol == null) ? SslProtocol.TLS : sslProtocol;
 	}
-
+	
+	/**
+	 * Méthode d'obtention de la valeur du champ "sslClientAuthentication"
+	 * @return Valeur du champ "sslClientAuthentication"
+	 */
+	public SslClientAuthentication getSslClientAuthentication() {
+	
+		// Renvoi de la valeur du champ "sslClientAuthentication"
+		return (sslClientAuthentication == null) ? SslClientAuthentication.NONE : sslClientAuthentication;
+	}
+	
 	/**
 	 * Méthode d'obtention de la valeur du champ "controlledShutdown"
 	 * @return Valeur du champ "controlledShutdown"
@@ -206,6 +235,26 @@ public class SimulatorProperties {
 	}
 	
 	/**
+	 * Méthode d'obtention de la valeur du champ "receiveBufferSize"
+	 * @return Valeur du champ "receiveBufferSize"
+	 */
+	public Long getReceiveBufferSize() {
+	
+		// Renvoi de la valeur du champ "receiveBufferSize"
+		return (receiveBufferSize == null) ? 102400L : sendBufferSize;
+	}
+
+	/**
+	 * Méthode d'obtention de la valeur du champ "maxRequestSize"
+	 * @return Valeur du champ "maxRequestSize"
+	 */
+	public Long getMaxRequestSize() {
+	
+		// Renvoi de la valeur du champ "maxRequestSize"
+		return (maxRequestSize == null) ? 104857600L : maxRequestSize;
+	}
+	
+	/**
 	 * Méthode permettant de valider l'instance
 	 */
 	public void validate() {
@@ -238,4 +287,5 @@ public class SimulatorProperties {
 		// On leve une exception
 		throw new RuntimeException("Violation des contraintes de validation des propriété de configuration du Simulateur : " + constraintViolations);
 	}
+	
 }
