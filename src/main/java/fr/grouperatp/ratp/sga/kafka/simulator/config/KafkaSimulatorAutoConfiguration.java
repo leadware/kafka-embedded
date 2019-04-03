@@ -55,8 +55,8 @@ public class KafkaSimulatorAutoConfiguration {
 			havingValue = "true",
 			matchIfMissing = false
 	)
-	@Bean
 	@ConditionalOnMissingBean
+	@Bean
 	@Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
 	public KafkaSimulatorFactory kafkaSimulatorFactory() {
 		
@@ -74,9 +74,9 @@ public class KafkaSimulatorAutoConfiguration {
 			name = "enabled",
 			havingValue = "true",
 			matchIfMissing = false
-	)
-	@Bean
+	)	
 	@ConditionalOnMissingBean
+	@Bean
 	@Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
 	public KafkaSimulator kafkaSimulator(KafkaSimulatorFactory kafkaSimulatorFactory) {
 		
@@ -94,8 +94,8 @@ public class KafkaSimulatorAutoConfiguration {
 			havingValue = "true",
 			matchIfMissing = false
 	)
-	@Bean
 	@ConditionalOnMissingBean
+	@Bean
 	public Docket api() {
 		
 		// Construction d

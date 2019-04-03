@@ -234,7 +234,7 @@ public class UnsecureSimulatorInitializingTest {
 		assertThat(records, is(notNullValue()));
 		
 		// Assert that Record has one entry
-		assertThat(records, hasSize(1));
+		assertThat(records, hasSize(nbMessage));
 		
 		// Obtention de l'utilisateur recu
 		User receivedUser = records.take().value();

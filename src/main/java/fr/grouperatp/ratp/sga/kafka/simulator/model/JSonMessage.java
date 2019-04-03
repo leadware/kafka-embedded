@@ -1,10 +1,10 @@
 package fr.grouperatp.ratp.sga.kafka.simulator.model;
 
-import org.springframework.validation.annotation.Validated;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
+import fr.grouperatp.ratp.sga.kafka.simulator.utils.jsr303.format.FormatType;
+import fr.grouperatp.ratp.sga.kafka.simulator.utils.jsr303.format.StringFormatValidator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiModelProperty.AccessMode;
@@ -25,7 +25,6 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@Validated
 public class JSonMessage {
 	
 	/**
@@ -47,6 +46,7 @@ public class JSonMessage {
 	/**
 	 * Corps du message
 	 */
+	@StringFormatValidator(format = FormatType.JSON)
 	@ApiModelProperty(accessMode = AccessMode.READ_WRITE, name = "messageBody", required = true, value = "Contenu du message à envoyer")
 	@JsonProperty(required = true, value = "messageBody")
 	@JsonPropertyDescription("Contenu du message")

@@ -3,27 +3,24 @@
  */
 package fr.grouperatp.ratp.sga.kafka.simulator.controller;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import fr.grouperatp.ratp.sga.kafka.simulator.KafkaSimulator;
 import fr.grouperatp.ratp.sga.kafka.simulator.properties.SimulatorProperties;
 import fr.grouperatp.ratp.sga.kafka.simulator.utils.KafkaSimulatorFactory;
-import fr.grouperatp.ratp.sga.kafka.simulator.utils.jsr303.file.StringFormatValidator;
+import fr.grouperatp.ratp.sga.kafka.simulator.utils.jsr303.format.FormatType;
+import fr.grouperatp.ratp.sga.kafka.simulator.utils.jsr303.format.StringFormatValidator;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
 /**
@@ -48,34 +45,31 @@ import io.swagger.annotations.ApiParam;
 		produces = { MediaType.APPLICATION_JSON_VALUE }, 
 		consumes = { MediaType.APPLICATION_JSON_VALUE }
 )
+@Validated
 public class ProducerController {
 	
 	/**
-	 * MÈthode permettant d'envoyer un message sur un topic du simulateur 
+	 * Methode permettant d'envoyer un message sur un topic du simulateur 
 	 * @param topicName	Nom du topic d'envoie
-	 * @param messageKey	Cle du message Kafka
-	 * @param payload	Contenu du message Kafka
+	 * @param messageKey	Cl√© du message
+	 * @param message	Contenu du message
 	 */
-	@Validated
-	@Email
-	@ApiOperation(value = "OpÈration d'envoie d'un message sur un topic du simulateur kafka")
 	@PostMapping(path = "/send/{topicName}/{messageKey}", consumes = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseStatus(code = HttpStatus.OK)
-	public boolean sendMessage(@ApiParam(name = "topicName", required = true) 
+	public void sendMessage(@ApiParam(name = "topicName", value = "Nom du topic d'envoi", required = true) 
 							@PathVariable("topicName") 
 							@NotEmpty String topicName, 
 							
-							@ApiParam(name = "messageKey", required = true) 
+							@ApiParam(name = "messageKey", value = "Cl√© du message KAFKA" ,required = true) 
 							@PathVariable("topicName") 
 							@NotEmpty String messageKey,
 							
-							@ApiParam(name = "messageBody",value = "JSonMessage au format JSON", required = true)
-							@NotEmpty
-							@StringFormatValidator
-							@RequestBody String payload) {
+							@ApiParam(name = "message", value = "Contenu du message au format JSON", required = true)
+							@RequestBody(required = true)
+							@StringFormatValidator(format = FormatType.JSON) String message) {
 		
-		System.out.println(payload);
-		return true;
+		System.out.println("TOPIC   : " + topicName);
+		System.out.println("MSS KEY : " + messageKey);
+		System.out.println("MSG     : " + message);
 	}
 	
 }

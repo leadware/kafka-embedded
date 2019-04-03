@@ -1,7 +1,7 @@
 /**
  * RATP :: SIT :: I2V :: SGA
  */
-package fr.grouperatp.ratp.sga.kafka.simulator.utils.jsr303.file;
+package fr.grouperatp.ratp.sga.kafka.simulator.utils.jsr303.format;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package fr.grouperatp.ratp.sga.kafka.simulator.utils.jsr303.file;
+package fr.grouperatp.ratp.sga.kafka.simulator.utils.jsr303.format;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -37,10 +37,7 @@ public class StringFormatValidatorEngine implements ConstraintValidator<StringFo
 	 */
 	@Override
 	public boolean isValid(String value, ConstraintValidatorContext context) {
-		System.out.println("--------------------------------------->");
-		System.out.println("--------------------------------------->");
-		System.out.println("--------------------------------------->");
-		System.out.println("--------------------------------------->");
+		
 		// Si le format requis est JSON
 		if(stringFormatValidator.value().equals(FormatType.JSON)) return SimulatorUtils.isValidJson(value);
 		
