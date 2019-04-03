@@ -1,0 +1,114 @@
+{
+	"properties": [
+		{
+			"name": "embedded.kafka.simulator.enabled",
+			"type": "java.lang.Boolean",
+			"description": "État d'activation du simulateur KAFKA"
+		},
+		{
+			"name": "embedded.kafka.simulator.java-temporary-directory",
+			"type": "java.lang.String",
+			"description": "Répertoire des fichiers temporaires"
+		},
+		{
+			"name": "embedded.kafka.simulator.controlled-shutdown",
+			"type": "java.lang.Boolean",
+			"description": "État de controle du Shutdown des Brokers"
+		},
+		{
+			"name": "embedded.kafka.simulator.enable-delete-topics",
+			"type": "java.lang.Boolean",
+			"description": "État de controle du suppression des topics dans le simulateur"
+		},
+		{
+			"name": "embedded.kafka.simulator.partition-count",
+			"type": "java.lang.Integer",
+			"description": "Nombre de partitions par topics"
+		},
+		{
+			"name": "embedded.kafka.simulator.network-thread-count",
+			"type": "java.lang.Integer",
+			"description": "Nombre de Theads réseau"
+		},
+		{
+			"name": "embedded.kafka.simulator.io-thread-count",
+			"type": "java.lang.Integer",
+			"description": "Nombre de Theads I/O"
+		},
+		{
+			"name": "embedded.kafka.simulator.send-buffer-size",
+			"type": "java.lang.Long",
+			"description": "Taille du buffer d'envoi'"
+		},
+		{
+			"name": "embedded.kafka.simulator.ssl-protocol",
+			"type": "java.lang.String",
+			"description": "Protocole SSL"
+		},
+		{
+			"name": "embedded.kafka.simulator.initial-topics",
+			"type": "java.util.ArrayList<java.lang.String>",
+			"description": "Liste initiale des topics à créer"
+		},
+		{
+			"name": "embedded.kafka.simulator.keystore-config",
+			"type": "fr.grouperatp.ratp.sga.kafka.simulator.properties.KeystoreProperties",
+			"description": "Propriétés de configuration du magasin de clé des Brokers KAFKA"
+		},
+		{
+			"name": "embedded.kafka.simulator.keystore-config.location",
+			"type": "java.lang.String",
+			"description": "Chemin du magasin de clés des Brokers KAFKA"
+		},
+		{
+			"name": "embedded.kafka.simulator.keystore-config.password",
+			"type": "java.lang.String",
+			"description": "Mot de passe du magasin de clés des Brokers KAFKA"
+		},
+		{
+			"name": "embedded.kafka.simulator.keystore-config.type",
+			"type": "fr.grouperatp.ratp.sga.kafka.simulator.properties.KeystoreType",
+			"description": "Type de magasin de clés des Brokers KAFKA"
+		},
+		{
+			"name": "embedded.kafka.simulator.keystore-config.keymanager-algorithm",
+			"type": "fr.grouperatp.ratp.sga.kafka.simulator.properties.keymanagerAlgorithm",
+			"description": "Algorithme de gestion des clés du magasin de clés des Brokers KAFKA"
+		},
+		{
+			"name": "embedded.kafka.simulator.broker-configs",
+			"type": "java.util.ArrayList<fr.grouperatp.ratp.sga.kafka.simulator.properties.BrokerProperties>",
+			"description": "Liste des propriétés de configuration des instances de brokers KAFKA"
+		},
+		{
+			"name": "embedded.kafka.simulator.broker-configs[0].broker-id",
+			"type": "java.lang.String",
+			"description": "ID de l'instance de brokers KAFKA"
+		},
+		{
+			"name": "embedded.kafka.simulator.broker-configs[0].logs-directory",
+			"type": "java.lang.String",
+			"description": "Répertoire de logs de l'instance de brokers KAFKA"
+		},
+		{
+			"name": "embedded.kafka.simulator.broker-configs[0].logs-directories",
+			"type": "java.util.List<java.lang.String>",
+			"description": "Liste de répertoires de logs de l'instance de brokers KAFKA"
+		},
+		{
+			"name": "embedded.kafka.simulator.broker-configs[0].listener",
+			"type": "fr.grouperatp.ratp.sga.kafka.simulator.properties.ListenerProperties",
+			"description": "Propriétés du Listener du broker"
+		},
+		{
+			"name": "embedded.kafka.simulator.broker-configs[0].listener.port",
+			"type": "java.lang.Integer",
+			"description": "Port du Listener du broker"
+		},
+		{
+			"name": "embedded.kafka.simulator.broker-configs[0].listener.protocol",
+			"type": "fr.grouperatp.ratp.sga.kafka.simulator.properties.ListenerProtocol",
+			"description": "Protocole du Listener du broker (PLAINTEXT, SSL, SASL, SASL_SSL, etc...)"
+		}
+	]
+}

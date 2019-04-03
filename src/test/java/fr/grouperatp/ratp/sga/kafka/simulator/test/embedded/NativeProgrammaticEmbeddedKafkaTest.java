@@ -1,43 +1,37 @@
+/**
+ * RATP :: SIT :: I2V :: SGA
+ */
 package fr.grouperatp.ratp.sga.kafka.simulator.test.embedded;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.admin.TopicListing;
 import org.apache.kafka.common.KafkaFuture;
+import org.apache.kafka.common.KafkaFuture.BiConsumer;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.kafka.test.EmbeddedKafkaBroker;
-import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.kafka.test.utils.KafkaTestUtils;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 /**
- * Test Class for deprecated KafkaEmbedded
- * @author jetune
- *
+ * Classe de test du broker Kafka Embarqué en mode Programmatic (SANDBOX)
+ * @author <a href="mailto:jean-jacques.etune-ngi@ratp.fr">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
+ * @since 21 mars 2019 - 08:33:56
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@EnableKafka
-@EmbeddedKafka(
-		count = AnnotatedKafkaEmbeddedTest.BROKER_NUMBER,
-		controlledShutdown = AnnotatedKafkaEmbeddedTest.COTROLLED_SHUTDOWN,
-		ports = {AnnotatedKafkaEmbeddedTest.BROKER_1_PORT, AnnotatedKafkaEmbeddedTest.BROKER_2_PORT},
-		partitions = AnnotatedKafkaEmbeddedTest.PARTITION_NUMBER,
-		topics = {"HCPA", "DMES"}
-)
-public class AnnotatedKafkaEmbeddedTest {
+@TestPropertySource(locations = {"classpath:native-kafka-emdebbed-application.properties"})
+public class NativeProgrammaticEmbeddedKafkaTest {
 	
 	/**
 	 * Number of Brokers
@@ -47,17 +41,17 @@ public class AnnotatedKafkaEmbeddedTest {
 	/**
 	 * Controlled Shutdown
 	 */
-	protected static final boolean COTROLLED_SHUTDOWN = false;
-	
+	protected static final boolean CONTROLLED_SHUTDOWN = true;
+
 	/**
 	 * First Broker Port (0 for Random)
 	 */
-	protected static final int BROKER_1_PORT = 50880;
+	protected static final int BROKER_1_PORT = 0;
 	
 	/**
 	 * Second Broker Port (0 for Random)
 	 */
-	protected static final int BROKER_2_PORT = 50881;
+	protected static final int BROKER_2_PORT = 0;
 	
 	/**
 	 * Number of Partitions
@@ -65,9 +59,13 @@ public class AnnotatedKafkaEmbeddedTest {
 	protected static final int PARTITION_NUMBER = 2;
 	
 	/**
-	 * Kafka Rule
+	 * Initial Topics List
 	 */
-	@Autowired
+	protected static final String[] TOPICS = {"HCPA", "DMES"};
+	
+	/**
+	 * Embedded Kafka Broker (Internally create by EmbeddedKafkaRule)
+	 */
 	private EmbeddedKafkaBroker embeddedKafkaBroker;
 	
 	/**
@@ -76,10 +74,24 @@ public class AnnotatedKafkaEmbeddedTest {
 	private KafkaAdmin kafkaAdmin;
 	
 	/**
+	 * Broker Admin Client
+	 */
+	private AdminClient adminClient = null;
+	
+	/**
 	 * Before Test
 	 */
 	@Before
 	public void before() {
+		
+		// Initialize Embedded Kafka Broker
+		embeddedKafkaBroker = new EmbeddedKafkaBroker(BROKER_NUMBER, CONTROLLED_SHUTDOWN, PARTITION_NUMBER, TOPICS);
+		
+		// Set Instances Ports
+		embeddedKafkaBroker.kafkaPorts(BROKER_1_PORT, BROKER_2_PORT);
+		
+		// Initialize
+		embeddedKafkaBroker.afterPropertiesSet();
 		
 		// Get Admin Properties
 		Map<String, Object> adminConfigs = new HashMap<>();
@@ -89,38 +101,34 @@ public class AnnotatedKafkaEmbeddedTest {
 		
 		// Instantiate Admin
 		kafkaAdmin = new KafkaAdmin(adminConfigs);
+
+		// Get Broker Admin Client
+		adminClient = AdminClient.create(kafkaAdmin.getConfig());
 	}
-	
+
 	/**
 	 * After Test
 	 */
 	@After
 	public void after() {
 		
-		// Shutdown Kafka Servers
-		embeddedKafkaBroker.getKafkaServers().forEach(kafkaServer -> kafkaServer.shutdown());
-		
-		// Awiting Shutdown Kafka Servers
-		embeddedKafkaBroker.getKafkaServers().forEach(kafkaServer -> kafkaServer.awaitShutdown());
+		// Destroy Embedded Broker
+		embeddedKafkaBroker.destroy();		
 	}
 	
 	/**
 	 * Print Kafka properties to Console
 	 * @throws InterruptedException Exception potentielle
-	 * @throws ExecutionException Exception potentielle
 	 */
 	@Test
-	public void printProperties() throws InterruptedException, ExecutionException {
-		
-		// Get Broker Admin Client
-		AdminClient adminClient = AdminClient.create(kafkaAdmin.getConfig());
+	public void printProperties() throws InterruptedException {
 		
 		// Get Admin Configuration
 		Map<String, Object> adminConfigs = kafkaAdmin.getConfig();
 		
 		// Get Properties
 		Map<String, Object> consumerConfigs = KafkaTestUtils.consumerProps("consumer", "false", embeddedKafkaBroker);
-
+		
 		// Get Properties
 		Map<String, Object> producerConfigs = KafkaTestUtils.producerProps(embeddedKafkaBroker);
 		
@@ -135,7 +143,7 @@ public class AnnotatedKafkaEmbeddedTest {
 		
 		// Print properties
 		System.out.println(consumerConfigs);
-		
+
 		// Prlog
 		System.out.println("---------------> PRODUCER PROPERTIES");
 		
@@ -145,11 +153,22 @@ public class AnnotatedKafkaEmbeddedTest {
 		// Future
 		KafkaFuture<Collection<TopicListing>> topicListingFuture = adminClient.listTopics().listings();
 		
-		// get Lost Topics
-		Collection<TopicListing> topics = topicListingFuture.get();
+		// Print the Topics List when we get them
+		topicListingFuture.whenComplete(new BiConsumer<Collection<TopicListing>, Throwable>() {
+			
+			@Override
+			public void accept(Collection<TopicListing> topics, Throwable exception) {
+				
+				// If there are exception
+				if(exception != null) throw new RuntimeException(exception);
+				
+				// Print List of Topics
+				topics.forEach(topic -> System.out.println("--------> TOPIC = " + topic.name()));
+			}
+		});
 		
-		// Print List topics
-		topics.forEach(topic -> System.out.println("--------> TOPIC = " + topic.name()));
+		// Sleep
+		Thread.sleep(5000);
 	}
 
 }
