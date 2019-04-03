@@ -177,7 +177,7 @@ public class UnsecureSimulatorInitializingTest {
 		
 		// Demarrage du listener
 		kafkaMessageListenerContainer.start();
-
+		
 		try {
 			
 			// Wait for Listener container start

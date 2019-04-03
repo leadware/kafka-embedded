@@ -30,10 +30,15 @@ import org.apache.kafka.clients.admin.ListTopicsOptions;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.admin.TopicListing;
 import org.apache.kafka.clients.consumer.OffsetAndMetadata;
+import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.KafkaFuture;
 import org.apache.kafka.common.TopicPartition;
+import org.apache.kafka.common.serialization.StringSerializer;
 import org.apache.kafka.common.utils.Time;
+import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaAdmin;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.util.Assert;
 
 import fr.grouperatp.ratp.sga.kafka.simulator.model.ConsumerGroup;
@@ -115,6 +120,11 @@ public class KafkaSimulator {
 	 * Client d'administration KAFKA embarqué
 	 */
 	private AdminClient adminClient;
+
+	/**
+	 * Template de production KAFKA (chaine de caractere)
+	 */
+	private KafkaTemplate<String, String> kafkaStringProducerTemplate;
 	
 	/**
 	 * Répertoire temporaire de stockage
@@ -153,6 +163,9 @@ public class KafkaSimulator {
 		
 		// Initialisation des topics
 		initializeTopics();
+		
+		// Initialize internal producers
+		initializeProducers();
 	}
 	
 	/**
@@ -388,6 +401,34 @@ public class KafkaSimulator {
 	}
 	
 	/**
+	 * Méthode permettant d'initialiser les producteurs de messages
+	 */
+	private void initializeProducers() {
+		
+		// Propriétés du producer
+		Map<String, Object> producerProperties = new HashMap<>();
+		
+		// Positionnement des URLs de serveurs KAFKA
+		producerProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, getBrokersAsString());
+		
+		// Positionnement de l'ID du client
+		producerProperties.put(ProducerConfig.CLIENT_ID_CONFIG, "simulator-string-producer");
+		
+		// Positionnement de la classe de secrialisation des clés
+		producerProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+		
+		// Positionnement de la classe de serialisation des données
+		producerProperties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+		
+		// Fabrique de producteurs
+		ProducerFactory<String, String> kafkaProducerFactory = new DefaultKafkaProducerFactory<String, String>(producerProperties);
+		
+		// Template de production Kafka
+		kafkaStringProducerTemplate = new KafkaTemplate<>(kafkaProducerFactory);
+	}
+	
+	
+	/**
 	 * Méthode permettant d'exécuter ine action sur le broker en mode Admin 
 	 * @param callback	Callback de l'action
 	 */
@@ -415,7 +456,7 @@ public class KafkaSimulator {
 	 * Méthode permettant d'obtenir l'ensemble des URL de Broker sous forme de chaine de caracteres 
 	 * @return	Chaines de Brokers
 	 */
-	private String getBrokersAsString() {
+	public String getBrokersAsString() {
 		
 		// On retourne la chiane
 		return simulatorProperties.getBrokerConfigs()
@@ -654,6 +695,29 @@ public class KafkaSimulator {
 			throw new KafkaException(e);
 			
 		}
+	}
+	
+	/**
+	 * Méthode permettant d'envoyer un message via le simulateur KAFKA
+	 * @param topic	Topic d'envoi
+	 * @param key	Clé du message
+	 * @param message	Contenu du message
+	 */
+	public void sendMessage(String topic, String key, String message) {
+		
+		// Envoie du message
+		kafkaStringProducerTemplate.send(topic, key, message);
+	}
+
+	/**
+	 * Méthode permettant d'envoyer un message via le simulateur KAFKA
+	 * @param topic	Topic d'envoi
+	 * @param message	Contenu du message
+	 */
+	public void sendMessage(String topic, String message) {
+		
+		// Envoie du message
+		kafkaStringProducerTemplate.send(topic, message);
 	}
 	
 	/**
