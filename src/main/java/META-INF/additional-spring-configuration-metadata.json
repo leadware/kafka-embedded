@@ -41,6 +41,16 @@
 			"description": "Taille du buffer d'envoi'"
 		},
 		{
+			"name": "embedded.kafka.simulator.receive-buffer-size",
+			"type": "java.lang.Long",
+			"description": "Taille du buffer de reception'"
+		},
+		{
+			"name": "embedded.kafka.simulator.max-request-size",
+			"type": "java.lang.Long",
+			"description": "Taille maximum des reauetes'"
+		},
+		{
 			"name": "embedded.kafka.simulator.ssl-protocol",
 			"type": "java.lang.String",
 			"description": "Protocole SSL"
