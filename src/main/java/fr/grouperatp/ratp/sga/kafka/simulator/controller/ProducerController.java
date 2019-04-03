@@ -49,12 +49,12 @@ import io.swagger.annotations.ApiParam;
 public class ProducerController {
 	
 	/**
-	 * MÃ©thode permettant d'envoyer un message sur un topic du simulateur 
+	 * Méthode permettant d'envoyer un message sur un topic du simulateur 
 	 * @param topicName	Nom du topic d'envoie
 	 * @param messageKey	Cle du message Kafka
 	 * @param payload	Contenu du message Kafka
 	 */
-	@ApiOperation(value = "OpÃ©ration d'envoie d'un message sur un topic du simulateur kafka")
+	@ApiOperation(value = "Opération d'envoie d'un message sur un topic du simulateur kafka")
 	@PostMapping(path = "/send/{topicName}/{messageKey}", consumes = MediaType.ALL_VALUE)
 	@ResponseStatus(code = HttpStatus.OK)
 	public void sendMessage(@ApiParam(name = "topicName", required = true) 
@@ -65,7 +65,7 @@ public class ProducerController {
 							@PathVariable("topicName") 
 							@NotEmpty String messageKey,
 							
-							@ApiParam(name = "messageKey", required = true)
+							@ApiParam(name = "messageBody", required = true)
 							@NotEmpty 
 							@RequestBody HttpEntity<String> payload) {}
 	
