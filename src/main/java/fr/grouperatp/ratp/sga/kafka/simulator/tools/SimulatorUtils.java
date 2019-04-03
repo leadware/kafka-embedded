@@ -5,8 +5,11 @@ package fr.grouperatp.ratp.sga.kafka.simulator.tools;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import org.springframework.util.ResourceUtils;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Classe utilitaire du simulateur
@@ -183,5 +186,30 @@ public class SimulatorUtils {
 			   // Return the original Path
 			   return rawPath;
 		   }
+	}
+	
+	/**
+	 * Methode permettant de tester si une chaine est au format JSON
+	 * @param json	Chaine a tester
+	 * @return	résultat du test
+	 */
+	public static boolean isValidJson(String json) {
+		
+		try {
+			
+			// Mapper JSon
+			ObjectMapper mapper = new ObjectMapper();
+			
+			// Tentative de transformation JSon Objet
+			mapper.readTree(json);
+			
+			// On retourne Trus si OK
+			return true;
+			
+		} catch (IOException e) {
+			
+			// En cas d'exception
+			return false;
+		}
 	}
 }
