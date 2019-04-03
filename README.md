@@ -1,45 +1,67 @@
-**Edit a file, create a new file, and clone from Bitbucket in under 2 minutes**
+# [Renovation][SGA][TECHNIQUE / feature-kafka-simulator] Mise en place d'un simulateur KAFKA embarqué pour les tests de consommation ACIV
 
-When you're done, you can delete the content in this README and update the file with details for others getting started with your repository.
+Il s'agit ici de mettre en place un Simulateur, offrant les services nominaux du serveur KAFKA, et embarquable de manière sélective dans une application
+JAVA/Spring Boot.
 
-*We recommend that you open this README in another tab as you perform the tasks below. You can [watch our video](https://youtu.be/0ocf7u76WSo) for a full demo of all the steps in this tutorial. Open the video in a new tab to avoid leaving Bitbucket.*
+## Présentation du Simulateur
 
----
+* Le simulateur a été monté comme une starter Spring Boot configurable via un objet de propriété alimenté par des propriétés système spécifique chargées
+à partir d'un fichier de configuration ou d'une atre source, par l'application utilisatrice.
 
-## Edit a file
+* Le simulateur offre un sous ensemble assez complet de configuration des brokers KAFKA autour d'un Orchestrateur de cluster Zookeeper démarré en localhost 
+sur le premier port libre de la machine hôte.
 
-You’ll start by editing this README file to learn how to edit a file in Bitbucket.
+* Le simulateur expose des APIs REST permettant d'effectuer des opération d'administration, de gestion des topics, ainsi que de production de messages.
 
-1. Click **Source** on the left side.
-2. Click the README.md link from the list of files.
-3. Click the **Edit** button.
-4. Delete the following text: *Delete this line to make a change to the README from Bitbucket.*
-5. After making your change, click **Commit** and then **Commit** again in the dialog. The commit page will open and you’ll see the change you just made.
-6. Go back to the **Source** page.
+* L'ensemble des APIs REST proposés par le simulateur sont documentés via SWAGGER
 
 ---
 
-## Create a file
+## Présentation des composants peincipaux du simulateur
 
-Next, you’ll add a new file to this repository.
+### La classe de configuration [fr.grouperatp.ratp.sga.kafka.simulator.properties.SimulatorProperties]
 
-1. Click the **New file** button at the top of the **Source** page.
-2. Give the file a filename of **contributors.txt**.
-3. Enter your name in the empty file space.
-4. Click **Commit** and then **Commit** again in the dialog.
-5. Go back to the **Source** page.
+* Cette classe représente le contenu du fichier de propriétés de configuration du simulateur.
+* Elle permet de valider le contenu du fichier après l'avoir associé à chacun de ses champs structurés grâce 
+à la **JSR 303 Bean Validation** prise en charge par Spring Boot **@Validated**. 
+* Cette classe sera utilisée par le Simulateur Kafka afin d'initialiser le serveur ZooKeeper et les brokers configurés
 
-Before you move on, go ahead and explore the repository. You've already seen the **Source** page, but check out the **Commits**, **Branches**, and **Settings** pages.
+### La classe de simulation [fr.grouperatp.ratp.sga.kafka.simulator.KafkaSimulator]
+
+* Cette classe représente le simulateur Kafka embarqué.
+* Le simulateur propose une méthode d'initialisation **initialize** permettant de configurer et démarrer tous les composants du cluster Kafka
+**ZooKeeper**, **Brokers**, **Client d'administration des brokers** et **Client d'administration ZooKeeper**
+* Le simulateur offre aussi des méthodes permettant de créer/supprimer/lister des topics, lister les groupes de consommateurs connectés, 
+lister les offsets des groupes de consommateurs.
+
+### Les contrôleurs
+
+Il s'agit des contrôleurs exposant les APIs REST d'exploitation du simulateur kafka
+
+* **fr.grouperatp.ratp.sga.kafka.simulator.controller.TopicController** expose les opérations d'administration sur les topics
+* **fr.grouperatp.ratp.sga.kafka.simulator.controller.ConsumerGroupController** expose les opérations de lecture d'informations sur les groupes de consommateurs
+* **fr.grouperatp.ratp.sga.kafka.simulator.controller.ProducerController** expose les opérations de production de message Kafka pour des consommateurs comme le serveur d'affichage (en recette)
+
+### La classe d'auto-configuration [fr.grouperatp.ratp.sga.kafka.simulator.config.KafkaSimulatorAutoConfiguration]
+
+Cette classe permet de connstruire l'ensemble des beans et de services nécessaires au bon fonctionnement du simulateur de manière conditionnée.
+
+* Condition de présence des classes de simulation dans le classpath : Celle condition a été mise en place en vue du détachement de la classe d'auto-configuration dans un projet dédié comme le prévoit les bonnes pratiques Spring Boot en matière de création de starters et d'auto-configurateurs. Le détachementse fera plus tard, une fois le starter stabilisé.
+
+* Condition d'activation du simulateur via la propiété ``embedded.kafka.simulator.enabled`` qui doit être à true pour permettre la création des beans du simulateur Kafka
 
 ---
 
-## Clone a repository
+## Installation Configuration & Exécution en standalone
 
-Use these steps to clone from SourceTree, our client for using the repository command-line free. Cloning allows you to work on your files locally. If you don't yet have SourceTree, [download and install first](https://www.sourcetreeapp.com/). If you prefer to clone from the command line, see [Clone a repository](https://confluence.atlassian.com/x/4whODQ).
+* Cloner le projet ``git clone git@ulice01.info.ratp:SGA/kafka-simulator.git``
+* Allez dans le répertoire du projet ``cd kafka-simulator``
+* Construisez le projet ``mvn clean install``
+* Démarrer l'application Spring Boot ``java -ja target/kafka-simulator-0.0.1-SNAPSHOT.jar``
+* Allez à l'adresse du Swagger UI ``http://localhost:8080/swagger-ui.html``
 
-1. You’ll see the clone button under the **Source** heading. Click that button.
-2. Now click **Check out in SourceTree**. You may need to create a SourceTree account or log in.
-3. When you see the **Clone New** dialog in SourceTree, update the destination path and name if you’d like to and then click **Clone**.
-4. Open the directory you just created to see your repository’s files.
+---
 
-Now that you're more familiar with your Bitbucket repository, go ahead and add a new file locally. You can [push your change back to Bitbucket with SourceTree](https://confluence.atlassian.com/x/iqyBMg), or you can [add, commit,](https://confluence.atlassian.com/x/8QhODQ) and [push from the command line](https://confluence.atlassian.com/x/NQ0zDQ).
+## Intégration dans le SGA
+
+* La suite au prochain numéro...... :-)
