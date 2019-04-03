@@ -31,8 +31,16 @@ public class ConsumerGroup {
 	/**
 	 * Nom du groupe
 	 */
-	@ApiModelProperty(accessMode = AccessMode.READ_WRITE, name = "consumerGroupName", required = true, value = "Nom du groupe de consommateurs")
-	@JsonProperty(required = true, value = "consumerGroupName")
-	@JsonPropertyDescription("Nom du groupe de consommateurs")
-	private String name;
+	@ApiModelProperty(accessMode = AccessMode.READ_WRITE, name = "consumerGroupId", required = true, value = "ID du groupe de consommateurs")
+	@JsonProperty(required = true, value = "consumerGroupId")
+	@JsonPropertyDescription("ID du groupe de consommateurs")
+	private String id;
+	
+	/**
+	 * Le groupe est-il simple
+	 */
+	@ApiModelProperty(accessMode = AccessMode.READ_WRITE, name = "consumerGroupId", required = true, value = "ID du groupe de consommateurs")
+	@JsonProperty(required = true, value = "simpleGroup", defaultValue = "true")
+	@JsonPropertyDescription("Type de groupe (simple ou non)")
+	private Boolean simpleGroup;
 }

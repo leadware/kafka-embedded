@@ -23,16 +23,21 @@ import javax.annotation.PreDestroy;
 import org.I0Itec.zkclient.ZkClient;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.AdminClientConfig;
+import org.apache.kafka.clients.admin.ConsumerGroupListing;
 import org.apache.kafka.clients.admin.CreateTopicsResult;
 import org.apache.kafka.clients.admin.DeleteTopicsResult;
 import org.apache.kafka.clients.admin.ListTopicsOptions;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.admin.TopicListing;
+import org.apache.kafka.clients.consumer.OffsetAndMetadata;
 import org.apache.kafka.common.KafkaFuture;
+import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.utils.Time;
 import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.util.Assert;
 
+import fr.grouperatp.ratp.sga.kafka.simulator.model.ConsumerGroup;
+import fr.grouperatp.ratp.sga.kafka.simulator.model.ConsumerGroupOffset;
 import fr.grouperatp.ratp.sga.kafka.simulator.model.Topic;
 import fr.grouperatp.ratp.sga.kafka.simulator.properties.BrokerProperties;
 import fr.grouperatp.ratp.sga.kafka.simulator.properties.ListenerProtocol;
@@ -499,7 +504,7 @@ public class KafkaSimulator {
 		// On retourne la liste
 		return listTopics(false);
 	}
-
+	
 	/**
 	 * Méthode permettant de lister les topics 
 	 * @param internal Etat interne ou non du topic
@@ -577,6 +582,78 @@ public class KafkaSimulator {
 		
 		// Suppression
 		deleteTopics(Arrays.stream(topicsNames).collect(Collectors.toList()));	
+	}
+	
+	/**
+	 * Méthode permettant de lister les groupes de consommateurs 
+	 * @return	Liste de groupes de consommateurs
+	 */
+	public List<ConsumerGroup> listConsumerGroup() {
+		
+		// Verifier que ZooKeeper est actif
+		Assert.notNull(this.zookeeper, "Assurez-vous que le cluster ZooKeeper est actif avant toute opération.");
+		
+		// Future
+		KafkaFuture<Collection<ConsumerGroupListing>> consumerGroupsListingFuture = adminClient.listConsumerGroups().all();
+		
+		try {
+			
+			// Attendre le resultat
+			return consumerGroupsListingFuture.get(DEFAULT_ADMIN_TIMEOUT, TimeUnit.SECONDS)
+									 		  .stream().map(consumerGroupsListing -> new ConsumerGroup(consumerGroupsListing.groupId(), consumerGroupsListing.isSimpleConsumerGroup()))
+									 		  .collect(Collectors.toList());
+			
+		} catch (Exception e) {
+			
+			// Print exception stack trace
+			e.printStackTrace();
+			
+			// On relance
+			throw new KafkaException(e);
+			
+		}
+	}
+
+	/**
+	 * Méthode permettant de lister les offsets d'un groupes de consommateurs 
+	 * @param groupId ID du groupe de consommateurs
+	 * @return	Liste des offsets d'un groupes de consommateurs
+	 */
+	public List<ConsumerGroupOffset> listConsumerGroupOffsets(String groupId) {
+		
+		// Verifier que ZooKeeper est actif
+		Assert.notNull(this.zookeeper, "Assurez-vous que le cluster ZooKeeper est actif avant toute opération.");
+		
+		// Future
+		KafkaFuture<Map<TopicPartition, OffsetAndMetadata>> consumerGroupsOffsetsMapFuture = adminClient.listConsumerGroupOffsets(groupId).partitionsToOffsetAndMetadata();
+		
+		try {
+			
+			// Attendre le resultat
+			return consumerGroupsOffsetsMapFuture.get(DEFAULT_ADMIN_TIMEOUT, TimeUnit.SECONDS)
+												 .entrySet()
+									 		  	 .stream().map(consumerGroupsOffsetEntry -> {
+									 		  		 
+									 		  		 // Obtention du Topic
+									 		  		 TopicPartition topic = consumerGroupsOffsetEntry.getKey();
+									 		  		 
+									 		  		 // Obtention de l'offset
+									 		  		 OffsetAndMetadata offset = consumerGroupsOffsetEntry.getValue();
+									 		  		 
+									 		  		 // On retourne le groupe de consumer
+									 		  		 return new ConsumerGroupOffset(topic.topic(), topic.partition(), offset.offset(), offset.metadata());
+									 		  	 })
+									 		  .collect(Collectors.toList());
+			
+		} catch (Exception e) {
+			
+			// Print exception stack trace
+			e.printStackTrace();
+			
+			// On relance
+			throw new KafkaException(e);
+			
+		}
 	}
 	
 	/**

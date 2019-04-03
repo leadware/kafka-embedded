@@ -50,7 +50,7 @@ import io.swagger.annotations.ApiResponse;
 )
 @RestController
 @RequestMapping(
-		path = "/simulator/topic/api/v1", 
+		path = "/simulator/topic/api/1.0", 
 		produces = { MediaType.APPLICATION_JSON_VALUE }, 
 		consumes = { MediaType.APPLICATION_JSON_VALUE }
 )
