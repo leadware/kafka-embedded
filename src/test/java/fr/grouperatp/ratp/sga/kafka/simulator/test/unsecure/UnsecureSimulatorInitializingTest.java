@@ -181,7 +181,7 @@ public class UnsecureSimulatorInitializingTest {
 		try {
 			
 			// Wait for Listener container start
-			Thread.sleep(5000);
+			Thread.sleep(10000);
 			
 		} catch (InterruptedException e) {
 			
@@ -207,16 +207,22 @@ public class UnsecureSimulatorInitializingTest {
 	@Test
 	public void testSendReceiveString() throws InterruptedException {
 		
+		// Nombre de message a envoyer
+		int nbMessage = 500;
+		
 		// Instantiation d'un user
 		User user = new User("YASHIRO", "NANAKAZE", "nyashiro", "nyashiro123");
 		
-		// Envoi
-		kafkaProducerTemplate.send(topic, user);
-		
+		for(int count = 0; count < nbMessage ; count++) {
+
+			// Envoi
+			kafkaProducerTemplate.send(topic, user);
+		}
+
 		try {
 			
 			// Wait for Listener Process Message
-			Thread.sleep(5000);
+			Thread.sleep(10000);
 			
 		} catch (InterruptedException e) {
 			
