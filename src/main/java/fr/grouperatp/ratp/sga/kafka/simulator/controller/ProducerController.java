@@ -3,13 +3,14 @@
  */
 package fr.grouperatp.ratp.sga.kafka.simulator.controller;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import fr.grouperatp.ratp.sga.kafka.simulator.KafkaSimulator;
 import fr.grouperatp.ratp.sga.kafka.simulator.properties.SimulatorProperties;
 import fr.grouperatp.ratp.sga.kafka.simulator.utils.KafkaSimulatorFactory;
+import fr.grouperatp.ratp.sga.kafka.simulator.utils.jsr303.file.StringFormatValidator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -54,10 +56,12 @@ public class ProducerController {
 	 * @param messageKey	Cle du message Kafka
 	 * @param payload	Contenu du message Kafka
 	 */
+	@Validated
+	@Email
 	@ApiOperation(value = "Opération d'envoie d'un message sur un topic du simulateur kafka")
-	@PostMapping(path = "/send/{topicName}/{messageKey}", consumes = MediaType.ALL_VALUE)
+	@PostMapping(path = "/send/{topicName}/{messageKey}", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(code = HttpStatus.OK)
-	public void sendMessage(@ApiParam(name = "topicName", required = true) 
+	public boolean sendMessage(@ApiParam(name = "topicName", required = true) 
 							@PathVariable("topicName") 
 							@NotEmpty String topicName, 
 							
@@ -65,8 +69,13 @@ public class ProducerController {
 							@PathVariable("topicName") 
 							@NotEmpty String messageKey,
 							
-							@ApiParam(name = "messageBody", required = true)
-							@NotEmpty 
-							@RequestBody HttpEntity<String> payload) {}
+							@ApiParam(name = "messageBody",value = "JSonMessage au format JSON", required = true)
+							@NotEmpty
+							@StringFormatValidator
+							@RequestBody String payload) {
+		
+		System.out.println(payload);
+		return true;
+	}
 	
 }
