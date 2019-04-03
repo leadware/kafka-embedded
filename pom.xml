@@ -94,17 +94,23 @@
 		<!-- m2e lifecycle mapping version property -->
 		<lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
 		
-		<!-- Maven Surefire plugin -->
+		<!-- Maven Surefire plugin version propery -->
 		<maven-surefire-plugin.version>2.22.1</maven-surefire-plugin.version>
 		
-		<!-- Maven Failsafe plugin -->
+		<!-- Maven Failsafe plugin version propery -->
 		<maven-failsafe-plugin.version>2.22.1</maven-failsafe-plugin.version>
 		
 		<!-- Maven Site Plugin Version Property -->
 		<maven-site-plugins.version>3.3</maven-site-plugins.version>
 		
-		<!-- Swagger Version -->
+		<!-- Swagger version propery -->
 		<springfox-swagger.version>2.9.2</springfox-swagger.version>
+		
+		<!-- Hibernate validator version propery -->
+		<hibernate-validator.version>6.0.16.Final</hibernate-validator.version>
+		
+		<!-- Bouncy Castle version property -->
+		<bouncy-castle.version>1.61</bouncy-castle.version>
 		
 	</properties>
 	
@@ -207,6 +213,7 @@
 							<exclude>**/*TestIT.java</exclude>
 							<exclude>**/*ITCase.java</exclude>
 						</excludes>
+						<forkMode>once</forkMode>
 					</configuration>
 				</plugin>
 				
@@ -290,11 +297,22 @@
 			<artifactId>spring-boot-starter</artifactId>
 		</dependency>
 		
-		<!-- Spring Boot Starter test dependency -->
+		<!-- Spring Boot Starter Validation -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
+		
+		<!-- Spring Boot Starter Web -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		
+		<!-- Spring Boot Configuration Processor dependency -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
 		</dependency>
 		
 		<!-- Spring Kafka dependency -->
@@ -321,6 +339,40 @@
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger-ui</artifactId>
 			<version>${springfox-swagger.version}</version>
+		</dependency>
+		
+		<!-- Swagger dependency -->
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-bean-validators</artifactId>
+			<version>${springfox-swagger.version}</version>
+		</dependency>
+		
+		<!-- Lombok dependency -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+		</dependency>
+		
+		<!-- Bouncy Castle BCProv -->
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcprov-jdk14</artifactId>
+			<version>${bouncy-castle.version}</version>
+		</dependency>
+		
+		<!-- Bouncy Castle BCPKIX -->
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcpkix-jdk14</artifactId>
+			<version>${bouncy-castle.version}</version>
+		</dependency>
+		
+		<!-- Spring Boot Starter test dependency -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
 		</dependency>
 		
 	</dependencies>

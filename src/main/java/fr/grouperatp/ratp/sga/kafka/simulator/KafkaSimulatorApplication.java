@@ -1,3 +1,6 @@
+/**
+ * RATP :: SIT :: I2V :: SGA
+ */
 package fr.grouperatp.ratp.sga.kafka.simulator;
 
 import org.springframework.boot.SpringApplication;
