@@ -3,7 +3,9 @@
  */
 package fr.grouperatp.ratp.sga.kafka.simulator.config;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -27,6 +29,7 @@ import org.springframework.kafka.listener.MessageListener;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 
 import fr.grouperatp.ratp.sga.kafka.simulator.KafkaSimulator;
+import fr.grouperatp.ratp.sga.kafka.simulator.model.ConsumedRecord;
 import fr.grouperatp.ratp.sga.kafka.simulator.properties.SimulatorProperties;
 import fr.grouperatp.ratp.sga.kafka.simulator.utils.KafkaSimulatorFactory;
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
@@ -121,10 +124,32 @@ public class KafkaSimulatorAutoConfiguration {
 	}
 	
 	/**
+	 * Méthode permettant de construire la liste d'enregistrement consommées par le consommateur KAFKA
+	 * @return	Liste d'enregistrement
+	 */
+	@Deprecated
+	@ConditionalOnProperty(
+			prefix = SimulatorProperties.SIMULATOR_PROPERTIES_PREFIX,
+			name = "enabled",
+			havingValue = "true",
+			matchIfMissing = false
+	)
+	@ConditionalOnMissingBean
+	@Bean
+	@Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
+	public List<ConsumedRecord> consumerRecords() {
+		
+		// On retourne la liste
+		return new ArrayList<>();
+	}
+	
+	/**
 	 * Méthode de construction du Listener Kafka 
 	 * @param kafkaSimulator	Simulateur Kafka
+	 * @param consumerRecords Liste d'enregistrements consommés
 	 * @return	Listener Kafka
 	 */
+	@Deprecated
 	@ConditionalOnProperty(
 			prefix = SimulatorProperties.SIMULATOR_PROPERTIES_PREFIX,
 			name = "enabled",
@@ -133,7 +158,7 @@ public class KafkaSimulatorAutoConfiguration {
 	)
 	@ConditionalOnMissingBean
 	@Bean(initMethod = "start", destroyMethod = "stop")
-	public KafkaMessageListenerContainer<String, String> kafkaListenerContainerFactory(KafkaSimulator kafkaSimulator) {
+	public KafkaMessageListenerContainer<String, String> kafkaListenerContainerFactory(KafkaSimulator kafkaSimulator, List<ConsumedRecord> consumerRecords) {
 
 		// Propriétés du producer
 		Map<String, Object> consumerProperties = new HashMap<>();
@@ -168,10 +193,18 @@ public class KafkaSimulatorAutoConfiguration {
 		// Add MessageListener
 		kafkaMessageListenerContainer.setupMessageListener((MessageListener<String, String>) record -> {
 			
+			// Ajout de l'enregistrement dans la liste
+			consumerRecords.add(new ConsumedRecord(record.topic(), record.partition(), 
+												   record.offset(), record.timestamp(), 
+												   record.timestampType(), 
+												   record.serializedKeySize(), 
+												   record.serializedValueSize(), 
+												   record.key(), record.value()));
+			
 			// Ajout dans la liste des recourds
-			System.out.println("========================");
+			System.out.println("==========================================");
 			System.out.println(record);
-			System.out.println("========================");
+			System.out.println("==========================================");
 		});
 		
 		// On retourne le listener
