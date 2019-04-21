@@ -1,6 +1,5 @@
-[![Leadware](http://leadware.net/medias/images/leadware/lw_logo_complet_sans_surlignement_2016_10_26_155X30.png)](http://www.leadware.net/)&nbsp;&nbsp;
-![](markdown/version.svg)&nbsp;&nbsp;![](markdown/build-status.svg)
-
+[![Leadware](http://leadware.net/medias/images/leadware/lw_logo_complet_sans_surlignement_2016_10_26_155X30.png)](http://www.leadware.net/) 
+![](markdown/version.svg) ![](markdown/build-status.svg)
 
 # Leadware KAFKA Embedded
 
