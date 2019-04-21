@@ -63,8 +63,8 @@
 	
 	<!-- Project scm -->
 	<scm>
-		<connection>scm:git:git@github.com:leadware/kafka-embedded.git</connection>
-		<developerConnection>scm:git:git@github.com:leadware/kafka-embedded.git</developerConnection>
+		<connection>scm:git@github.com:leadware/kafka-embedded.git</connection>
+		<developerConnection>scm:git@github.com:leadware/kafka-embedded.git</developerConnection>
 		<url>git@github.com:leadware/kafka-embedded.git</url>
 	</scm>
 	
