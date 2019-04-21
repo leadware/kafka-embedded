@@ -33,9 +33,9 @@
 		<path d="M0 0h196v20H0z" fill="url(#b)"/>
 	</g>
 	<g fill="#fff" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="10" text-anchor="middle">
-		<text fill="#010101" fill-opacity=".3" x="52" y="15">Kafka Embedded</text>
-		<text x="52" y="14">Kafka Embedded</text>
-		<text fill="#010101" fill-opacity=".3" x="148" y="15">1.0.1.RC5</text>
-		<text x="148" y="14">1.0.1.RC5</text>
+		<text fill="#010101" fill-opacity=".3" x="52" y="15">Snapshot</text>
+		<text x="52" y="14">Snapshot</text>
+		<text fill="#010101" fill-opacity=".3" x="148" y="15">1.0.23-SNAPSHOT</text>
+		<text x="148" y="14">1.0.23-SNAPSHOT</text>
 	</g>
 <script xmlns=""/></svg>
