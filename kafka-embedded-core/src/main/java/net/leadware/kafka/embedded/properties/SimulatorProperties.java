@@ -180,7 +180,7 @@ public class SimulatorProperties {
 	public SslProtocol getSslProtocol() {
 	
 		// Renvoi de la valeur du champ "sslProtocol"
-		return (sslProtocol == null) ? SslProtocol.TLS : sslProtocol;
+		return (sslProtocol == null) ? SslProtocol.TLS12 : sslProtocol;
 	}
 	
 	/**

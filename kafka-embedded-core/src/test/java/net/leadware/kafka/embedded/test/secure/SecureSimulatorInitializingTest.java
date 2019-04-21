@@ -41,7 +41,6 @@ import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
@@ -69,7 +68,6 @@ import net.leadware.kafka.embedded.tools.SimulatorUtils;
  * @author <a href="mailto:jetune@leadware.net">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
  * @since 31 mars 2019 - 11:06:05
  */
-@Ignore
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @TestPropertySource(locations = {

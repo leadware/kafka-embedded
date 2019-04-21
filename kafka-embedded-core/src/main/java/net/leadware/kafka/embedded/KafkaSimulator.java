@@ -52,6 +52,7 @@ import org.apache.kafka.clients.consumer.OffsetAndMetadata;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.KafkaFuture;
 import org.apache.kafka.common.TopicPartition;
+import org.apache.kafka.common.config.SslConfigs;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.apache.kafka.common.utils.Time;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
@@ -74,7 +75,6 @@ import net.leadware.kafka.embedded.model.Topic;
 import net.leadware.kafka.embedded.properties.BrokerProperties;
 import net.leadware.kafka.embedded.properties.ListenerProperties;
 import net.leadware.kafka.embedded.properties.ListenerProtocolProperties;
-import net.leadware.kafka.embedded.properties.ListenerSecurityProtocol;
 import net.leadware.kafka.embedded.properties.SimulatorProperties;
 import net.leadware.kafka.embedded.tools.SimulatorUtils;
 
@@ -412,11 +412,7 @@ public class KafkaSimulator {
 							   String.valueOf(Long.MAX_VALUE));
 		
 		// Ajout etat activation SSL Enabled
-		properties.setProperty(KafkaConfig.SslEnabledProtocolsProp(), 
-							   String.valueOf(brokerConfig.getListener()
-									   					  .getProtocol()
-									   					  .getScheme()
-									   					  .equals(ListenerSecurityProtocol.SSL)));
+		properties.setProperty(KafkaConfig.SslEnabledProtocolsProp(), SslConfigs.DEFAULT_SSL_ENABLED_PROTOCOLS);
 		
 		// Si la configuration de truststore est definie
 		if(simulatorProperties.getTruststoreConfig() != null) {

@@ -37,7 +37,17 @@ public enum SslProtocol {
 	/**
 	 * TLS SSL
 	 */
-	TLS("TLS");
+	TLS("TLS"),
+
+	/**
+	 * TLS V1.1
+	 */
+	TLS11("TLSv1.1"),
+	
+	/**
+	 * TLS V1.2
+	 */
+	TLS12("TLSv1.2");
 	
 	/**
 	 * Valeur de l'enumeration
