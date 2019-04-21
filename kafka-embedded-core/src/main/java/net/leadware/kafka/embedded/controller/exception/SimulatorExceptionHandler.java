@@ -1,6 +1,3 @@
-/**
- * RATP :: SIT :: I2V :: SGA
- */
 package net.leadware.kafka.embedded.controller.exception;
 
 /*-
@@ -38,7 +35,7 @@ import org.springframework.web.context.request.WebRequest;
 
 /**
  * Classe de gestion des exceptions survenus dans les traitements REST
- * @author <a href="mailto:jean-jacques.etune-ngi@ratp.fr">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
+ * @author <a href="mailto:jetune@leadware.net">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
  * @since 3 avr. 2019 - 22:10:35
  */
 @RestControllerAdvice

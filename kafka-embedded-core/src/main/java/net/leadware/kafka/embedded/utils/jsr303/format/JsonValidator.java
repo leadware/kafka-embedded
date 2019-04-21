@@ -34,7 +34,7 @@ import javax.validation.Payload;
 
 /**
  *  Annotation de validation du format d'une chaine de caractere
- * @author <a href="mailto:jean-jacques.etune-ngi@ratp.fr">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
+ * @author <a href="mailto:jetune@leadware.net">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
  * @since 3 avr. 2019
  */
 @StringFormatValidator(format = FormatType.JSON)

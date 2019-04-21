@@ -1,6 +1,3 @@
-/**
- * RATP :: SIT :: I2V :: SGA
- */
 package net.leadware.kafka.embedded.controller;
 
 /*-
@@ -56,7 +53,7 @@ import net.leadware.kafka.embedded.utils.KafkaSimulatorFactory;
 
 /**
  * Controleur Rest des opérations sur les topics
- * @author <a href="mailto:jean-jacques.etune-ngi@ratp.fr">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
+ * @author <a href="mailto:jetune@leadware.net">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
  * @since 2 avr. 2019 - 22:22:52
  */
 @Api(description = "Service Rest de gestion des topics", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)

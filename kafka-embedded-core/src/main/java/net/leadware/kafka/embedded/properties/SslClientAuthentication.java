@@ -1,6 +1,3 @@
-/**
- * RATP :: SIT :: I2V :: SGA
- */
 package net.leadware.kafka.embedded.properties;
 
 /*-
@@ -30,7 +27,7 @@ import lombok.Getter;
 
 /**
  * Énumération des type d'authentification client 
- * @author <a href="mailto:jean-jacques.etune-ngi@ratp.fr">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
+ * @author <a href="mailto:jetune@leadware.net">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
  * @since 29 mars 2019 - 08:47:39
  */
 @AllArgsConstructor

@@ -1,6 +1,3 @@
-/**
- * RATP :: SIT :: I2V :: SGA
- */
 package net.leadware.kafka.embedded.test.embedded;
 
 /*-
@@ -52,7 +49,7 @@ import net.leadware.kafka.embedded.test.KafkaSimulatorAutoConfiguration;
 
 /**
  * Classe de test du broker Kafka Embarqué en mode Annotation (SANDBOX)
- * @author <a href="mailto:jean-jacques.etune-ngi@ratp.fr">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
+ * @author <a href="mailto:jetune@leadware.net">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
  * @since 21 mars 2019 - 08:32:51
  */
 @RunWith(SpringRunner.class)

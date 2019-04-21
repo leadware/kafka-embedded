@@ -38,7 +38,7 @@ import net.leadware.kafka.embedded.utils.jsr303.format.StringFormatValidator;
 
 /**
  * Classe représentant un message à envoyer via KAFKA
- * @author <a href="mailto:jean-jacques.etune-ngi@ratp.fr">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
+ * @author <a href="mailto:jetune@leadware.net">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
  * @since 3 avr. 2019
  */
 @ApiModel(description = "Message d'envoie sur le simulateur KAFKA")

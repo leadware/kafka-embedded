@@ -1,6 +1,3 @@
-/**
- * RATP :: SIT :: I2V :: SGA
- */
 package net.leadware.kafka.embedded.sample;
 
 /*-
@@ -30,7 +27,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  * Classe principale de l'application de sample KAFKA Embedded
- * @author <a href="mailto:jean-jacques.etune-ngi@ratp.fr">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
+ * @author <a href="mailto:jetune@leadware.net">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
  * @since 21 mars 2019 - 08:30:39
  */
 @SpringBootApplication

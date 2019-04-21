@@ -1,6 +1,3 @@
-/**
- * RATP :: SIT :: I2V :: SGA
- */
 package net.leadware.kafka.embedded.controller.exception;
 
 /*-
@@ -37,7 +34,7 @@ import lombok.ToString;
 
 /**
  * Classe représentant une erreur de validation des parametres Rest
- * @author <a href="mailto:jean-jacques.etune-ngi@ratp.fr">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
+ * @author <a href="mailto:jetune@leadware.net">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
  * @since 3 avr. 2019 - 22:20:11
  */
 @NoArgsConstructor

@@ -1,6 +1,3 @@
-/**
- * RATP :: SIT :: I2V :: SGA
- */
 package net.leadware.kafka.embedded.tools;
 
 /*-
@@ -37,7 +34,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Classe utilitaire du simulateur
- * @author <a href="mailto:jean-jacques.etune-ngi@ratp.fr">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
+ * @author <a href="mailto:jetune@leadware.net">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
  * @since 31 mars 2019 - 12:10:22
  */
 public class SimulatorUtils {

@@ -1,6 +1,3 @@
-/**
- * RATP :: SIT :: I2V :: SGA
- */
 package net.leadware.kafka.embedded.properties;
 
 /*-
@@ -38,7 +35,7 @@ import lombok.ToString;
 
 /**
  * Classe de configuration du Borker de simulation
- * @author <a href="mailto:jean-jacques.etune-ngi@ratp.fr">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
+ * @author <a href="mailto:jetune@leadware.net">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
  * @since 23 mars 2019 - 22:09:49
  */
 @NoArgsConstructor

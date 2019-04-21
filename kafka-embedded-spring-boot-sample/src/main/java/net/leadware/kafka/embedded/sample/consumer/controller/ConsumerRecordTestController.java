@@ -1,6 +1,3 @@
-/**
- * RATP :: SIT :: I2V :: SGA
- */
 package net.leadware.kafka.embedded.sample.consumer.controller;
 
 /*-
@@ -44,7 +41,7 @@ import net.leadware.kafka.embedded.utils.KafkaSimulatorFactory;
 
 /**
  * Controleur Rest des operations sur la liste des enregistrements consommés 
- * @author <a href="mailto:jean-jacques.etune-ngi@ratp.fr">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
+ * @author <a href="mailto:jetune@leadware.net">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
  * @since 4 avr. 2019 - 08:17:24
  */
 @Api(description = "Service Rest de gestion de la liste des enregistrements consommés (ONLY FOR DEMO)", 

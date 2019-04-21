@@ -1,6 +1,3 @@
-/**
- * RATP :: SIT :: I2V :: SGA
- */
 package net.leadware.kafka.embedded.controller;
 
 /*-
@@ -50,7 +47,7 @@ import net.leadware.kafka.embedded.utils.jsr303.format.StringFormatValidator;
 
 /**
  * Service Rest de production de message Kafka sur le simulateur 
- * @author <a href="mailto:jean-jacques.etune-ngi@ratp.fr">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
+ * @author <a href="mailto:jetune@leadware.net">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
  * @since 3 avr. 2019 - 08:26:44
  */
 @Api(description = "Service Rest de production de message Kafka sur le simulateur", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)

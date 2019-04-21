@@ -1,6 +1,3 @@
-/**
- * RATP :: SIT :: I2V :: SGA
- */
 package net.leadware.kafka.embedded.sample.consumer.model;
 
 /*-
@@ -36,7 +33,7 @@ import lombok.ToString;
 
 /**
  * Classe représetant une donnée consommée
- * @author <a href="mailto:jean-jacques.etune-ngi@ratp.fr">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
+ * @author <a href="mailto:jetune@leadware.net">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
  * @since 4 avr. 2019 - 08:29:15
  */
 @ApiModel(description = "Information sur un enregistrement consommé sur KAFKA (ONLY FOR DEMO)")

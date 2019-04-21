@@ -53,7 +53,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  * Classe de configuration du consommateur de test pour demo swagger
- * @author <a href="mailto:jean-jacques.etune-ngi@ratp.fr">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
+ * @author <a href="mailto:jetune@leadware.net">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
  * @since 4 avr. 2019
  */
 @Configuration

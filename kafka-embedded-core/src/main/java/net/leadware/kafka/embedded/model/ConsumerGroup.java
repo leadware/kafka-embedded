@@ -1,6 +1,3 @@
-/**
- * RATP :: SIT :: I2V :: SGA
- */
 package net.leadware.kafka.embedded.model;
 
 /*-
@@ -39,7 +36,7 @@ import lombok.ToString;
 
 /**
  * Classe représentant un groupe de consommateurs
- * @author <a href="mailto:jean-jacques.etune-ngi@ratp.fr">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
+ * @author <a href="mailto:jetune@leadware.net">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
  * @since 2 avr. 2019 - 22:37:59
  */
 @ApiModel(description = "Information sur un groupe de consommateur KAFKA")
