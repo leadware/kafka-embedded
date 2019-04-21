@@ -34,7 +34,7 @@
 		<artifactId>kafka-embedded</artifactId>
 		
 		<!-- Parent Version -->
-		<version>0.0.1-SNAPSHOT</version>
+		<version>1.0.0-RC3</version>
 		
 		<!-- Parent relative path -->
 		<relativePath>../pom.xml</relativePath>
