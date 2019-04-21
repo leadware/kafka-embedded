@@ -1,4 +1,4 @@
-# [Renovation][SGA][TECHNIQUE / feature-kafka-simulator] Mise en place d'un simulateur KAFKA embarqué pour les tests de consommation ACIV
+# Mise en place d'un simulateur KAFKA embarqué pour les tests de consommation ACIV
 
 Il s'agit ici de mettre en place un Simulateur, offrant les services nominaux du serveur KAFKA, et embarquable de manière sélective dans une application
 JAVA/Spring Boot.

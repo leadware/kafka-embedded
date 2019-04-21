@@ -1,67 +1,105 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  #%L
+  Apache Kafka Embedded Server
+  $Id:$
+  $HeadURL:$
+  %%
+  Copyright (C) 2013 - 2019 Leadware
+  %%
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  
+       http://www.apache.org/licenses/LICENSE-2.0
+  
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  #L%
+  -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	
+	<!-- Project parent -->
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>9</version>
+	</parent>
 	
 	<!-- Pom model version -->
 	<modelVersion>4.0.0</modelVersion>
 	
-	<!-- Parent Project -->
-	<parent>
-		
-		<!-- Parent group ID -->
-		<groupId>org.springframework.boot</groupId>
-		
-		<!-- Parent artifact ID -->
-		<artifactId>spring-boot-starter-parent</artifactId>
-		
-		<!-- Parent Version -->
-		<version>2.1.3.RELEASE</version>
-		
-		<!-- Parent relative path -->
-		<relativePath/>
-		
-	</parent>
-	
 	<!-- Project group ID -->
-	<groupId>ratp.info.sga</groupId>
+	<groupId>net.leadware</groupId>
 	
-	<!-- Project artifact ID -->
-	<artifactId>kafka-simulator</artifactId>
+	<!-- Project Artifact ID -->
+	<artifactId>kafka-embedded</artifactId>
 	
-	<!-- Project version -->
-	<version>0.0.1-SNAPSHOT</version>
-	
-	<!-- Project name -->
-	<name>kafka-simulator</name>
-	
-	<!-- Project description -->
-	<description>Apache KAFKA Simulator for tes purposes</description>
+  	<!-- Project name -->
+  	<name>Apache Kafka Embedded Server</name>
+  	
+  	<!-- Project description -->
+  	<description>Apache KAFKA Embedded Server for test purposes</description>
+  	
+	<!-- Project Version -->
+  	<version>0.0.1-SNAPSHOT</version>  
+  	
+	<!-- Packaging -->
+	<packaging>pom</packaging>
 	
 	<!-- Project source URL -->
-	<url>git@</url>
+	<url>https://github.com/leadware/kafka-embedded/</url>
+	
+	<!-- Project licence -->
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
 	
 	<!-- Project scm -->
 	<scm>
-		<connection>scm:git@</connection>
-		<developerConnection>scm:git@</developerConnection>
-		<url>git@</url>
+		<connection>scm:git:git@github.com:leadware/kafka-embedded.git</connection>
+		<developerConnection>scm:git:git@github.com:leadware/kafka-embedded.git</developerConnection>
+		<url>git@github.com:leadware/kafka-embedded.git</url>
 	</scm>
 	
 	<!-- Project issue managment -->
 	<issueManagement>
-		<system>REDMINE</system>
-		<url>https://</url>
+		<system>Jira</system>
+		<url>http://jira.kafka-embedded.leadware.net</url>
 	</issueManagement>
 	
 	<!-- Project Continuous integration system -->
 	<ciManagement>
-		<system>JENKINS</system>
-		<url>https://</url>
+		<system>Bamboo</system>
+		<url>http://bamboo.kafka-embedded.leadware.net</url>
 	</ciManagement>
+	
+	<!-- Project developpers -->
+	<developers>
+		<developer>
+			<name>Jean-Jacques ETUNE NGI</name>
+			<email>jetune@leadware.net</email>
+			<organization>Leadware</organization>
+			<timezone>GMT+1</timezone>
+			<roles>
+				<role>owner</role>
+				<role>Technical lead</role>
+				<role>Enterprise Architect</role>
+				<role>Developper</role>
+			</roles>
+		</developer>
+	</developers>
 	
 	<!-- Project organisation -->
 	<organization>
-		<name>RATP</name>
-		<url>http://www.ratp.fr</url>
+		<name>Leadware</name>
+		<url>http://www.leadware.net</url>
 	</organization>
 	
 	<!-- Project properties -->
@@ -103,6 +141,21 @@
 		<!-- Maven Site Plugin Version Property -->
 		<maven-site-plugins.version>3.3</maven-site-plugins.version>
 		
+		<!-- Maven Deploy Plugin Version Property -->
+		<maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
+		
+		<!-- Licence Maven Plugin version property -->
+		<license-maven-plugin.version>1.20</license-maven-plugin.version>
+		
+		<!-- Apache RAT Plugin Version Property -->
+		<apache.rat.plugin.version>0.13</apache.rat.plugin.version>
+		
+		<!-- GPG Version Property -->
+		<gpg.version>1.6</gpg.version>
+		
+		<!-- Spring Boot Version property -->
+		<spring-boot.version>2.1.3.RELEASE</spring-boot.version>
+		
 		<!-- Swagger version propery -->
 		<springfox-swagger.version>2.9.2</springfox-swagger.version>
 		
@@ -113,6 +166,60 @@
 		<bouncy-castle.version>1.61</bouncy-castle.version>
 		
 	</properties>
+	
+	<!-- Dependencies management -->
+	<dependencyManagement>
+		
+		<!-- Dependencies -->
+		<dependencies>
+			
+			<!-- Spring Boot Dependencies Management Import -->
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-dependencies</artifactId>
+				<version>${spring-boot.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			
+			<!-- Swagger dependency -->
+			<dependency>
+				<groupId>io.springfox</groupId>
+				<artifactId>springfox-swagger2</artifactId>
+				<version>${springfox-swagger.version}</version>
+			</dependency>
+			
+			<!-- Swagger dependency -->
+			<dependency>
+				<groupId>io.springfox</groupId>
+				<artifactId>springfox-swagger-ui</artifactId>
+				<version>${springfox-swagger.version}</version>
+			</dependency>
+			
+			<!-- Swagger dependency -->
+			<dependency>
+				<groupId>io.springfox</groupId>
+				<artifactId>springfox-bean-validators</artifactId>
+				<version>${springfox-swagger.version}</version>
+			</dependency>
+			
+			<!-- Bouncy Castle BCProv -->
+			<dependency>
+				<groupId>org.bouncycastle</groupId>
+				<artifactId>bcprov-jdk14</artifactId>
+				<version>${bouncy-castle.version}</version>
+			</dependency>
+			
+			<!-- Bouncy Castle BCPKIX -->
+			<dependency>
+				<groupId>org.bouncycastle</groupId>
+				<artifactId>bcpkix-jdk14</artifactId>
+				<version>${bouncy-castle.version}</version>
+			</dependency>
+			
+		</dependencies>
+		
+	</dependencyManagement>
 	
 	<!-- Project build configuration -->
 	<build>
@@ -184,7 +291,14 @@
 				    	</execution>
 				    </executions>
 				</plugin>
-				
+			
+			<!-- Maven Deploy plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<version>${maven-deploy-plugin.version}</version>
+			</plugin>
+			
 				<!-- Maven Javadoc plugin -->
 				<plugin>
 				    <groupId>org.apache.maven.plugins</groupId>
@@ -237,13 +351,138 @@
 					<version>${maven-site-plugins.version}</version>
 				</plugin>
 				
+				<!-- Licence Maven Plugin -->
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>license-maven-plugin</artifactId>
+					<version>${license-maven-plugin.version}</version>
+					<configuration>
+						<verbose>true</verbose>
+						<addSvnKeyWords>true</addSvnKeyWords>
+						<licenseName>apache_v2</licenseName>
+						<inceptionYear>2019</inceptionYear>
+						<excludes>
+							<exclude>**/META-INF/*.json</exclude>
+						</excludes>
+					</configuration>
+				</plugin>
+				
+				<!-- Apache RAT plugin -->
+				<plugin>
+					<groupId>org.apache.rat</groupId>
+					<artifactId>apache-rat-plugin</artifactId>
+					<version>${apache.rat.plugin.version}</version>
+					<configuration>
+						<excludes>
+							<exclude>**/.git/**</exclude>
+							<exclude>**/test/resources/**</exclude>
+							<exclude>**/.gitignore/**</exclude>
+	                        <exclude>**/catalog.xml</exclude>
+	                        <exclude>**/.springBeans</exclude>
+	                        <exclude>**/README</exclude>
+	                        <exclude>**/README.md</exclude>
+	                        <exclude>**/README.txt</exclude>
+	                        <exclude>**/MANIFEST.MF</exclude>
+	                        <exclude>**/.factorypath</exclude>
+	                        <exclude>**/.settings/**</exclude>
+	                        <exclude>**/.apt_generated/**</exclude>
+	                        <exclude>**/.apt_generated_tests/**</exclude>
+	                        <exclude>**/.project</exclude>
+	                        <exclude>**/.classpath</exclude>
+	                        <exclude>**/META-INF/*.json</exclude>
+						</excludes>
+					</configuration>
+					<executions>
+						<execution>
+							<phase>verify</phase>
+							<goals>
+								<goal>check</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				
+				<!-- GPG Plugin -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-gpg-plugin</artifactId>
+					<version>${gpg.version}</version>
+					<configuration>
+						<passphrase>sakazaki</passphrase>
+						<excludes>**/*.asc</excludes>
+					</configuration>
+					<executions>
+						<execution>
+							<id>sign-artifact</id>
+							<phase>verify</phase>
+							<goals>
+								<goal>sign</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				
+				<!-- Spring Boot Maven plugin -->
+				<plugin>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-maven-plugin</artifactId>
+					<version>${spring-boot.version}</version>
+				</plugin>
+				
+				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>${lifecycle-mapping.version}</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-enforcer-plugin</artifactId>
+										<versionRange>[${maven-enforcer-plugin.version},)</versionRange>
+										<goals>
+											<goal>enforce</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+				
+				
 			</plugins>
 			
 		</pluginManagement>
 		
-		<!-- Plugins -->
+		<!-- Global Default Plugins -->
 		<plugins>
-					
+			
+			<!-- Licence Maven Plugin -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>update-header-sources</id>
+						<phase>process-sources</phase>
+						<goals>
+							<goal>update-file-header</goal>
+						</goals>
+						<configuration>
+							<roots>
+								<root>./</root>
+							</roots>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+				
 			<!-- Enforcer Maven plugin -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -256,22 +495,16 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 			</plugin>
 			
+			<!-- Maven Source plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+			</plugin>
+			
 			<!-- Maven Javadoc plugin -->
 			<plugin>
 			    <groupId>org.apache.maven.plugins</groupId>
 			    <artifactId>maven-javadoc-plugin</artifactId>
-			</plugin>
-			
-			<!-- Maven Surefire Plugin -->
-			<plugin>
-				<groupId>org.apache.maven.plugin</groupId>
-				<artifactId>maven-surefire-plugins</artifactId>
-			</plugin>
-			
-			<!-- maven failsafe -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-failsafe-plugin</artifactId>
 			</plugin>
 			
 			<!-- Maven Site Plugin -->
@@ -280,101 +513,37 @@
 				<artifactId>maven-site-plugins</artifactId>
 			</plugin>
 			
+			<!-- Apache RAT plugin -->
 			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
+				<groupId>org.apache.rat</groupId>
+				<artifactId>apache-rat-plugin</artifactId>
 			</plugin>
+			
+			<!-- GPG Plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+			</plugin>
+			
 		</plugins>
 		
 	</build>
 	
-	<!-- Project dependencies -->
-	<dependencies>
+	<!-- Modules -->
+	<modules>
+	
+		<!-- Kafka Embedded Core -->
+		<module>kafka-embedded-core</module>
 		
-		<!-- Spring Boot Starter dependency -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter</artifactId>
-		</dependency>
+		<!-- Kafka Embedded Autoconfigure -->
+		<module>kafka-embedded-spring-boot-autoconfigure</module>
 		
-		<!-- Spring Boot Starter Validation -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-validation</artifactId>
-		</dependency>
+		<!-- Kafka Embedded Starter -->
+		<module>kafka-embedded-spring-boot-starter</module>
 		
-		<!-- Spring Boot Starter Web -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
+		<!-- Kafka Embedded Sample -->
+		<module>kafka-embedded-spring-boot-sample</module>
 		
-		<!-- Spring Boot Configuration Processor dependency -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-configuration-processor</artifactId>
-		</dependency>
-		
-		<!-- Spring Kafka dependency -->
-		<dependency>
-			<groupId>org.springframework.kafka</groupId>
-			<artifactId>spring-kafka</artifactId>
-		</dependency>
-		
-		<!-- Spring Kafka Test dependency -->
-		<dependency>
-			<groupId>org.springframework.kafka</groupId>
-			<artifactId>spring-kafka-test</artifactId>
-		</dependency>
-		
-		<!-- Swagger dependency -->
-		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger2</artifactId>
-			<version>${springfox-swagger.version}</version>
-		</dependency>
-		
-		<!-- Swagger dependency -->
-		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger-ui</artifactId>
-			<version>${springfox-swagger.version}</version>
-		</dependency>
-		
-		<!-- Swagger dependency -->
-		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-bean-validators</artifactId>
-			<version>${springfox-swagger.version}</version>
-		</dependency>
-		
-		<!-- Lombok dependency -->
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-		</dependency>
-		
-		<!-- Bouncy Castle BCProv -->
-		<dependency>
-			<groupId>org.bouncycastle</groupId>
-			<artifactId>bcprov-jdk14</artifactId>
-			<version>${bouncy-castle.version}</version>
-		</dependency>
-		
-		<!-- Bouncy Castle BCPKIX -->
-		<dependency>
-			<groupId>org.bouncycastle</groupId>
-			<artifactId>bcpkix-jdk14</artifactId>
-			<version>${bouncy-castle.version}</version>
-		</dependency>
-		
-		<!-- Spring Boot Starter test dependency -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-		
-	</dependencies>
+	</modules>
 	
 </project>
