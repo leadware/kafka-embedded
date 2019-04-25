@@ -33,7 +33,12 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Scope;
+import org.springframework.kafka.core.KafkaAdmin;
+import org.springframework.kafka.core.KafkaTemplate;
 
+import io.swagger.annotations.ApiModelProperty.AccessMode;
+import kafka.server.KafkaServer;
+import kafka.zk.EmbeddedZookeeper;
 import net.leadware.kafka.embedded.KafkaSimulator;
 import net.leadware.kafka.embedded.properties.SimulatorProperties;
 import net.leadware.kafka.embedded.utils.KafkaSimulatorFactory;
@@ -52,7 +57,13 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration
 @ConditionalOnClass({
 	KafkaSimulator.class,
-	KafkaSimulatorFactory.class
+	KafkaSimulatorFactory.class,
+	BeanValidatorPluginsConfiguration.class,
+	AccessMode.class,
+	KafkaTemplate.class,
+	KafkaAdmin.class,
+	KafkaServer.class,
+	EmbeddedZookeeper.class
 })
 @EnableConfigurationProperties(SimulatorProperties.class)
 @EnableSwagger2

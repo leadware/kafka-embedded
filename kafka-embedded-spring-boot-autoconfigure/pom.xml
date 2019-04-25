@@ -34,7 +34,7 @@
 		<artifactId>kafka-embedded</artifactId>
 		
 		<!-- Parent Version -->
-		<version>1.0.23-SNAPSHOT</version>
+		<version>1.0.5-SNAPSHOT</version>
 		
 		<!-- Parent relative path -->
 		<relativePath>../pom.xml</relativePath>
@@ -43,8 +43,7 @@
 	
 	<!-- Project artifact ID -->
 	<artifactId>kafka-embedded-spring-boot-autoconfigure</artifactId>
-  <version>1.0.3-SNAPSHOT</version>
-	
+  		
 	<!-- Project name -->
 	<name>Apache Kafka Embedded Server :: Spring Boot Autoconfigure module</name>
 	
@@ -75,6 +74,34 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-configuration-processor</artifactId>
+		</dependency>
+		
+		<!-- Swagger dependency -->
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-bean-validators</artifactId>
+			<optional>true</optional>
+		</dependency>
+		
+		<!-- Swagger dependency -->
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<optional>true</optional>
+		</dependency>
+		
+		<!-- Spring Kafka dependency -->
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka</artifactId>
+			<optional>true</optional>
+		</dependency>
+		
+		<!-- Spring Kafka Test dependency -->
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka-test</artifactId>
+			<optional>true</optional>
 		</dependency>
 		
 		<!-- Spring Boot Starter test dependency -->
