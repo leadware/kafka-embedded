@@ -29,7 +29,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import net.leadware.kafka.embedded.utils.jsr303.file.FileValidator;
+import net.leadware.bean.validation.ext.annotations.file.FileValidator;
 
 /**
  * Classe de configuration d'un magasin de clés du Broker

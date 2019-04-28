@@ -39,11 +39,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
+import net.leadware.bean.validation.ext.annotations.json.FormatType;
+import net.leadware.bean.validation.ext.annotations.json.StringFormatValidator;
 import net.leadware.kafka.embedded.KafkaSimulator;
 import net.leadware.kafka.embedded.properties.SimulatorProperties;
 import net.leadware.kafka.embedded.utils.KafkaSimulatorFactory;
-import net.leadware.kafka.embedded.utils.jsr303.format.FormatType;
-import net.leadware.kafka.embedded.utils.jsr303.format.StringFormatValidator;
 
 /**
  * Service Rest de production de message Kafka sur le simulateur 

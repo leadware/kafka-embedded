@@ -33,8 +33,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import net.leadware.kafka.embedded.utils.jsr303.format.FormatType;
-import net.leadware.kafka.embedded.utils.jsr303.format.StringFormatValidator;
+import net.leadware.bean.validation.ext.annotations.json.FormatType;
+import net.leadware.bean.validation.ext.annotations.json.StringFormatValidator;
 
 /**
  * Classe représentant un message à envoyer via KAFKA

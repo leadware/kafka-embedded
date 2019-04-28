@@ -63,7 +63,6 @@ public class SimulatorConfigurationPropertiesTest {
 	@Autowired
 	private SimulatorProperties simulatorProperties;
 	
-
 	/**
 	 * Before Test
 	 */

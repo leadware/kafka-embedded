@@ -59,9 +59,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import net.leadware.bean.validation.ext.tools.FileUtils;
 import net.leadware.kafka.embedded.test.KafkaSimulatorAutoConfiguration;
 import net.leadware.kafka.embedded.test.unsecure.data.User;
-import net.leadware.kafka.embedded.tools.SimulatorUtils;
 
 /**
  * Classe de test de bon démarrage d'un simulateur non sécurisé
@@ -227,7 +227,7 @@ public class SecureSimulatorInitializingTest {
 		producerProperties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
 		
 		// Positionnement de la localisation du keystore producteur
-		producerProperties.put(SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG, SimulatorUtils.getResolvedPath(producerKeyststoreLocation));
+		producerProperties.put(SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG, FileUtils.getResolvedPath(producerKeyststoreLocation));
 		
 		// Positionnement de la clé du keystore producteur
 		producerProperties.put(SslConfigs.SSL_KEYSTORE_PASSWORD_CONFIG, producerKeyststorePassword);
@@ -236,7 +236,7 @@ public class SecureSimulatorInitializingTest {
 		producerProperties.put(SslConfigs.SSL_KEY_PASSWORD_CONFIG, producerKeyPassword);
 		
 		// Positionnement de la localisation du truststore producteur
-		producerProperties.put(SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG, SimulatorUtils.getResolvedPath(producerTruststoreLocation));
+		producerProperties.put(SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG, FileUtils.getResolvedPath(producerTruststoreLocation));
 		
 		// Positionnement de la clé du truststore producteur
 		producerProperties.put(SslConfigs.SSL_TRUSTSTORE_PASSWORD_CONFIG, producerTruststorePassword);
@@ -277,7 +277,7 @@ public class SecureSimulatorInitializingTest {
 		consumerProperties.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
 		
 		// Positionnement de la localisation du keystore Consommateur
-		consumerProperties.put(SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG, SimulatorUtils.getResolvedPath(consumerKeyststoreLocation));
+		consumerProperties.put(SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG, FileUtils.getResolvedPath(consumerKeyststoreLocation));
 		
 		// Positionnement de la clé du keystore Consommateur
 		consumerProperties.put(SslConfigs.SSL_KEYSTORE_PASSWORD_CONFIG, consumerKeyststorePassword);
@@ -286,7 +286,7 @@ public class SecureSimulatorInitializingTest {
 		consumerProperties.put(SslConfigs.SSL_KEY_PASSWORD_CONFIG, consumerKeyPassword);
 		
 		// Positionnement de la localisation du truststore Consommateur
-		consumerProperties.put(SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG, SimulatorUtils.getResolvedPath(consumerTruststoreLocation));
+		consumerProperties.put(SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG, FileUtils.getResolvedPath(consumerTruststoreLocation));
 		
 		// Positionnement de la clé du truststore Consommateur
 		consumerProperties.put(SslConfigs.SSL_TRUSTSTORE_PASSWORD_CONFIG, consumerTruststorePassword);

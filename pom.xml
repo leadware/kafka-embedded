@@ -165,6 +165,9 @@
 		<!-- Bouncy Castle version property -->
 		<bouncy-castle.version>1.61</bouncy-castle.version>
 		
+		<!-- Bean Validation version property -->
+		<bean-validation.version>1.0.0-RC4</bean-validation.version>
+		
 	</properties>
 	
 	<!-- Dependencies management -->
@@ -215,6 +218,13 @@
 				<groupId>org.bouncycastle</groupId>
 				<artifactId>bcpkix-jdk14</artifactId>
 				<version>${bouncy-castle.version}</version>
+			</dependency>
+			
+			<!-- Bean Validation -->
+			<dependency>
+				<groupId>net.leadware</groupId>
+				<artifactId>bean-validation</artifactId>
+				<version>${bean-validation.version}</version>
 			</dependency>
 			
 		</dependencies>
@@ -291,14 +301,14 @@
 				    	</execution>
 				    </executions>
 				</plugin>
-			
+				
 				<!-- Maven Deploy plugin -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-deploy-plugin</artifactId>
 					<version>${maven-deploy-plugin.version}</version>
 				</plugin>
-			
+				
 				<!-- Maven Javadoc plugin -->
 				<plugin>
 				    <groupId>org.apache.maven.plugins</groupId>
@@ -462,26 +472,6 @@
 		
 		<!-- Global Default Plugins -->
 		<plugins>
-			
-			<!-- Licence Maven Plugin -->
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>license-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>update-header-sources</id>
-						<phase>process-sources</phase>
-						<goals>
-							<goal>update-file-header</goal>
-						</goals>
-						<configuration>
-							<roots>
-								<root>./</root>
-							</roots>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
 				
 			<!-- Enforcer Maven plugin -->
 			<plugin>
@@ -501,43 +491,95 @@
 				<artifactId>maven-source-plugin</artifactId>
 			</plugin>
 			
-			<!-- Maven Javadoc plugin -->
-			<plugin>
-			    <groupId>org.apache.maven.plugins</groupId>
-			    <artifactId>maven-javadoc-plugin</artifactId>
-			</plugin>
-			
-			<!-- Maven Site Plugin -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-site-plugin</artifactId>
-			</plugin>
-			
-			<!-- Apache RAT plugin -->
-			<plugin>
-				<groupId>org.apache.rat</groupId>
-				<artifactId>apache-rat-plugin</artifactId>
-			</plugin>
-			
-			<!-- GPG Plugin -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-gpg-plugin</artifactId>
-			</plugin>
-			
-			<!-- Release Plugin -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-release-plugin</artifactId>
-				<configuration>
-					<mavenExecutorId>forked-path</mavenExecutorId>
-					<useReleaseProfile>false</useReleaseProfile>
-					<arguments>${arguments} -DskipTests -Psonatype-oss-release</arguments>
-				</configuration>
-			</plugin>
 		</plugins>
 		
 	</build>
+	
+	<!-- Project profiles -->
+	<profiles>
+		
+		<!-- Deploy profile -->
+		<profile>
+			
+			<!-- Profile ID -->
+			<id>deploy</id>
+			
+			<!-- Profile Activation -->
+			<activation>
+				
+				<!-- Default Activation -->
+				<activeByDefault>false</activeByDefault>
+				
+			</activation>
+			
+			<!-- Profile Build Configuration -->
+			<build>
+				
+				<!-- Profile plugins -->
+				<plugins>
+					
+					<!-- Licence Maven Plugin -->
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>license-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>update-header-sources</id>
+								<phase>process-sources</phase>
+								<goals>
+									<goal>update-file-header</goal>
+								</goals>
+								<configuration>
+									<roots>
+										<root>./</root>
+									</roots>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					
+					<!-- Maven Javadoc plugin -->
+					<plugin>
+					    <groupId>org.apache.maven.plugins</groupId>
+					    <artifactId>maven-javadoc-plugin</artifactId>
+					</plugin>
+					
+					<!-- Maven Site Plugin -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-site-plugin</artifactId>
+					</plugin>
+					
+					<!-- Apache RAT plugin -->
+					<plugin>
+						<groupId>org.apache.rat</groupId>
+						<artifactId>apache-rat-plugin</artifactId>
+					</plugin>
+					
+					<!-- GPG Plugin -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+					</plugin>
+					
+					<!-- Release Plugin -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-release-plugin</artifactId>
+						<configuration>
+							<mavenExecutorId>forked-path</mavenExecutorId>
+							<useReleaseProfile>false</useReleaseProfile>
+							<arguments>${arguments} -DskipTests -Psonatype-oss-release</arguments>
+						</configuration>
+					</plugin>
+					
+				</plugins>
+				
+			</build>
+			
+		</profile>
+			
+	</profiles>
 	
 	<!-- Modules -->
 	<modules>

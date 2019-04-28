@@ -44,7 +44,7 @@ import org.springframework.kafka.listener.MessageListener;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 
 import lombok.extern.slf4j.Slf4j;
-import net.leadware.kafka.embedded.tools.SimulatorUtils;
+import net.leadware.bean.validation.ext.tools.FileUtils;
 import net.leadware.kafka.sample.consumer.model.ConsumedRecord;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -113,7 +113,7 @@ public class KafkaSimulatorSampleConsumerConfiguration {
 		consumerProperties.put(ConsumerConfig.METADATA_MAX_AGE_CONFIG, consumerConfig.getMetadataMaxAge());
 
 		// Positionnement de la localisation du keystore Consommateur
-		consumerProperties.put(SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG, SimulatorUtils.getResolvedPath(consumerConfig.getKeystoreLocation()));
+		consumerProperties.put(SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG, FileUtils.getResolvedPath(consumerConfig.getKeystoreLocation()));
 		
 		// Positionnement de la clé du keystore Consommateur
 		consumerProperties.put(SslConfigs.SSL_KEYSTORE_PASSWORD_CONFIG, consumerConfig.getKeystorePassword());
@@ -122,7 +122,7 @@ public class KafkaSimulatorSampleConsumerConfiguration {
 		consumerProperties.put(SslConfigs.SSL_KEY_PASSWORD_CONFIG, consumerConfig.getKeyPassword());
 		
 		// Positionnement de la localisation du truststore Consommateur
-		consumerProperties.put(SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG, SimulatorUtils.getResolvedPath(consumerConfig.getTruststoreLocation()));
+		consumerProperties.put(SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG, FileUtils.getResolvedPath(consumerConfig.getTruststoreLocation()));
 		
 		// Positionnement de la clé du truststore Consommateur
 		consumerProperties.put(SslConfigs.SSL_TRUSTSTORE_PASSWORD_CONFIG, consumerConfig.getTruststorePassword());

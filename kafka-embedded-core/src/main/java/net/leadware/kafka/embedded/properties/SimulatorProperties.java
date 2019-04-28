@@ -43,8 +43,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import net.leadware.kafka.embedded.utils.jsr303.file.FileType;
-import net.leadware.kafka.embedded.utils.jsr303.file.FileValidator;
+import lombok.extern.slf4j.Slf4j;
+import net.leadware.bean.validation.ext.annotations.file.FileType;
+import net.leadware.bean.validation.ext.annotations.file.FileValidator;
 
 /**
  * Classe de configuration du simulateur KAFKA
@@ -57,6 +58,7 @@ import net.leadware.kafka.embedded.utils.jsr303.file.FileValidator;
 @Setter
 @ToString
 @ConfigurationProperties(prefix = SimulatorProperties.SIMULATOR_PROPERTIES_PREFIX)
+@Slf4j
 public class SimulatorProperties {
 	
 	/**
@@ -73,7 +75,10 @@ public class SimulatorProperties {
 	/**
 	 * Répertoire temporaire de fichier (java.io.tmpdir)
 	 */
-	@FileValidator(fileType = FileType.DIRECTORY)
+	@FileValidator(
+			fileType = FileType.DIRECTORY, 
+			message = "Veuillez vous assurer que le répertoire temporaire paramétré existe et que vous y avez les droits en lecture"
+	)
 	private String javaTemporaryDirectory;
 	
 	/**
@@ -299,13 +304,16 @@ public class SimulatorProperties {
 		constraintViolations.forEach(constraintViolation -> {
 			
 			// Affichage du chemin de la propriete
-			System.out.println("-------> Propriete : " + constraintViolation.getRootBeanClass() + "." + constraintViolation.getPropertyPath());
-
+			log.debug("Violation de contraintes...");
+			
+			// Affichage du chemin de la propriete
+			log.debug("Propriete : " + constraintViolation.getRootBeanClass() + "." + constraintViolation.getPropertyPath());
+			
 			// Affichage de la valeur de la propriete
-			System.out.println("-------> Valeur : " + constraintViolation.getInvalidValue());
-
+			log.debug("Valeur : " + constraintViolation.getInvalidValue());
+			
 			// Affichage dela propriete
-			System.out.println("-------> Raison : " + constraintViolation.getMessage());
+			log.debug("Raison : " + constraintViolation.getMessage());
 		});
 		
 		// On leve une exception

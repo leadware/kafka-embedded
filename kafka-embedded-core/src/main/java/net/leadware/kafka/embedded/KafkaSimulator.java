@@ -70,6 +70,7 @@ import kafka.zk.EmbeddedZookeeper;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.leadware.bean.validation.ext.tools.FileUtils;
 import net.leadware.kafka.embedded.model.ConsumerGroup;
 import net.leadware.kafka.embedded.model.ConsumerGroupOffset;
 import net.leadware.kafka.embedded.model.Topic;
@@ -460,12 +461,12 @@ public class KafkaSimulator {
 							   			   .map(logDirectory -> {
 							   				   
 							   				   // On retourne le chemin resolu
-							   				   return SimulatorUtils.getResolvedPath(logDirectory);
+							   				   return FileUtils.getResolvedPath(logDirectory);
 							   			   })
 							   			   .collect(Collectors.joining(",")));
 		
 		// Broker Log dir
-		properties.setProperty(KafkaConfig.LogDirProp(), SimulatorUtils.getResolvedPath(brokerConfig.getLogsDirectory()));
+		properties.setProperty(KafkaConfig.LogDirProp(), FileUtils.getResolvedPath(brokerConfig.getLogsDirectory()));
 
 		// Broker Log Log Flush Interval
 		properties.setProperty(KafkaConfig.LogFlushIntervalMsProp(), String.valueOf(1000));
@@ -503,7 +504,7 @@ public class KafkaSimulator {
 			
 			// Ajout Truststore location
 			properties.setProperty(KafkaConfig.SslTruststoreLocationProp(), 
-								   SimulatorUtils.getResolvedPath(simulatorProperties.getTruststoreConfig().getLocation()));
+								   FileUtils.getResolvedPath(simulatorProperties.getTruststoreConfig().getLocation()));
 			
 			// Ajout Truststore password
 			properties.setProperty(KafkaConfig.SslTruststorePasswordProp(), 
@@ -523,7 +524,7 @@ public class KafkaSimulator {
 
 			// Ajout Truststore location
 			properties.setProperty(KafkaConfig.SslKeystoreLocationProp(), 
-								   SimulatorUtils.getResolvedPath(simulatorProperties.getKeystoreConfig().getLocation()));
+								   FileUtils.getResolvedPath(simulatorProperties.getKeystoreConfig().getLocation()));
 			
 			// Ajout Keystore password
 			properties.setProperty(KafkaConfig.SslKeystorePasswordProp(), 

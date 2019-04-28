@@ -162,6 +162,12 @@
 			<scope>test</scope>
 		</dependency>
 		
+		<!-- Bean Validation -->
+		<dependency>
+			<groupId>net.leadware</groupId>
+			<artifactId>bean-validation</artifactId>
+		</dependency>
+		
 	</dependencies>
 	
 </project>
