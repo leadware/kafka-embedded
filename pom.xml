@@ -44,7 +44,7 @@
   	<description>Apache KAFKA Embedded Server for test purposes</description>
   	
 	<!-- Project Version -->
-  	<version>1.0.1-RC9-SNAPSHOT</version>  
+  	<version>1.0.1-RC9</version>  
   	
 	<!-- Packaging -->
 	<packaging>pom</packaging>
