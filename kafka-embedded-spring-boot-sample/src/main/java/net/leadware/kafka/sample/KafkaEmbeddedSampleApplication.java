@@ -1,4 +1,4 @@
-package net.leadware.kafka.embedded.sample;
+package net.leadware.kafka.sample;
 
 /*-
  * #%L

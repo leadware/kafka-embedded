@@ -25,6 +25,7 @@ package net.leadware.kafka.embedded.utils;
 import javax.annotation.PostConstruct;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.leadware.kafka.embedded.KafkaSimulator;
 import net.leadware.kafka.embedded.properties.SimulatorProperties;
 
@@ -34,6 +35,7 @@ import net.leadware.kafka.embedded.properties.SimulatorProperties;
  * @since 24 mars 2019 - 14:30:32
  */
 @AllArgsConstructor
+@Slf4j
 public class KafkaSimulatorFactory {
 
 	/**
@@ -52,6 +54,9 @@ public class KafkaSimulatorFactory {
 	 * @return	Instance du simulateur KAFKA
 	 */
 	public KafkaSimulator getInstance() {
+		
+		// Log
+		log.debug("Instantiation d'un Simulateur KAFKA");
 		
 		// Instantiate Kafka Simulator
 		KafkaSimulator kafkaSimulator = new KafkaSimulator(simulatorProperties);

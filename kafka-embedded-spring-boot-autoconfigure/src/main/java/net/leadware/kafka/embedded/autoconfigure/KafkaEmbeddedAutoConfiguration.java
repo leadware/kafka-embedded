@@ -39,6 +39,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import io.swagger.annotations.ApiModelProperty.AccessMode;
 import kafka.server.KafkaServer;
 import kafka.zk.EmbeddedZookeeper;
+import lombok.extern.slf4j.Slf4j;
 import net.leadware.kafka.embedded.KafkaSimulator;
 import net.leadware.kafka.embedded.properties.SimulatorProperties;
 import net.leadware.kafka.embedded.utils.KafkaSimulatorFactory;
@@ -69,6 +70,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 @Import(BeanValidatorPluginsConfiguration.class)
 @ComponentScan(basePackageClasses = KafkaSimulator.class)
+@Slf4j
 public class KafkaEmbeddedAutoConfiguration {
 	
 	/**
@@ -92,6 +94,9 @@ public class KafkaEmbeddedAutoConfiguration {
 	@Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
 	public KafkaSimulatorFactory kafkaSimulatorFactory() {
 		
+		// Log
+		log.debug("Création du Bean de fabrique des Simulateurs Kafka");
+		
 		// On retourne l'instance du Bean
 		return new KafkaSimulatorFactory(simulatorProperties);
 	}
@@ -112,6 +117,9 @@ public class KafkaEmbeddedAutoConfiguration {
 	@Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
 	public KafkaSimulator kafkaSimulator(KafkaSimulatorFactory kafkaSimulatorFactory) {
 		
+		// Log
+		log.debug("Création du Bean de simulation Kafka");
+		
 		// On retourne l'instance du simulateur KAFKA
 		return kafkaSimulatorFactory.getInstance();
 	}
@@ -126,9 +134,11 @@ public class KafkaEmbeddedAutoConfiguration {
 			havingValue = "true",
 			matchIfMissing = false
 	)
-	@ConditionalOnMissingBean
 	@Bean
-	public Docket api() {
+	public Docket kafkaEmbeddedApi() {
+		
+		// Log
+		log.debug("Création du Bean swagger d'exposition de la documentation de l'API Kafka Embedded");
 		
 		// Construction d
 		return new Docket(DocumentationType.SWAGGER_2)

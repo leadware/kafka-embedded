@@ -1,4 +1,4 @@
-package net.leadware.kafka.embedded.sample.consumer.controller;
+package net.leadware.kafka.sample.consumer.controller;
 
 /*-
  * #%L
@@ -36,8 +36,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import net.leadware.kafka.embedded.KafkaSimulator;
-import net.leadware.kafka.embedded.sample.consumer.model.ConsumedRecord;
 import net.leadware.kafka.embedded.utils.KafkaSimulatorFactory;
+import net.leadware.kafka.sample.consumer.model.ConsumedRecord;
 
 /**
  * Controleur Rest des operations sur la liste des enregistrements consommés 

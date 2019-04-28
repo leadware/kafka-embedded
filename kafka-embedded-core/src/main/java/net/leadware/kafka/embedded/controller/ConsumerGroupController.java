@@ -30,6 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -64,10 +65,10 @@ import net.leadware.kafka.embedded.utils.KafkaSimulatorFactory;
 )
 @RestController
 @RequestMapping(
-		path = "/simulator/consumer/api/1.0", 
-		produces = { MediaType.APPLICATION_JSON_VALUE }, 
-		consumes = { MediaType.APPLICATION_JSON_VALUE }
+		path = "/simulator/api/1.0/consumers/groups", 
+		produces = { MediaType.APPLICATION_JSON_VALUE }
 )
+@Validated
 public class ConsumerGroupController {
 	
 	/**
@@ -82,7 +83,7 @@ public class ConsumerGroupController {
 	 */
 	@ApiOperation(value = "Opération de listage des groupes de consommateurs Kafka")
 	@ApiResponse(message = "Liste des groupes de consommateurs trouvés", code = 200)
-	@GetMapping(path = "/groups", consumes = MediaType.ALL_VALUE)
+	@GetMapping
 	@ResponseBody
 	public List<ConsumerGroup> listConsumerGroup() {
 		
@@ -97,14 +98,14 @@ public class ConsumerGroupController {
 	 */
 	@ApiOperation(value = "Opération de listage des offsets d'un groupe de consommateurs Kafka")
 	@ApiResponse(message = "Liste des offsets d'un groupe de consommateurs trouvés", code = 200)
-	@GetMapping(path = "/groups/{groupId}/offsets", consumes = MediaType.ALL_VALUE)
+	@GetMapping(path = "/{groupId}/offsets")
 	@ResponseBody
 	public List<ConsumerGroupOffset> listConsumerGroupOffsets(@ApiParam(name = "groupId", required = true) 
 														      @PathVariable("groupId")
-															  @NotEmpty  String groupId) {
+															  @NotEmpty(message = "Le paramètre 'groupId' doit être renseigné")
+															  String groupId) {
 		
 		// On retourne la liste d'offsets du groupe de consommateurs
 		return kafkaSimulator.listConsumerGroupOffsets(groupId);
 	}
-	
 }

@@ -69,6 +69,7 @@ import kafka.utils.ZKStringSerializer$;
 import kafka.zk.EmbeddedZookeeper;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.leadware.kafka.embedded.model.ConsumerGroup;
 import net.leadware.kafka.embedded.model.ConsumerGroupOffset;
 import net.leadware.kafka.embedded.model.Topic;
@@ -85,6 +86,7 @@ import net.leadware.kafka.embedded.tools.SimulatorUtils;
  */
 @RequiredArgsConstructor
 @Getter
+@Slf4j
 public class KafkaSimulator {
 	
 	/**
@@ -178,17 +180,35 @@ public class KafkaSimulator {
 	@PostConstruct
 	public void initialize() {
 		
+		// Log
+		log.debug("Initialisation du Simulateur KAFKA");
+		
+		// Log
+		log.debug("Validation des propriétés de configuration du Simulateur KAFKA");
+		
 		// Validation des contraintes
 		simulatorProperties.validate();
+		
+		// Log
+		log.debug("Initialisation du serveur Zookeeper");
 		
 		// Initialisation de ZooKeeper
 		initializeZookeeper();
 		
+		// Log
+		log.debug("Initialisation des brokers configurés");
+		
 		// Initialize Brokers
 		initializeBrokers();
 		
+		// Log
+		log.debug("Initialisation des Topics configurés");
+		
 		// Initialisation des topics
 		initializeTopics();
+		
+		// Log
+		log.debug("Initialisation du producteur par défaut (disponible via les services REST)");
 		
 		// Initialize internal producers
 		initializeProducers();
@@ -198,15 +218,28 @@ public class KafkaSimulator {
 	 * Méthode permettant d'initialiser les composants zookeeper embarque
 	 */
 	private void initializeZookeeper() {
-
+		
+		// Log
+		log.trace("Positionnement [redirection] de la propriété java.io.tmpdir [Nouvelle valeur : {}]", 
+					simulatorProperties.getJavaTemporaryDirectory());
+		
 		// Si la liste des configurations de brokerrs est vide
 		System.setProperty("java.io.tmpdir", simulatorProperties.getJavaTemporaryDirectory());
+		
+		// Log
+		log.trace("Instantiation du serveur Zookeeper embarqué");
 		
 		// Initialisation d'une instance de ZooKeeper
 		zookeeper = new EmbeddedZookeeper();
 		
+		// Log
+		log.trace("Construction du ENDPOINT d'écoute du serveur Zookeeper embarqué");
+		
 		// Initialisation de la ciane de connexion à ZooKeeper
 		zookeeperConnexionUrl = "127.0.0.1:".concat(String.valueOf(zookeeper.port()));
+		
+		// Log
+		log.trace("Instantiation d'un client Zookeeper sur l'URL construite [{}]", zookeeperConnexionUrl);
 		
 		// Initialisation du client ZooKeeper
 		zookeeperClient = new ZkClient(zookeeperConnexionUrl, 
@@ -220,6 +253,9 @@ public class KafkaSimulator {
 	 */
 	private void initializeBrokers() {
 		
+		// Log
+		log.trace("Réinitialisation du cache des serveurs KAFKA");
+		
 		// Vidage de l'ancienne liste de brokers
 		kafkaServers.clear();
 		
@@ -228,45 +264,96 @@ public class KafkaSimulator {
 				simulatorProperties.getBrokerConfigs().isEmpty()) 
 			throw new RuntimeException("Veuillez renseigner la configuration d'au moins un Broker");
 		
+		// Log
+		log.trace("Parcours de la liste des configurations de brokers");
+		
 		// Parcours de la liste de configurations de brokers
 		for(int index = 0; index < simulatorProperties.getBrokerConfigs().size(); index++) {
+			
+			// Log
+			log.trace("Obtention de la configuration [{}]", index);
 			
 			// Obtention de la config
 			BrokerProperties brokerProperties = simulatorProperties.getBrokerConfigs().get(index);
 			
+			// Log
+			log.trace("Obtention du port public du Broker [{}]", index);
+			
 			// Port public du broker
 			int publicPort = brokerProperties.getListener().getPort();
+			
+			// Log
+			log.trace("Port public du Broker [{}] : [{}]", index, publicPort);
+			
+			// Log
+			log.trace("Calcul du port d'administration en fonction de la configuration");
 			
 			// Initialisation du port d'admin
 			int adminPort = findAdminPort(brokerProperties, publicPort);
 			
+			// Log
+			log.trace("Port d'administration du Broker [{}] : [{}]", index, adminPort);
+			
+			// Log
+			log.trace("Calcul du port du producteur interne en fonction de la configuration");
+			
 			// Initialisation du port du producteur interne
 			int internalProducerPort = findInternalProducerPort(brokerProperties, publicPort, adminPort);
+			
+			// Log
+			log.trace("Port du producteur interne du Broker [{}] : [{}]", index, internalProducerPort);
+			
+			// Log
+			log.trace("Mise à jour de la configuration du broker [{}] avec le port d'administration [{}]", index, adminPort);
 			
 			// Positionnement du port d'admin
 			brokerProperties.getListener().setAdminPort(adminPort);
 			
+			// Log
+			log.trace("Mise à jour de la configuration du broker [{}] avec le port du producteur interne [{}]", index, internalProducerPort);
+			
 			// Positionnement du port du producteur interne
 			brokerProperties.getListener().setInternalProducerPort(internalProducerPort);
+			
+			// Log
+			log.trace("Initialisation des propriétés de configuratio du Broker Kafka [{}]", index);
 			
 			// Construction des propriétés de base
 			Properties properties = createBrokerProperties(index, brokerProperties);
 			
+			// Log
+			log.trace("Création d'un serveur KAFKA sur la base de des propriétés initialisées [{}]", properties);
+			
 			// Création d'un serveur Kafka
 			KafkaServer server = TestUtils.createServer(new KafkaConfig(properties), Time.SYSTEM);
+			
+			// Log
+			log.trace("Ajout du Broker Kafka [{}] dans le cache de serveur", index);
 			
 			// Ajout du serveur Kafka dans la liste des serveurs
 			kafkaServers.add(server);
 		}
 		
+		// Log
+		log.trace("Initialisation de la MAP de configuration du client d'administration des Brokers KAFKA");
+		
 		// MAP des configurations administrateur
 		Map<String, Object> adminConfigs = new HashMap<>();
+		
+		// Log
+		log.trace("Ajout de la liste des URLs de Brokers dans la configuration du client d'administration [{}]", getAdminBrokersUrls());
 		
 		// Positionnement des URL de serveurs
 		adminConfigs.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, getAdminBrokersUrls());
 		
+		// Log
+		log.trace("Ajout de l'identifiant du client administration du simulateur");
+		
 		// Positionnement de l'ID du client d'admin
 		adminConfigs.put(AdminClientConfig.CLIENT_ID_CONFIG, "simulator-admin-client");
+		
+		// Log
+		log.trace("Création du client d'administration");
 		
 		// Instanciation du client d.administration
 		adminClient = AdminClient.create(adminConfigs);
@@ -350,9 +437,6 @@ public class KafkaSimulator {
 		
 		// Listeners
 		properties.setProperty(KafkaConfig.ListenersProp(), getListenerAllUrls(brokerConfig.getListener()));
-		
-		// Inter Broker Listeners
-		//properties.setProperty(KafkaConfig.InterBrokerListenerNameProp(),"PLAINTEXT");
 		
 		// Inter Broker Listeners
 		properties.setProperty(KafkaConfig.InterBrokerSecurityProtocolProp(), brokerConfig.getListener().getProtocol().getScheme().getValue());
@@ -479,8 +563,14 @@ public class KafkaSimulator {
 	 */
 	private void initializeTopics() {
 		
+		// Log
+		log.trace("Réinitialisation de la liste des topics crées");
+		
 		// Vidage de la liste de topics
 		createdTopics.clear();
+		
+		// Log
+		log.trace("Création de la liste de topics [{}]", simulatorProperties.getInitialTopics());
 		
 		// Creation des topic de la liste parametrée
 		internalCreateTopics(simulatorProperties.getInitialTopics());
@@ -749,6 +839,9 @@ public class KafkaSimulator {
 	 */
 	public void createTopics(String...topicsNames) {
 		
+		// Log
+		log.debug("Création des topics [{}]", Arrays.asList(topicsNames));
+		
 		// Creation de la liste de topics
 		internalCreateTopics(
 
@@ -807,6 +900,9 @@ public class KafkaSimulator {
 	 */
 	public void deleteTopics(List<String> topicsNames) {
 		
+		// Log
+		log.debug("Suppression des topics [{}]", topicsNames);
+		
 		// Verifier que ZooKeeper est actif
 		Assert.notNull(this.zookeeper, "Assurez-vous que le cluster ZooKeeper est actif avant toute opération.");
 
@@ -841,6 +937,9 @@ public class KafkaSimulator {
 	 * @param topicsNames	Liste de noms de topics
 	 */
 	public void deleteTopics(String...topicsNames) {
+		
+		// Log
+		log.debug("Suppression des topics [{}]", Arrays.asList(topicsNames));
 		
 		// Suppression
 		deleteTopics(Arrays.stream(topicsNames).collect(Collectors.toList()));	
@@ -926,6 +1025,9 @@ public class KafkaSimulator {
 	 */
 	public void sendMessage(String topic, String key, String message) {
 		
+		// Log
+		log.debug("Envoie d'un message Clé [{}], Topic [{}], Contenu [{}]", key, topic, message);
+		
 		// Envoie du message
 		kafkaStringProducerTemplate.send(topic, key, message);
 	}
@@ -936,6 +1038,9 @@ public class KafkaSimulator {
 	 * @param message	Contenu du message
 	 */
 	public void sendMessage(String topic, String message) {
+		
+		// Log
+		log.debug("Envoie d'un message Topic [{}], Contenu [{}]", topic, message);
 		
 		// Envoie du message
 		kafkaStringProducerTemplate.send(topic, message);

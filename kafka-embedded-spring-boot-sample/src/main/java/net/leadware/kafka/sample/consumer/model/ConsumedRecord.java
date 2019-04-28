@@ -1,4 +1,4 @@
-package net.leadware.kafka.embedded.sample.consumer.model;
+package net.leadware.kafka.sample.consumer.model;
 
 /*-
  * #%L

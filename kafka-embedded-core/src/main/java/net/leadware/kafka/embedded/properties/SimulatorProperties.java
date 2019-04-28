@@ -1,5 +1,7 @@
 package net.leadware.kafka.embedded.properties;
 
+import java.util.ArrayList;
+
 /*-
  * #%L
  * Apache Kafka Embedded Server
@@ -77,47 +79,40 @@ public class SimulatorProperties {
 	/**
 	 * Etat de contrôle d'arrêt des brokers
 	 */
-	@NotNull(message = "Veuillez renseigner l'état de contrôle d'arrêt des brokers")
 	private Boolean controlledShutdown = Boolean.TRUE;
-
+	
 	/**
 	 * Etat d'activation de la capacité de suppression de topics du Simulateur KAFKA
 	 */
-	@NotNull(message = "Veuillez renseigner l'etat d'activation de la suppression de topics du simulateur KAFKA")
 	private Boolean enableDeleteTopics = Boolean.TRUE;
 	
 	/**
 	 * Nombre de partitions par topic
 	 */
-	@NotNull(message = "Veuillez renseigner le nombre de partition par topics")
 	@Positive(message = "Le nombre de partition par topic doit être une valeur supérieure à 0")
 	private Integer partitionCount = 1;
 	
 	/**
 	 * Broker instance network thread count (used for receive and send messages)
 	 */
-	@NotNull(message = "Veuillez renseigner le nombre de threads réseaux")
 	@Positive(message = "Le nombre de threads réseaux doit être une valeur supérieure à 0")
 	private Integer networkThreadCount = 1;
 	
 	/**
 	 * Broker instance I/O thread count (used for process messages with disk I/O)
 	 */
-	@NotNull(message = "Veuillez renseigner le nombre de threads d'I/O")
 	@Positive(message = "Le nombre de threads I/O doit être une valeur supérieure à 0")
 	private Integer ioThreadCount = 1;
 	
 	/**
 	 * Broker instance send buffer max size (in byte)
 	 */
-	@NotNull(message = "Veuillez renseigner la taille du buffer d'envoie")
 	@Positive(message = "La taille du buffer d'envoie doit être une valeur supérieure à 0")
 	private Long sendBufferSize = 102400L;
-
+	
 	/**
 	 * Broker instance send buffer max size (in byte)
 	 */
-	@NotNull(message = "Veuillez renseigner la taille du buffer de reception")
 	@Positive(message = "La taille du buffer de reception doit être une valeur supérieure à 0")
 	private Long receiveBufferSize = 102400L;
 
@@ -191,6 +186,16 @@ public class SimulatorProperties {
 	
 		// Renvoi de la valeur du champ "sslClientAuthentication"
 		return (sslClientAuthentication == null) ? SslClientAuthentication.NONE : sslClientAuthentication;
+	}
+	
+	/**
+	 * Méthode permettant d'obtenir la liste des topics initiaux à créer
+	 * @return	Liste initiale des topics à créer
+	 */
+	public List<String> getInitialTopics() {
+		
+		// Renvoi de la valeur du champ "initialTopics"
+		return initialTopics == null ? new ArrayList<>() : initialTopics;
 	}
 	
 	/**

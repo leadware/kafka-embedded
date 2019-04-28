@@ -32,11 +32,11 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -46,6 +46,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
+import lombok.extern.slf4j.Slf4j;
 import net.leadware.kafka.embedded.KafkaSimulator;
 import net.leadware.kafka.embedded.model.Topic;
 import net.leadware.kafka.embedded.properties.SimulatorProperties;
@@ -69,10 +70,11 @@ import net.leadware.kafka.embedded.utils.KafkaSimulatorFactory;
 )
 @RestController
 @RequestMapping(
-		path = "/simulator/topic/api/1.0", 
-		produces = { MediaType.APPLICATION_JSON_VALUE }, 
-		consumes = { MediaType.APPLICATION_JSON_VALUE }
+		path = "/kafka/simulator/api/1.0/topics", 
+		produces = { MediaType.APPLICATION_JSON_VALUE }
 )
+@Slf4j
+@Validated
 public class TopicController {
 	
 	/**
@@ -83,17 +85,21 @@ public class TopicController {
 	
 	/**
 	 * Méthode permettant de créer un topic dans le simulateur
-	 * @param topic	Topic a creer
+	 * @param topicName	Nom du topic a creer
 	 */
 	@ApiOperation(value = "Opération de création d'un topic")
-	@PostMapping(path = "/create")
+	@PutMapping(path = "/{topicName}")
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public void createTopic(@ApiParam(name = "topic", required = true) 
-							@NotNull 
-							@RequestBody Topic topic) {
+	public void createTopicByName(@ApiParam(name = "topicName", required = true, value = "Nom du topic à créer") 
+								  @PathVariable("topicName")
+								  @NotEmpty(message = "Le paramètre 'topicName' doit être renseigné")
+								  String topicName) {
+		
+		// Log
+		log.debug("Création du topic : [{}]", topicName);
 		
 		// On cree le topic
-		kafkaSimulator.createTopics(topic.getName());
+		kafkaSimulator.createTopics(topicName);
 	}
 	
 	/**
@@ -103,11 +109,15 @@ public class TopicController {
 	 */
 	@ApiOperation(value = "Opération de listage des topics en fonction de leur état de visibilité")
 	@ApiResponse(message = "Liste des topics trouvés", code = 200)
-	@GetMapping(path = "/topics/{internal}", consumes = MediaType.ALL_VALUE)
+	@GetMapping(path = "/{internal}")
 	@ResponseBody
-	public List<Topic> listTopic(@ApiParam(name = "internal", required = true) 
-								 @PathVariable("internal") 
-								 @NotNull Boolean internal) {
+	public List<Topic> listTopic(@ApiParam(name = "internal", required = true, value = "Topic interne ?") 
+								 @PathVariable(name = "internal") 
+								 @NotNull(message = "Le paramètre 'internal' doit être renseigné")
+								 Boolean internal) {
+		
+		// Log
+		log.debug("Listage des topics [Interne = {}]", internal);
 		
 		// On retourne la liste de topics
 		return kafkaSimulator.listTopics(internal);
@@ -118,11 +128,15 @@ public class TopicController {
 	 * @param topicName	Nom du topic
 	 */
 	@ApiOperation(value = "Opération de suppression d'un topic à partir de son nom")
-	@DeleteMapping(path = "/{topicName}", consumes = MediaType.ALL_VALUE)
+	@DeleteMapping(path = "/{topicName}")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
-	public void deleteTopic(@ApiParam(name = "topicName", required = true) 
+	public void deleteTopic(@ApiParam(name = "topicName", required = true, value = "Nom du topic à supprimer") 
 						    @PathVariable("topicName")
-							@NotEmpty String topicName) {
+							@NotEmpty(message = "Le paramètre 'topicName' doit être renseigné")
+							String topicName) {
+		
+		// Log
+		log.debug("Suppression du topic [{}]", topicName);
 		
 		// Suppression du topic
 		kafkaSimulator.deleteTopics(topicName);

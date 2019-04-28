@@ -63,9 +63,8 @@ import net.leadware.kafka.embedded.utils.jsr303.format.StringFormatValidator;
 )
 @RestController
 @RequestMapping(
-		path = "/simulator/producer/api/1.0", 
-		produces = { MediaType.APPLICATION_JSON_VALUE }, 
-		consumes = { MediaType.APPLICATION_JSON_VALUE }
+		path = "/kafka/simulator/api/1.0/producers", 
+		produces = { MediaType.APPLICATION_JSON_VALUE }
 )
 @Validated
 public class ProducerController {
@@ -82,19 +81,25 @@ public class ProducerController {
 	 * @param messageKey	Clé du message
 	 * @param message	Contenu du message
 	 */
-	@PostMapping(path = "/send/{topicName}/{messageKey}", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(
+			path = "/send/{topicName}/{messageKey}", 
+			consumes = MediaType.APPLICATION_JSON_VALUE
+	)
 	@ResponseStatus(value = HttpStatus.OK, reason = "Message envoyé dans la file")
 	public void sendMessage(@ApiParam(name = "topicName", value = "Nom du topic d'envoi", required = true) 
 							@PathVariable("topicName") 
-							@NotEmpty String topicName, 
+							@NotEmpty(message = "Le paramètre 'topicName' doit être renseigné")
+							String topicName, 
 							
 							@ApiParam(name = "messageKey", value = "Clé du message KAFKA" ,required = true) 
-							@PathVariable("topicName") 
-							@NotEmpty String messageKey,
+							@PathVariable("messageKey") 
+							@NotEmpty(message = "Le paramètre 'messageKey' doit être renseigné")
+							String messageKey,
 							
 							@ApiParam(name = "message", value = "Contenu du message au format JSON", required = true)
 							@RequestBody(required = true)
-							@StringFormatValidator(format = FormatType.JSON) String message) {
+							@StringFormatValidator(format = FormatType.JSON, message = "Le contenu du message doit être au format JSON")
+							String message) {
 		
 		// Envoi du message
 		kafkaSimulator.sendMessage(topicName, messageKey, message);
@@ -105,11 +110,15 @@ public class ProducerController {
 	 * @param topicName	Nom du topic d'envoie
 	 * @param message	Contenu du message
 	 */
-	@PostMapping(path = "/send/{topicName}", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(
+			path = "/send/{topicName}", 
+			consumes = MediaType.APPLICATION_JSON_VALUE
+	)
 	@ResponseStatus(value = HttpStatus.OK, reason = "Message envoyé dans la file")
 	public void sendMessage(@ApiParam(name = "topicName", value = "Nom du topic d'envoi", required = true) 
 							@PathVariable("topicName") 
-							@NotEmpty String topicName, 
+							@NotEmpty(message = "Le paramètre 'topicName' doit être renseigné")
+							String topicName, 
 							
 							@ApiParam(name = "message", value = "Contenu du message au format JSON", required = true)
 							@RequestBody(required = true)

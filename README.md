@@ -94,17 +94,37 @@ Kafka Embarqué de manière conditionnée.
         <dependency>
             <groupId>net.leadware</groupId>
             <artifactId>kafka-embedded-spring-boot-starter</artifactId>
-            <version>1.0.0-RC1</version>
+            <version>1.0.0-RC8</version>
         </dependency>
         
     </dependencies>
     
     // GRADLE
     dependencies {
-        compile "net.leadware:kafka-embedded-spring-boot-starter:1.0.0-RC1"
+        compile "net.leadware:kafka-embedded-spring-boot-starter:1.0.0-RC8"
     }
 ```
-* Mettre en place les propriétés de configuration du Kafka Embedded
+* Référencer les fichiers de configuration du simulateur kafka et du consommateur dans 
+  le fichier de configuration principal de l'application
+  
+```
+# Application context
+server.servlet.context-path=/kafka-embedded
+
+# Server port
+server.port=8080
+
+# Chemin vers le fichier de configuration du simulateur KAFKA
+net.leadware.kafka.sample.config.simulator=classpath:kafka-simulator.properties
+
+# Chemin vers le fichier de configuration du consommateur KAFKA
+net.leadware.kafka.sample.config.consumer=classpath:kafka-consumer.properties
+```
+
+* Mettre en place les propriétés de configuration du Simulateur Kafka
+
+** Mode NON SÉCURISÉ
+
 ```
     # Embedded Kafka Simulator activation status
     embedded.kafka.simulator.enabled = true
@@ -154,213 +174,335 @@ Kafka Embarqué de manière conditionnée.
     # Embedded Kakfa Simulator broker instance Listener protocol scheme
     embedded.kafka.simulator.broker-configs[0].listener.protocol.scheme = PLAINTEXT
 ```
-* Charger les proprétés dans la JVM (par exemple avec un @PropertySource)
-* Vous pouvez désormais créer des producteurs et des consommateurs qui se connectent 
-  en localhost sur les brokers Kafka
+** Mode SÉCURISÉ
+```
+    # Embedded Kafka Simulator activation status
+    embedded.kafka.simulator.enabled = true
+    
+    # Embedded Kakfa Simulator control shutdown status
+    embedded.kafka.simulator.java-temporary-directory = target
+    
+    # Embedded Kakfa Simulator control shutdown status
+    embedded.kafka.simulator.controlled-shutdown = false
+    
+    # Embedded Kakfa Simulator enable delete topics capability
+    embedded.kafka.simulator.enable-delete-topics = true
+    
+    # Embedded Kakfa Simulator partition count [Default KAFKA Properties : num.partitions = 1]
+    embedded.kafka.simulator.partition-count = 1
+    
+    # Embedded Kakfa servers Network Threads used for receive and send messages [Default : num.network.threads=3]
+    embedded.kafka.simulator.network-thread-count = 2
+    
+    # Embedded Kakfa servers I/O Threads used for process messages with disk I/O [Default : num.io.threads=8]
+    embedded.kafka.simulator.io-thread-count = 2
+    
+    # Embedded Kakfa servers send buffer max size in byte [Default : socket.send.buffer.bytes=102400]
+    embedded.kafka.simulator.send-buffer-size = 102400
+    
+    # Embedded Kakfa servers receive buffer max size in byte [Default : socket.receive.buffer.bytes=102400]
+    embedded.kafka.simulator.receive-buffer-size = 102400
+    
+    # Embedded Kakfa servers receive buffer max size in byte [Default : max.socket.request.bytes=104857600]
+    embedded.kafka.simulator.max-request-size = 104857600
+    
+    # Embedded Kakfa Simulator broker SSL Protocol [Default : ssl.protocol = TLS]
+    embedded.kafka.simulator.ssl-protocol = TLS
+    
+    # Embedded Kakfa Simulator broker SSL Client Authentication [Default : ssl.client.auth = none]
+    embedded.kafka.simulator.ssl-client-authentication = NONE
+    
+    # Embedded Kakfa Simulator broker keystore keymanagerAlgorithm
+    embedded.kafka.simulator.keystore-config.keymanager-algorithm = SunX509
+    
+    # Embedded Kakfa Simulator broker keystore location
+    embedded.kafka.simulator.keystore-config.location=file:target/classes/kafka-broker.jks
+    
+    # Embedded Kakfa Simulator broker keystore password
+    embedded.kafka.simulator.keystore-config.password = ratp123
+    
+    # Embedded Kakfa Simulator broker key password
+    embedded.kafka.simulator.keystore-config.key-password = ratp123
+    
+    # Embedded Kakfa Simulator broker keystore type
+    embedded.kafka.simulator.keystore-config.type = JKS
+    
+    # Embedded Kakfa Simulator broker truststore keymanagerAlgorithm
+    embedded.kafka.simulator.truststore-config.keymanager-algorithm = SunX509
+    
+    # Embedded Kakfa Simulator broker truststore location
+    embedded.kafka.simulator.truststore-config.location=file:target/classes/kafka-broker.jks
+    
+    # Embedded Kakfa Simulator broker truststore password
+    embedded.kafka.simulator.truststore-config.password = ratp123
+    
+    # Embedded Kakfa Simulator broker truststore type
+    embedded.kafka.simulator.truststore-config.type = JKS
+    
+    # Embedded Kakfa Simulator initial topics
+    embedded.kafka.simulator.initial-topics = HCPA,DMES,IC
+    
+    # Embedded Kakfa Simulator broker instance Logs directory
+    embedded.kafka.simulator.broker-configs[0].logs-directory=file:target/kafka/broker/broker0/logssecure
+    
+    # Embedded Kakfa Simulator broker instance Logs directories
+    embedded.kafka.simulator.broker-configs[0].logs-directories=file:target/kafka/broker/broker0/logssecure
+    
+    # Embedded Kakfa Simulator broker instance Listener port
+    embedded.kafka.simulator.broker-configs[0].listener.port = 9690
+    
+    # Embedded Kakfa Simulator broker instance Listener protocol name
+    embedded.kafka.simulator.broker-configs[0].listener.protocol.name = SSL
+    
+    # Embedded Kakfa Simulator broker instance Listener protocol scheme
+    embedded.kafka.simulator.broker-configs[0].listener.protocol.scheme = SSL
+
+```
+
+* Mettre en place la configuration d'un consommateur
+
+** Mode NON SÉCURISÉ
   
 ```
-    # PROPRIÉTÉS DU CONSOMMATEUR
-    
     # Consumer Bootstrap Server
-    consumer.bootstrap-servers=localhost:9590
+    net.leadware.kafka.sample.config.consumer.bootstrap-servers=PLAINTEXT://localhost:9090
     
     # Consumer Client ID
-    consumer.client-id=kafka-consumer
+    net.leadware.kafka.sample.config.consumer.client-id=sample-consumer
     
     # Consumer Group ID
-    consumer.group-id=kafka-consumer-group
+    net.leadware.kafka.sample.config.consumer.client-group-id=sample-consumer-group
     
-    # Consumer topic
-    consumer.topic=HCPA
-```
+    # Consumer Metadata Max Age
+    net.leadware.kafka.sample.config.consumer.metadata-max-age=5000
+    
+    # Consumer topic pattern
+    net.leadware.kafka.sample.config.consumer.topic-pattern=.*
 
 ```
-    // CLASSE REPRÉSENTANT LA DONNÉE QUI SERA ECHANGÉE
-        
-    /**
-     * Classe représentant un utilisateur à sérialiser/désérialiser en KAFKA
-     * @author <a href="mailto:jetune@leadware.net">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
-     * @since 1 avr. 2019 - 08:07:06
-     */
-    @NoArgsConstructor
-    @AllArgsConstructor
+
+** Mode SÉCURISÉ
+  
+```
+    # Consumer Bootstrap Server
+    net.leadware.kafka.sample.config.consumer.bootstrap-servers=SSL://localhost:9690
+    
+    # Consumer Client ID
+    net.leadware.kafka.sample.config.consumer.client-id=sample-consumer
+    
+    # Consumer Group ID
+    net.leadware.kafka.sample.config.consumer.client-group-id=sample-consumer-group
+    
+    # Consumer Metadata Max Age
+    net.leadware.kafka.sample.config.consumer.metadata-max-age=5000
+    
+    # Consumer topic pattern
+    net.leadware.kafka.sample.config.consumer.topic-pattern=.*
+    
+    # Consumer Security protocol
+    net.leadware.kafka.sample.config.consumer.security-protocol=SSL
+    
+    # Consumer Truststore location
+    net.leadware.kafka.sample.config.consumer.truststore-location=file:target/classes/kafka-broker.jks
+    
+    # Consumer Truststore password
+    net.leadware.kafka.sample.config.consumer.truststore-password=ratp123
+    
+    # Consumer Keystore locaton
+    net.leadware.kafka.sample.config.consumer.keystore-location=file:target/classes/kafka-broker.jks
+    
+    # Consumer Keystore password
+    net.leadware.kafka.sample.config.consumer.keystore-password=ratp123
+    
+    # Consumer Key password
+    net.leadware.kafka.sample.config.consumer.key-password=ratp123
+
+```
+
+** NB : Un producteur interne, disponible via une API Rest est déjà fournit par le simulateur (voir doc swagger http://your-app/your-context/swagger-ui.html), mais vous pouvez 
+configurer d'autres producteurs en vous inspirant de la configuration du consomateur
+
+* Exemple de chargement des configurations du consommateur
+
+```
+    @Component
+    @PropertySource(name = "consumerConfiguration", value = {"${net.leadware.kafka.sample.config.consumer}"})
+    @ConfigurationProperties(prefix="net.leadware.kafka.sample.config.consumer")
     @Getter
     @Setter
-    public class User {
+    public class KafkaSimulatorSampleConsumerProperties {
         
         /**
-         * Prenom de l'utilisateur
+         * Liste des URL des Brokers Kafka
          */
-        private String lastName;
+        private String bootstrapServers;
         
         /**
-         * Nom de l'utilisateur
+         * Identifiant du consommateur
          */
-        private String firstName;
+        private String clientId;
         
         /**
-         * No de connexion
+         * Identifiant du groupe du consommateur
          */
-        private String login;
+        private String clientGroupId;
         
         /**
-         * Mot de passe
+         * Durée maximale de recharge des metadonnees du consommateur
          */
-        private String password;
+        private String metadataMaxAge;
         
+        /**
+         * Pattern des topics d'abonnement automatique
+         */
+        private String topicPattern;
+        
+        /**
+         * Protocole de securite du consomateur
+         */
+        private String securityProtocol;
+        
+        /**
+         * Chemin vers le fichier trustore
+         */
+        private String truststoreLocation;
+        
+        /**
+         * Mot de passe du fichier truststore
+         */
+        private String truststorePassword;
+        
+        /**
+         * Chemin vers le fichier keystore
+         */
+        private String keystoreLocation;
+        
+        /**
+         * Mot de passe du magasin de clés
+         */
+        private String keystorePassword;
+        
+        /**
+         * Mot de passe de la clé
+         */
+        private String keyPassword;
     }
 ```
+* Exemple de configuration d'un listener kafka
 
 ```
-    // CHARGEMENT DES PROPRIÉTÉ DU PRODUCTEUR
-    
-    /**
-     * Bootstrap Servers du Producteur
-     */
-    @Value("${producer.bootstrap-servers}")
-    private String producerBootstrapServers;
-    
-    /**
-     * Client ID du Producteur
-     */
-    @Value("${producer.client-id}")
-    private String producerClientId;
-    
-    /**
-     * Topic d'echange du Producteur
-     */
-    @Value("${producer.topic}")
-    private String topic; 
-```
-
-```
-    // CHARGEMENT DES PROPRIÉTÉ DU CONSOMMATEUR
-    
-    /**
-     * Bootstrap Servers du Consommateur
-     */
-    @Value("${consumer.bootstrap-servers}")
-    private String consumerBootstrapServers;
-    
-    /**
-     * Client ID du Consommateur
-     */
-    @Value("${consumer.client-id}")
-    private String consumerClientId;
-    
-    /**
-     * Group ID du Consommateur
-     */
-    @Value("${consumer.group-id}")
-    private String consumerGroupId;
-    
-    /**
-     * Topic d'echange du Consommateur
-     */
-    @Value("${consumer.topic}")
-    private String consumerTopic = "HCPA";    
-```
-
-```
-    
-    /**
-     * Template de production KAFKA
-     */
-    private KafkaTemplate<String, User> kafkaProducerTemplate;
-    
-    /**
-     * Conteneur de Listener de Message KAFKA
-     */
-    private KafkaMessageListenerContainer<String, User> kafkaMessageListenerContainer;
-    
-    /**
-     * File de stockage des messages reçues de KAFKA par le consommateur
-     */
-    final BlockingQueue<ConsumerRecord<String, User>> records = new LinkedBlockingQueue<>();
-```
-
-```
-    // INITIALISATION DU PRODUCTEUR ET DU CONSOMMATEUR
-    
-    
-    // Propriétés du producer
-    Map<String, Object> producerProperties = new HashMap<>();
-    
-    // Positionnement des URLs de serveurs KAFKA
-    producerProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, producerBootstrapServers);
-    
-    // Positionnement de l'ID du client
-    producerProperties.put(ProducerConfig.CLIENT_ID_CONFIG, producerClientId);
-    
-    // Positionnement de la classe de secrialisation des clés
-    producerProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-    
-    // Positionnement de la classe de secrialisation des données
-    producerProperties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-    
-    // Fabrique de producteurs
-    ProducerFactory<String, User> kafkaProducerFactory = new DefaultKafkaProducerFactory<String, User>(producerProperties);
-    
-    // Template de production Kafka
-    kafkaProducerTemplate = new KafkaTemplate<>(kafkaProducerFactory);
-    
-    // Propriétés du producer
-    Map<String, Object> consumerProperties = new HashMap<>();
-    
-    // Positionnement des URLs de serveurs KAFKA
-    consumerProperties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, consumerBootstrapServers);
-    
-    // Positionnement de l'ID du client
-    consumerProperties.put(ConsumerConfig.CLIENT_ID_CONFIG, consumerClientId);
-    
-    // Positionnement de l'ID du groupe
-    consumerProperties.put(ConsumerConfig.GROUP_ID_CONFIG, consumerGroupId);
-    
-    // Positionnement de la classe de deserialisation des clés
-    consumerProperties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-    
-    // Positionnement de la classe de deserialisation des données
-    consumerProperties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-    
-    // Positionnement de des packages trustés pour la deserialisation
-    consumerProperties.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
-    
-    // Fabrique de consommateurs
-    ConsumerFactory<String, User> kafkaConsumerFactory = new DefaultKafkaConsumerFactory<String, User>(consumerProperties);
-    
-    // Container Propertie
-    ContainerProperties containerPorperties = new ContainerProperties(consumerTopic);
-    
-    // MessageListener Container
-    kafkaMessageListenerContainer = new KafkaMessageListenerContainer<>(kafkaConsumerFactory, containerPorperties);
-    
-    // Add MessageListener
-    kafkaMessageListenerContainer.setupMessageListener((MessageListener<String, User>) record -> {
+    @Configuration
+    @EnableSwagger2
+    @Slf4j
+    public class KafkaSimulatorSampleConsumerConfiguration {
         
-        // Ajout dans la liste des recourds
-        records.add(record);
-    });
-    
-    // Demarrage du listener
-    kafkaMessageListenerContainer.start();
-    
-```
-
-```
-    // Envoi du message 500 fois
-    
-    // Nombre de message a envoyer
-    int nbMessage = 500;
-    
-    // Instantiation d'un user
-    User user = new User("JEANN-JACQUES", "ETUNE NGI", "jetune", "jetune123");
-    
-    for(int count = 0; count < nbMessage ; count++) {
+        /**
+         * Configuration du consommateur
+         */
+        @Autowired
+        private KafkaSimulatorSampleConsumerProperties consumerConfig;
         
-        // Envoi
-        kafkaProducerTemplate.send(topic, user);
+        /**
+         * Méthode permettant de construire la liste d'enregistrement consommées par le consommateur KAFKA
+         * @return  Liste d'enregistrement
+         */
+        @Bean
+        @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
+        public List<ConsumedRecord> consumerRecords() {
+            
+            // On retourne la liste
+            return new ArrayList<>();
+        }
+        
+        /**
+         * Méthode de construction du Listener Kafka
+         * @param consumerRecords Liste d'enregistrements consommés
+         * @return  Listener Kafka
+         */
+        @Bean(initMethod = "start", destroyMethod = "stop")
+        public KafkaMessageListenerContainer<String, String> kafkaListenerContainerFactory(List<ConsumedRecord> consumerRecords) {
+    
+            // Propriétés du producer
+            Map<String, Object> consumerProperties = new HashMap<>();
+            
+            // Positionnement des URLs de serveurs KAFKA
+            consumerProperties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, consumerConfig.getBootstrapServers());
+            
+            // Positionnement de l'ID du client
+            consumerProperties.put(ConsumerConfig.CLIENT_ID_CONFIG, consumerConfig.getClientId());
+            
+            // Positionnement de l'ID du groupe
+            consumerProperties.put(ConsumerConfig.GROUP_ID_CONFIG, consumerConfig.getClientGroupId());
+            
+            // Positionnement de la classe de deserialisation des clés
+            consumerProperties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+            
+            // Positionnement de la classe de deserialisation des données
+            consumerProperties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+            
+            // Positionnement de des packages trustés pour la deserialisation
+            consumerProperties.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
+            
+            // Positionnement du delai de recharche des metadonnees de topics (recharger la liste de topics toutes les 5)
+            consumerProperties.put(ConsumerConfig.METADATA_MAX_AGE_CONFIG, consumerConfig.getMetadataMaxAge());
+    
+            // Positionnement de la localisation du keystore Consommateur
+            consumerProperties.put(SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG, SimulatorUtils.getResolvedPath(consumerConfig.getKeystoreLocation()));
+            
+            // Positionnement de la clé du keystore Consommateur
+            consumerProperties.put(SslConfigs.SSL_KEYSTORE_PASSWORD_CONFIG, consumerConfig.getKeystorePassword());
+            
+            // Positionnement du mot de passe de la clé Consommateur
+            consumerProperties.put(SslConfigs.SSL_KEY_PASSWORD_CONFIG, consumerConfig.getKeyPassword());
+            
+            // Positionnement de la localisation du truststore Consommateur
+            consumerProperties.put(SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG, SimulatorUtils.getResolvedPath(consumerConfig.getTruststoreLocation()));
+            
+            // Positionnement de la clé du truststore Consommateur
+            consumerProperties.put(SslConfigs.SSL_TRUSTSTORE_PASSWORD_CONFIG, consumerConfig.getTruststorePassword());
+            
+            // Positionnement du type de cle
+            consumerProperties.put(SslConfigs.SSL_KEYSTORE_TYPE_CONFIG, "JKS");
+            
+            consumerProperties.put("ssl.enabled.protocols", "TLSv1.2,TLSv1.1,TLSv1");
+            
+            // Positionnement du protocol de securite
+            consumerProperties.put("security.protocol", consumerConfig.getSecurityProtocol());
+            
+            // Fabrique de consommateurs
+            ConsumerFactory<String, String> kafkaConsumerFactory = new DefaultKafkaConsumerFactory<>(consumerProperties);
+            
+            // Container Propertie
+            ContainerProperties containerPorperties = new ContainerProperties(Pattern.compile(consumerConfig.getTopicPattern()));
+            
+            // MessageListener Container
+            KafkaMessageListenerContainer<String, String> kafkaMessageListenerContainer = new KafkaMessageListenerContainer<>(kafkaConsumerFactory, containerPorperties);
+            
+            // Add MessageListener
+            kafkaMessageListenerContainer.setupMessageListener((MessageListener<String, String>) record -> {
+                
+                // Ajout de l'enregistrement dans la liste
+                consumerRecords.add(new ConsumedRecord(record.topic(), record.partition(), 
+                                                       record.offset(), record.timestamp(), 
+                                                       record.timestampType(), 
+                                                       record.serializedKeySize(), 
+                                                       record.serializedValueSize(), 
+                                                       record.key(), record.value()));
+                
+                // Ajout dans la liste des recourds
+                System.out.println("==========================================");
+                System.out.println(record);
+                System.out.println("==========================================");
+            });
+            
+            // On retourne le listener
+            return kafkaMessageListenerContainer;
+        }
+    
+        
     }
-    
+
 ```
 
 * Allez à l'adresse du Swagger UI et visualiser la documentation des services offerts
+* Pour plus d'informations, veuillez regarder les codes sources de l'application **kafka-embedded-spring-boot-sample**

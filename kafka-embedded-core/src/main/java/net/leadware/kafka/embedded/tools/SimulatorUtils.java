@@ -32,11 +32,14 @@ import org.springframework.util.SocketUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * Classe utilitaire du simulateur
  * @author <a href="mailto:jetune@leadware.net">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
  * @since 31 mars 2019 - 12:10:22
  */
+@Slf4j
 public class SimulatorUtils {
 	
 	/**
@@ -91,10 +94,16 @@ public class SimulatorUtils {
 		
 		try {
 			
+			// log
+			log.debug("Vérification de l'état de lecture du fichier [{}]", path);
+			
 			// On retourne l'état de visibilié en lecture
 			return getFile(path).canRead();
 			
 		} catch (Exception e) {
+			
+			// Trace d'erreur
+			e.printStackTrace();
 			
 			// On retourne false
 			return false;
@@ -183,16 +192,46 @@ public class SimulatorUtils {
 	 * @return Fichier construit en cas d'existence
 	 */
 	public static File getFile(String path) {
-
+		
 		try {
+			
+			// Si le chemim est null
+			if(path == null) throw new FileNotFoundException("Le fichier 'null' n'existe pas");
+			
+			// Log
+			log.debug("Obtention de l'URL du chemin [{}]...", path);
+			
+			// resolution du chemin
+			String resolvedPath = getResolvedPath(path);
+			
+			// Log
+			log.debug("URL complète du chemin [{}] : [{}]", path, resolvedPath);
+			
+			// Si le fichier est dans une archive
+			if(fileInArchive(resolvedPath)) {
+				
+				// On leve une exception
+				throw new IOException("Impossible de construire un objet java.io.File depuis un fichier contenue dans une archive [{" + resolvedPath + "}]");
+			}
 			
 			// Obtention du File sur le repertoire temporaire
 			return ResourceUtils.getFile(path);
 			
 		} catch (FileNotFoundException e) {
 			
+			// Log
+			log.debug("Le fichier [{}] n'existe pas.", path);
+			
 			// On relance
-			throw new RuntimeException("Le chemin n'existe pas : " + path);
+			throw new RuntimeException("Le chemin n'existe pas : " + path, e);
+			
+		} catch (IOException e) {
+			
+			// Log
+			log.debug("Erreur survenue lors du traitement du fichier [{}] : [{}]", path, e.getMessage());
+			
+			// On relance
+			throw new RuntimeException("Erreur survenue lors du traitement du fichier [{" + path + "}]", e);
 		}
 	}
 	
@@ -257,5 +296,17 @@ public class SimulatorUtils {
 		
 		// On retourne un port supérieur à la valeur minimale
 		return SocketUtils.findAvailableTcpPort(generatedPortMinValue);
+	}
+	
+	/**
+	 * Méthode permettant de verifier si un chemin indique une ressource dans une archive
+	 * @param path	Chemin a tester
+	 * @return	Etat
+	 */
+	private static boolean fileInArchive(String path) {
+		
+		// On retourne le resultat
+		return path.contains("!/");
+		
 	}
 }

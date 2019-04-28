@@ -298,6 +298,7 @@ public class SecureSimulatorInitializingTest {
 		
 		// Positionnement du protocol de securite
 		consumerProperties.put("security.protocol", consumerSecurityProtocol);
+		
 		// Fabrique de consommateurs
 		ConsumerFactory<String, User> kafkaConsumerFactory = new DefaultKafkaConsumerFactory<String, User>(consumerProperties);
 		
