@@ -166,7 +166,7 @@
 		<bouncy-castle.version>1.61</bouncy-castle.version>
 		
 		<!-- Bean Validation version property -->
-		<bean-validation.version>1.0.0-RC4</bean-validation.version>
+		<bean-validation.version>1.0.0-RC6</bean-validation.version>
 		
 	</properties>
 	
