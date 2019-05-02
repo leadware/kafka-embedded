@@ -130,7 +130,7 @@ public class SimulatorConfigurationPropertiesTest {
 		assertThat(simulatorProperties.getBrokerConfigs(), hasSize(1));
 		
 		// Assert that broker first config port map 9090 is set to PLAINTEXT
-		assertThat(simulatorProperties.getBrokerConfigs().get(0).getListener().getPort(), is(equalTo(9090)));
+		assertThat(simulatorProperties.getBrokerConfigs().get(0).getListener().getPort(), is(equalTo(9290)));
 		
 		// Assert that broker first config port map 9091 is set to SSL
 		assertThat(simulatorProperties.getBrokerConfigs().get(0).getListener().getProtocol().getScheme(), is(equalTo(ListenerSecurityProtocol.PLAINTEXT)));

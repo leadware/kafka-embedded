@@ -664,10 +664,23 @@ public class KafkaSimulator {
 	}
 	
 	/**
+	 * Méthode permettant d'obtenir l'ensemble des URL publique des Brokers 
+	 * @return	URLs publique des brokers
+	 */
+	public String getPublicBrokersUrls() {
+		
+		// On retourne la chiane
+		return simulatorProperties.getBrokerConfigs()
+								  .parallelStream()
+								  .map(brokerProperty -> getListenerPublicUrl(brokerProperty.getListener()))
+								  .collect(Collectors.joining(",", "", ""));
+	}
+	
+	/**
 	 * Méthode permettant d'obtenir l'ensemble des URL d'administration des Brokers 
 	 * @return	URLs d'administration des brokers
 	 */
-	private String getAdminBrokersUrls() {
+	public String getAdminBrokersUrls() {
 		
 		// On retourne la chiane
 		return simulatorProperties.getBrokerConfigs()
@@ -675,7 +688,7 @@ public class KafkaSimulator {
 								  .map(brokerProperty -> getListenerAdminUrl(brokerProperty.getListener()))
 								  .collect(Collectors.joining(",", "", ""));
 	}
-
+	
 	/**
 	 * Méthode permettant d'obtenir l'ensemble des URL de producteur interne des Brokers 
 	 * @return	URLs de producteur interne des brokers

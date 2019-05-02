@@ -53,7 +53,7 @@ public class BrokerProperties {
 	/**
 	 * Default Logs Directory
 	 */
-	private List<String> DEFAULT_LOGS_DIRECTORIES = Collections.singletonList(System.getProperty("java.io.tmpdir"));
+	private List<String> DEFAULT_LOGS_DIRECTORIES = Collections.singletonList(buildDefaultLogDir());
 	
 	/**
 	 * Répertoire de stockage des logs
@@ -69,7 +69,7 @@ public class BrokerProperties {
 	 * Broker Endpoints Listeners
 	 */
 	@Valid
-	private ListenerProperties listener = new ListenerProperties();
+	private ListenerProperties listener;
 	
 	/**
 	 * Méthode d'obtention de la valeur du champ "logsDirectory"
@@ -99,5 +99,18 @@ public class BrokerProperties {
 	
 		// Renvoi de la valeur du champ "listener"
 		return (listener == null) ? DEFAULT_LISTENER : listener;
+	}
+	
+	/**
+	 * Methode de construction du repertoire de logs par defaut
+	 * @return Chemin du repertoire de logs par defaut
+	 */
+	private String buildDefaultLogDir() {
+		
+		// Obtention du repertoire temporaire
+		String tempDir = System.getProperty("java.io.tmpdir");
+		
+		// Construction
+		return (tempDir.endsWith("/") ? tempDir : tempDir.concat("/")).concat("kafka_simulator");
 	}
 }

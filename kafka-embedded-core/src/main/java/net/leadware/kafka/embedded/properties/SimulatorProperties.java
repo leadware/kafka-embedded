@@ -1,6 +1,7 @@
 package net.leadware.kafka.embedded.properties;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /*-
  * #%L
@@ -34,7 +35,6 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
-import javax.validation.constraints.Size;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -69,7 +69,6 @@ public class SimulatorProperties {
 	/**
 	 * Etat d'activation du Simulateur KAFKA
 	 */
-	@NotNull(message = "Veuillez renseigner l'etat d'activation du simulateur KAFKA")
 	private Boolean enabled = Boolean.TRUE;
 	
 	/**
@@ -158,8 +157,6 @@ public class SimulatorProperties {
 	/**
 	 * Liste des proprietes des brokers du cluster
 	 */
-	@NotNull(message = "Veuillez renseigner les propriétés des Borkers")
-	@Size(min = 1, message = "Veuillez configurer au moins un broker")
 	@Valid
 	private List<BrokerProperties> brokerConfigs = null;
 	
@@ -170,7 +167,7 @@ public class SimulatorProperties {
 	public String getJavaTemporaryDirectory() {
 	
 		// Renvoi de la valeur du champ "javaTemporaryDirectory"
-		return (javaTemporaryDirectory == null) ? System.getProperty("java.io.tmpDir") : javaTemporaryDirectory.trim();
+		return (javaTemporaryDirectory == null || javaTemporaryDirectory.trim().isEmpty()) ? System.getProperty("java.io.tmpdir") : javaTemporaryDirectory.trim();
 	}
 	
 	/**
@@ -284,6 +281,18 @@ public class SimulatorProperties {
 	}
 	
 	/**
+	 * Méthode d'obtention de la valeur du champ "brokerConfigs"
+	 * @return Valeur du champ "brokerConfigs"
+	 */
+	public List<BrokerProperties> getBrokerConfigs() {
+	
+		// Renvoi de la valeur du champ "brokerConfigs"
+		return (brokerConfigs == null || brokerConfigs.isEmpty()) ? 
+				Collections.singletonList(new BrokerProperties()) : 
+					brokerConfigs;
+	}
+	
+	/**
 	 * Méthode permettant de valider l'instance
 	 */
 	public void validate() {
@@ -319,5 +328,4 @@ public class SimulatorProperties {
 		// On leve une exception
 		throw new RuntimeException("Violation des contraintes de validation des propriété de configuration du Simulateur : " + constraintViolations);
 	}
-	
 }

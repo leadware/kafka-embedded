@@ -83,6 +83,58 @@ Kafka Embarqué de manière conditionnée.
 
 * Condition d'activation du simulateur via la propiété ``embedded.kafka.simulator.enabled`` qui doit être à true pour permettre la création des beans du simulateur Kafka
 
+* NB : Seule la propriété ``embedded.kafka.simulator.enabled`` est nécessaire pour 
+  le demarrage du simulateur. En effet, l'autoconfiguration du simulateur vous propose 
+  des propriétés par défaut
+
+```
+
+# Embedded Kakfa Simulator control shutdown status
+embedded.kafka.simulator.java-temporary-directory = <Valeur de java.io.tmpdir>
+
+# Embedded Kakfa Simulator control shutdown status
+embedded.kafka.simulator.controlled-shutdown = false
+
+# Embedded Kakfa Simulator enable delete topics capability
+embedded.kafka.simulator.enable-delete-topics = true
+
+# Embedded Kakfa Simulator partition count [Default KAFKA Properties : num.partitions = 1]
+embedded.kafka.simulator.partition-count = 1
+
+# Embedded Kakfa servers Network Threads used for receive and send messages [Default : num.network.threads=3]
+embedded.kafka.simulator.network-thread-count = 2
+
+# Embedded Kakfa servers I/O Threads used for process messages with disk I/O [Default : num.io.threads=8]
+embedded.kafka.simulator.io-thread-count = 2
+
+# Embedded Kakfa servers send buffer max size in byte [Default : socket.send.buffer.bytes=102400]
+embedded.kafka.simulator.send-buffer-size = 102400
+
+# Embedded Kakfa servers receive buffer max size in byte [Default : socket.receive.buffer.bytes=102400]
+embedded.kafka.simulator.receive-buffer-size = 102400
+
+# Embedded Kakfa servers receive buffer max size in byte [Default : max.socket.request.bytes=104857600]
+embedded.kafka.simulator.max-request-size = 104857600
+
+# Embedded Kakfa Simulator initial topics
+embedded.kafka.simulator.initial-topics = <AUCUN TOPIC PAR DEFAUT>
+
+# Embedded Kakfa Simulator broker instance Logs directory
+embedded.kafka.simulator.broker-configs[0].logs-directory = <Valeur de java.io.tmpdir>/kafka_simulator
+
+# Embedded Kakfa Simulator broker instance Logs directories
+embedded.kafka.simulator.broker-configs[0].logs-directories = <Valeur de java.io.tmpdir>/kafka_simulator
+
+# Embedded Kakfa Simulator broker instance Listener port
+embedded.kafka.simulator.broker-configs[0].listener.port = 9090
+
+# Embedded Kakfa Simulator broker instance Listener protocol name
+embedded.kafka.simulator.broker-configs[0].listener.protocol.name = PLAINTEXT
+
+# Embedded Kakfa Simulator broker instance Listener protocol scheme
+embedded.kafka.simulator.broker-configs[0].listener.protocol.scheme = PLAINTEXT
+```
+
 ## Utilisation du starter Kafka Embedded
 
 * Déclarer le starter comme dépendance MAVEN ou GRADLE

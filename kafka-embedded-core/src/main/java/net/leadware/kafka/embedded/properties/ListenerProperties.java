@@ -57,21 +57,36 @@ public class ListenerProperties {
 	private static final ListenerProtocolProperties DEFAULT_INTERNAL_PRODUCER_PROTOCOL = new ListenerProtocolProperties("INTERNAL_PRODUCER", ListenerSecurityProtocol.PLAINTEXT);
 	
 	/**
+	 * Port public par defaut
+	 */
+	private static final Integer DEFAULT_PUBLIC_PORT = 9090;
+	
+	/**
+	 * Port admin par defaut
+	 */
+	private static final Integer DEFAULT_ADMIN_PORT = 0;
+	
+	/**
+	 * Port Producteur interne par defaut
+	 */
+	private static final Integer DEFAULT_INTERNAL_PRODUCER_PORT = 0;
+	
+	/**
 	 * Broker listener port
 	 */
 	@Positive(message = "La valeur du port d'écoute du broker ne peut être nulle ou négative")
 	@NotNull(message = "Veuillez renseigner le numéro de port d'écoute du broker")
-	private Integer port = 0; 
+	private Integer port = DEFAULT_PUBLIC_PORT; 
 	
 	/**
 	 * Broker listener admin port
 	 */
-	private Integer adminPort = 0;
+	private Integer adminPort = DEFAULT_ADMIN_PORT;
 	
 	/**
 	 * Broker listener internal producer port
 	 */
-	private Integer internalProducerPort = 0;
+	private Integer internalProducerPort = DEFAULT_INTERNAL_PRODUCER_PORT;
 	
 	/**
 	 * Broker listener protocol
@@ -95,7 +110,7 @@ public class ListenerProperties {
 	public Integer getPort() {
 	
 		// Renvoi de la valeur du champ "port"
-		return (port == null) ? 0 : port;
+		return (port == null) ? DEFAULT_PUBLIC_PORT : port;
 	}
 
 	/**
@@ -115,7 +130,7 @@ public class ListenerProperties {
 	public synchronized Integer getAdminPort() {
 		
 		// Retourne la valeur du champ "adminPort"
-		return (adminPort == null) ? 0 : adminPort;
+		return (adminPort == null) ? DEFAULT_ADMIN_PORT : adminPort;
 	}
 
 	/**
@@ -125,7 +140,7 @@ public class ListenerProperties {
 	public Integer getInternalProducerPort() {
 	
 		// Retourne la valeur du champ "internalProducerPort"
-		return (internalProducerPort == null) ? 0 : internalProducerPort;
+		return (internalProducerPort == null) ? DEFAULT_INTERNAL_PRODUCER_PORT : internalProducerPort;
 	}
 
 	/**
