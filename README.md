@@ -4,9 +4,9 @@
 ![](http://www.pragma-innovation.fr/wp-content/uploads/2018/02/kafka-logo.png)
 
 # Rappels Apache KAFKA
-Apache KAFKA est une plateforme de streaming distribué de données capable de gérer des très gros volumes de données par unité de temps.
+Apache KAFKA est une plateforme de streaming distribué de données de type Publication/Souscription (pub/sub), capable de gérer des très gros volumes de données par unité de temps.
 
-## Origine de KAFKA
+## Origines de KAFKA
 
 Le projet KAFKA a été initié par la société LinkedIn en 2009, afin de mettre en place une plateforme de messagerie permettant de :
 *  Centraliser la production et la consommation des flux de données de l'entreprise
@@ -19,6 +19,14 @@ En 2011, le projetKAFKA a rejoint l'incubateur de la fondation Apache et a subit
 *  Des mécanismes de chargement/diffusion de données depuis ou vers la plateforme grâce à KAFKA CONNECT
 *  Des mécanismes de Transformation de données au fil de l'eau (temps réel) grâce à KAFKA Stram
 *  Des mécanismes de requêtage de données grâce à KAFKA SQL (KSQL).
+
+## Positionnements de KAFKA
+
+*  Apache KAFKA s'inscrit globalement dans la lignée des outils support aux architectures pilotées par les évènements (EDA). De ce point de vue, il se rapproche des implémentations des spécifications Java Messaging Service (comme Apache ActiveMQ) et Advance Messaging Queue Protocol (comme RabbtMQ).
+*  Dans une architecture d'entreprise Apache KAFKA se positionne principalement comme médiateur de messagerie asynchrone entre des composants autonommes
+*  Dans une architecture d'intégration de données, grâce à ses fonctions de Streaming évènementiel, KAFKA se positionnera comme une pièce centrale et incontournable allant plus loin qu'une simple plateforme de messagerie, en proposant des mécanismes de traitement de données en temps réels, permettant ainsi de le rendre comparable à un ETL ou un mini ESB
+*  Dans une architecture d'intégration de service, Apache KAFKA se positionnera comme un des multiples médias de transport pour les connecteurs d'E/S d'une plateforme d'intégration de service (ESB)
+
 
 
 
