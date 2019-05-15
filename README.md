@@ -27,6 +27,7 @@ En 2011, le projetKAFKA a rejoint l'incubateur de la fondation Apache et a subit
 *  Dans une architecture d'intégration de données, grâce à ses fonctions de Streaming évènementiel, KAFKA se positionnera comme une pièce centrale et incontournable allant plus loin qu'une simple plateforme de messagerie, en proposant des mécanismes de traitement de données en temps réels, permettant ainsi de le rendre comparable à un ETL ou un mini ESB
 *  Dans une architecture d'intégration de service, Apache KAFKA se positionnera comme un des multiples médias de transport pour les connecteurs d'E/S d'une plateforme d'intégration de service (ESB)
 
+![](https://fr.confluent.io/wp-content/uploads/chart-kafka-infrastructure@2x.png)
 
 
 
