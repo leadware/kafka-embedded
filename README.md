@@ -15,7 +15,7 @@ Le projet KAFKA a été initié par la société LinkedIn en 2009, afin de mettr
 *  Garantir la livraison des données
 *  Assurer la persistance des données avant consommation
 
-En 2011, le projetKAFKA a rejoint l'incubateur de la fondation Apache et a subit de grandes évolution. Aujourd'hui, Apache KAFKA est une plateforme de streaming temps réel proposant
+En 2012, le projetKAFKA a rejoint l'incubateur de la fondation Apache et a subit de grandes évolution. Aujourd'hui, Apache KAFKA est une plateforme de streaming temps réel proposant
 *  Des mécanismes de chargement/diffusion de données depuis ou vers la plateforme grâce à KAFKA CONNECT
 *  Des mécanismes de Transformation de données au fil de l'eau (temps réel) grâce à KAFKA Stram
 *  Des mécanismes de requêtage de données grâce à KAFKA SQL (KSQL).
@@ -29,12 +29,41 @@ En 2011, le projetKAFKA a rejoint l'incubateur de la fondation Apache et a subit
 
 ![](https://fr.confluent.io/wp-content/uploads/chart-kafka-infrastructure@2x.png)
 
+## Quelques mots clés de KAFKA
 
+*  **Broker**
+Il s'agit d'une des instances (un des noeuds) actives du serveur Apache KAFKA
 
-# Leadware KAFKA Embedded
+*  **ZooKeeper**
+C'est un système de gestion des noeud redondants exploité par KAFKA pour la coordinaton de ses différentes instances
 
-Le principal objectif du projet KAFKA Embedded est de fournir aux développeurs, architectes, DevOps, une version embarquée du serveur Apache KAFKA, permettant de fournir les fonctionnalités principales d'un cluster KAFKA au sein d'une application et ainsi de faciliter les test de processus d'intégration de données dans un environnement d'intégration et de déploiement continue.
+*  **Producer**
+Il s'agit du composants permettant ls production d'évènements à destination de un ou plusieurs consommateurs
 
+*  **Consumer**
+Il s'agit du composants permettant la consommation des évènements produits et diffusés par le biais de KAFKA
+
+*  **Publish/Subscribe**
+Il s'agit du mode de communication sur lequel repose la plateforme KAFKA
+
+*  **Topics**
+Il s'agit d'une zone de stockage des évènements diffusés par le(s) producteur(s) et qui doivent être récupérés par un ou plusieurs consommateur(s)
+
+*  **Key**
+Il s'agit d'une clé de répartition des messages dans les partitions, permettant ainsi la publication et la consommation de message sen parallèle.
+
+*  **Partition**
+Il s'agit d'une séquence ordonnée et immuable de messages ne permettant que le rajout en fin de queue
+
+# Le projet KAFKA Embedded
+
+Le principal objectif du projet KAFKA Embedded est de fournir aux développeurs, architectes, DevOps, une version embarquée du serveur Apache KAFKA, permettant de fournir les fonctionnalités principales d'un cluster KAFKA au sein d'une application et ainsi de faciliter les tests de composants et processus d'intégration de données dans un environnement d'intégration et de déploiement continue.
+
+## Usages principaux
+
+*  Implémentation de tests unitaire des composants d'intégration de données (venant d'un cluster KAFKA)
+*  Implémentation de tests end-to-end des processus d'intégration de données (venant d'un cluster KAFKA)
+*  Implémentation de simulateur de diffusion de données à la demande
 
 ## Fonctionnalités ##
 
