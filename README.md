@@ -1,6 +1,27 @@
 [![Leadware](http://leadware.net/medias/images/leadware/lw_logo_complet_sans_surlignement_2016_10_26_155X30.png)](http://www.leadware.net/) 
 ![](markdown/version.svg) ![](markdown/snapshot.svg) ![](markdown/build-status.svg)
 
+![](http://www.pragma-innovation.fr/wp-content/uploads/2018/02/kafka-logo.png)
+
+# Rappels Apache KAFKA
+Apache KAFKA est une plateforme de streaming distribué de données capable de gérer des très gros volumes de données par unité de temps.
+
+## Origine de KAFKA
+
+Le projet KAFKA a été initié par la société LinkedIn en 2009, afin de mettre en place une plateforme de messagerie permettant de :
+*  Centraliser la production et la consommation des flux de données de l'entreprise
+*  Supporter nativement la montée en charge (scalabilité horizontale)
+*  Permettre la production et la consommation des données évenementielles en très haut débit
+*  Garantir la livraison des données
+*  Assurer la persistance des données avant consommation
+
+En 2011, le projetKAFKA a rejoint l'incubateur de la fondation Apache et a subit de grandes évolution. Aujourd'hui, Apache KAFKA est une plateforme de streaming temps réel proposant
+*  Des mécanismes de chargement/diffusion de données depuis ou vers la plateforme grâce à KAFKA CONNECT
+*  Des mécanismes de Transformation de données au fil de l'eau (temps réel) grâce à KAFKA Stram
+*  Des mécanismes de requêtage de données grâce à KAFKA SQL (KSQL).
+
+
+
 # Leadware KAFKA Embedded
 
 Le principal objectif du projet KAFKA Embedded est de fournir aux développeurs, architectes, DevOps, une version embarquée du serveur Apache KAFKA, permettant de fournir les fonctionnalités principales d'un cluster KAFKA au sein d'une application et ainsi de faciliter les test de processus d'intégration de données dans un environnement d'intégration et de déploiement continue.
