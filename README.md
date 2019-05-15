@@ -65,6 +65,15 @@ Le principal objectif du projet KAFKA Embedded est de fournir aux développeurs,
 *  Implémentation de tests end-to-end des processus d'intégration de données (venant d'un cluster KAFKA)
 *  Implémentation de simulateur de diffusion de données à la demande
 
+## Versions des composants KAFKA utilisés dans le projet
+
+| Composant | Version |
+| ------ | ------ |
+| Serveur KAFKA | 2.11 |
+| Serveur ZooKeeper | 3.4.13 | 
+| Client Kafka | 2.0.1 |
+| Client ZooKeeper | 0.10 |
+
 ## Fonctionnalités ##
 
 Le projet KAFKA Embedded fournit un sous-ensemble assez complet des fonctionnalités du serveur Apache KAFKA en version full.
