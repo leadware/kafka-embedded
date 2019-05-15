@@ -214,14 +214,14 @@ embedded.kafka.simulator.broker-configs[0].listener.protocol.scheme = PLAINTEXT
         <dependency>
             <groupId>net.leadware</groupId>
             <artifactId>kafka-embedded-spring-boot-starter</artifactId>
-            <version>1.0.0-RC8</version>
+            <version>1.0.0-RC11</version>
         </dependency>
         
     </dependencies>
     
     // GRADLE
     dependencies {
-        compile "net.leadware:kafka-embedded-spring-boot-starter:1.0.0-RC8"
+        compile "net.leadware:kafka-embedded-spring-boot-starter:1.0.0-RC11"
     }
 ```
 * Référencer les fichiers de configuration du simulateur kafka et du consommateur dans 
