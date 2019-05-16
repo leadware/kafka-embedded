@@ -74,6 +74,18 @@ Le principal objectif du projet KAFKA Embedded est de fournir aux développeurs,
 | Client Kafka | 2.0.1 |
 | Client ZooKeeper | 0.10 |
 
+## Versions des outils et Frameworks utilisés
+
+| Outils de base | Version | Usage |
+| ------ | ------ | ------ |
+| GIT | 2.17.1 | Gestion des sources |
+| Oracle Java | 1.8.x | Langage de développement |
+| Apache Maven | 3.x | Outils de construction |
+| Spring Framework | 5.x | Framework de développement Managé |
+| Spring Boot | 2.1.3.RELEASE | Framework de configuration/packaging de projet |
+| Swagger | 2.9.2 | Framework de documentation d'API |
+| Leadware Bean Validator | 1.0.0-RC6 | Bibliothèque d'extention de la JSR 303 Bean Validation |
+
 ## Fonctionnalités ##
 
 Le projet KAFKA Embedded fournit un sous-ensemble assez complet des fonctionnalités du serveur Apache KAFKA en version full.
