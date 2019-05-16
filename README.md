@@ -34,8 +34,11 @@ En 2012, le projetKAFKA a rejoint l'incubateur de la fondation Apache et a subit
 *  **Broker**
 Il s'agit d'une des instances (un des noeuds) actives du serveur Apache KAFKA
 
+*  **Cluster**
+Il s'agit d'un ensemble d'instances de serveur KAFKA fonctionnant ensemble dans le but principal de supporter la charge et la disponibilité.
+
 *  **ZooKeeper**
-C'est un système de gestion des noeud redondants exploité par KAFKA pour la coordinaton de ses différentes instances
+C'est un système de gestion des noeuds redondants exploité par KAFKA pour la coordinaton de ses différentes instances dans un cluster
 
 *  **Producer**
 Il s'agit du composants permettant ls production d'évènements à destination de un ou plusieurs consommateurs
