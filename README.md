@@ -3,8 +3,34 @@
 
 ![](http://www.pragma-innovation.fr/wp-content/uploads/2018/02/kafka-logo.png)
 
+# Le projet KAFKA Embedded
+
+Le principal objectif du projet KAFKA Embedded est de mettre à disposition des 
+développeurs, architectes, technicals leads, DevOps, un outil fournissant toutes 
+les fonctionnalités principales d'un cluster KAFKA, embarqué à la demande dans 
+une application JAVA/Spring.
+
+Cette Intégration : 
+
+*  Facilitera les tests de composants et processus d'intégration de données et en 
+environnement d'intégration et de déploiement continue.
+*  **Permettra de remplacer les Mock de serveur KAFKA, par un Cluster KAFKA réel et allégé**
+*  Apportera une plus grande précision aux tests d'intégration de vos composants 
+et processus d'intégration de données
+*  **Fournira un moeyn de simuler des données à la demande en environnement de recette et de préproduction**
+
+## Usages principaux du projet KAFKA Embedded
+
+*  Implémentation de tests unitaire des composants d'intégration de données (venant d'un cluster KAFKA)
+*  Implémentation de tests end-to-end des processus d'intégration de données (venant d'un cluster KAFKA)
+*  Implémentation de simulateur de diffusion de données à la demande
+*  Implémentation de tests précis des processus de streaming d'évènements
+
 # Rappels Apache KAFKA
-Apache KAFKA est une plateforme de streaming distribué de données de type Publication/Souscription (pub/sub), capable de gérer des très gros volumes de données par unité de temps.
+
+Apache KAFKA est une plateforme de streaming distribué de données fonctionnement
+en mode Publication/Souscription (pub/sub), capable de gérer des très gros volumes 
+de données par unité de temps.  [**Plus d'informations sur le produit KAFKA**](https://kafka.apache.org/documentation/).
 
 ## Origines de KAFKA
 
@@ -15,7 +41,7 @@ Le projet KAFKA a été initié par la société LinkedIn en 2009, afin de mettr
 *  Garantir la livraison des données
 *  Assurer la persistance des données avant consommation
 
-En 2012, le projetKAFKA a rejoint l'incubateur de la fondation Apache et a subit de grandes évolution. Aujourd'hui, Apache KAFKA est une plateforme de streaming temps réel proposant
+En 2012, le projet KAFKA a rejoint l'incubateur de la fondation Apache et a subit de grandes évolution. Aujourd'hui, Apache KAFKA est une plateforme de streaming temps réel proposant
 *  Des mécanismes de chargement/diffusion de données depuis ou vers la plateforme grâce à KAFKA CONNECT
 *  Des mécanismes de Transformation de données au fil de l'eau (temps réel) grâce à KAFKA Stram
 *  Des mécanismes de requêtage de données grâce à KAFKA SQL (KSQL).
@@ -58,15 +84,51 @@ Il s'agit d'une clé de répartition des messages dans les partitions, permettan
 *  **Partition**
 Il s'agit d'une séquence ordonnée et immuable de messages ne permettant que le rajout en fin de queue
 
-# Le projet KAFKA Embedded
 
-Le principal objectif du projet KAFKA Embedded est de fournir aux développeurs, architectes, DevOps, une version embarquée du serveur Apache KAFKA, permettant de fournir les fonctionnalités principales d'un cluster KAFKA au sein d'une application et ainsi de faciliter les tests de composants et processus d'intégration de données dans un environnement d'intégration et de déploiement continue.
+# Retour sur le projet KAFKA Embedded
 
-## Usages principaux
+## Présentation des modules du projet
 
-*  Implémentation de tests unitaire des composants d'intégration de données (venant d'un cluster KAFKA)
-*  Implémentation de tests end-to-end des processus d'intégration de données (venant d'un cluster KAFKA)
-*  Implémentation de simulateur de diffusion de données à la demande
+Le projet Kafka est livré sous la forme d'un Starter Spring Boot (kafka-embedded-spring-boot-starter) découpé en 5 sous modules.
+
+* #### kafka-embedded
+  Projet maven parent, parapluie de tous les sous-projets constituant le starter Kafka Embedded
+
+* #### kafka-embedded-core
+  
+  Module principal contenant l'implémentation et les tests du cluster embarqué KAFKA, ainsi que des  
+  services RESt permettant l'administration globale du cluster (Topics, Groupes de Consommateurs,  
+  Messages, etc...) documentés via Swagger 2.
+
+* #### kafka-embedded-spring-boot-autoconfigure
+  Module Spécifique Spring Boot, permettant de définir l'auto configurateur du module 
+  Kafka
+
+* #### kafka-embedded-spring-boot-starter
+  Module spécifique Spring Boot permettant de définir le Starter qui sera utilisé par 
+  les développeurs afin d'intégrer le module Kafka Embedded dans leurs applications.
+  
+* #### kafka-embedded-spring-boot-sample
+  Module présentant un exemple d'utilisation du module Kafka Embedded dans une application 
+  Spring Boot
+
+## Présentation des Fonctionnalités
+
+Le projet KAFKA Embedded fournit un sous-ensemble assez complet des fonctionnalités d'un Cluster Apache KAFKA déployé en mode Production-Ready.
+
+* Configuration Multi Brokers
+* Multi Listener par Brokers
+* Répertoires de logs par broker
+* Configurations globale des Buffers (send et receive)
+* Configurations globale des threads networks et I/O
+* Configurations globale des taille de requêtes
+* Configuration PLAINTEXT et SSL (Keystore, Truststore)
+* Initialisation des Topics
+* Service Rest de gestion des topics
+* Service Rest de production de données
+* Autoconfiguration Spring Boot
+* Documentation d'API via Swagger et Swagger-UI
+* Exemple d'application utilisant le projet comme starter (kafka-embedded-spring-boot-sample)
 
 ## Versions des composants KAFKA utilisés dans le projet
 
@@ -88,47 +150,6 @@ Le principal objectif du projet KAFKA Embedded est de fournir aux développeurs,
 | Spring Boot | 2.1.3.RELEASE | Framework de configuration/packaging de projet |
 | Swagger | 2.9.2 | Framework de documentation d'API |
 | Leadware Bean Validator | 1.0.0-RC6 | Bibliothèque d'extention de la JSR 303 Bean Validation |
-
-## Fonctionnalités ##
-
-Le projet KAFKA Embedded fournit un sous-ensemble assez complet des fonctionnalités du serveur Apache KAFKA en version full.
-
-* Configuration Multi Brokers
-* Multi Listener par Brokers
-* Répertoires de logs par broker
-* Configurations globale des Buffers (send et receive)
-* Configurations globale des threads networks et I/O
-* Configurations globale des taille de requêtes
-* Configuration PLAINTEXT et SSL (Keystore, Truststore)
-* Initialisation des Topics
-* Service Rest de gestion des topics
-* Service Rest de production de données
-* Autoconfiguration Spring Boot
-* Documentation d'API via Swagger et Swagger-UI
-* Exemple d'application utilisant le projet comme starter (kafka-embedded-spring-boot-sample)
-
-## Présentation des modules du projet
-
-* #### kafka-embedded
-  Projet maven parent de tous les sous-projets constituant le starter Kafka Embedded
-
-* #### kafka-embedded-core
-  
-  Module principal contenant l'implémentation et les tests du cluster embarqué KAFKA, ainsi que des  
-  services RESt permettant l'administration globale du cluster (Topics, Groupes de Consommateurs,  
-  Messages, etc...) documentés via Swagger 2.
-
-* #### kafka-embedded-spring-boot-autoconfigure
-  Module Spécifique Spring Boot, permettant de définir l'auto configurateur du module 
-  Kafka
-
-* #### kafka-embedded-spring-boot-starter
-  Module spécifique Spring Boot permettant de définir le Starter qui sera utilisé par 
-  les développeurs afin d'intégrer le module Kafka Embedded dans leurs applications.
-  
-* #### kafka-embedded-spring-boot-sample
-  Module présentant un exemple d'utilisation du module Kafka Embedded dans une application 
-  Spring Boot
 
 ## Classes principales du projet
 
