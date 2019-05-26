@@ -59,7 +59,7 @@ public class ListenerProperties {
 	/**
 	 * Port public par defaut
 	 */
-	private static final Integer DEFAULT_PUBLIC_PORT = 9090;
+	private static final Integer DEFAULT_PUBLIC_PORT = 0;
 	
 	/**
 	 * Port admin par defaut
@@ -74,8 +74,6 @@ public class ListenerProperties {
 	/**
 	 * Broker listener port
 	 */
-	@Positive(message = "La valeur du port d'écoute du broker ne peut être nulle ou négative")
-	@NotNull(message = "Veuillez renseigner le numéro de port d'écoute du broker")
 	private Integer port = DEFAULT_PUBLIC_PORT; 
 	
 	/**

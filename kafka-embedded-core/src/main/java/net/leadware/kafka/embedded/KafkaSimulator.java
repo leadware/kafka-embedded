@@ -83,6 +83,7 @@ import net.leadware.kafka.embedded.tools.SimulatorUtils;
 /**
  * Classe représentant le simulateur KAFKA
  * @author <a href="mailto:jetune@leadware.net">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
+ * 		   <a href="mailto:ltchatch@leadware.net">Guy Landry TCHATCHOUANG (Java EE Developer)</a>
  * @since 23 mars 2019 - 23:06:45
  */
 @RequiredArgsConstructor
@@ -281,7 +282,7 @@ public class KafkaSimulator {
 			log.trace("Obtention du port public du Broker [{}]", index);
 			
 			// Port public du broker
-			int publicPort = brokerProperties.getListener().getPort();
+			int publicPort = findPublicPort(brokerProperties);
 			
 			// Log
 			log.trace("Port public du Broker [{}] : [{}]", index, publicPort);
@@ -303,6 +304,12 @@ public class KafkaSimulator {
 			
 			// Log
 			log.trace("Port du producteur interne du Broker [{}] : [{}]", index, internalProducerPort);
+			
+			// Log
+			log.trace("Mise à jour de la configuration du broker [{}] avec le port public[{}]", index, publicPort);
+						
+			// Positionnement du port public
+			brokerProperties.getListener().setPort(publicPort);
 			
 			// Log
 			log.trace("Mise à jour de la configuration du broker [{}] avec le port d'administration [{}]", index, adminPort);
@@ -379,6 +386,27 @@ public class KafkaSimulator {
 		}
 		
 		// On retourne le port
+		return port;
+	}
+	
+	/**
+	 * Methode de recherche du port d'écoute du brocer
+	 * @param brokerProperties Propriétés du broker
+	 * @return Port public d'écoute du broker
+	 */
+	private int findPublicPort(BrokerProperties brokerProperties) {
+		
+		//Port venant du fichier de configuration
+		int port = brokerProperties.getListener().getPort();
+		
+		//Si le port est <=0
+		if(port <= 0) {
+			
+			//Recherche et récupération d'un port libre
+			port = SimulatorUtils.findAvailablePortExcept(null);
+		}
+		
+		//On retourne le port
 		return port;
 	}
 	
@@ -862,6 +890,41 @@ public class KafkaSimulator {
 				 // Stream sur la liste des noms de topics
 				 Arrays.stream(topicsNames).collect(Collectors.toList())
 		);
+	}
+	
+	/**
+	 * Methode permettant de renvoyé une liste de ports publics
+	 * pour les brokers actif, si l'utilisateur n'en a pas pécisé 
+	 * @return Liste de ports
+	 */
+	public List<Integer> getPublicPorts() {
+		
+		// Verifier que ZooKeeper est actif
+		Assert.notNull(this.zookeeper, "Assurez-vous que le cluster ZooKeeper est actif avant toute opération.");
+		
+		//Initialisation d'une liste
+		List<Integer> list = new ArrayList<Integer>();
+
+		//Parcour de la liste des brokerConfig
+		for(BrokerProperties brokerProperties: simulatorProperties.getBrokerConfigs()) {
+			
+			//Ajout d'un port dans la liste
+			list.add(brokerProperties.getListener().getPort());
+		}
+		
+		try {
+			//On retourne la liste
+			return list;
+			
+		} catch(Exception e) {
+			
+			// Print exception stack trace
+			e.printStackTrace();
+			
+			// On relance
+			throw new KafkaException(e);
+		}
+		
 	}
 	
 	/**

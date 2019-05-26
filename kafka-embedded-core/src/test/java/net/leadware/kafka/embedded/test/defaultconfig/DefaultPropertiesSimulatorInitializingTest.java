@@ -176,9 +176,9 @@ public class DefaultPropertiesSimulatorInitializingTest {
 		
 		// Verification du nombre de serveur
 		assertThat(kafkaSimulator.getKafkaServers(), hasSize(1));
-		
+			
 		// Verification de l'URL publique
-		assertThat(kafkaSimulator.getPublicBrokersUrls(), equalTo("PLAINTEXT://127.0.0.1:9090"));
+		assertThat(kafkaSimulator.getPublicBrokersUrls(), equalTo("PLAINTEXT://127.0.0.1:" + kafkaSimulator.getPublicPorts().get(0)));
 		
 		// Verification de l'URL d'admin
 		assertThat(kafkaSimulator.getAdminBrokersUrls(), equalTo("ADMIN://127.0.0.1:" + listenerProperties.getAdminPort()));
@@ -252,7 +252,8 @@ public class DefaultPropertiesSimulatorInitializingTest {
 		Map<String, Object> producerProperties = new HashMap<>();
 		
 		// Positionnement des URLs de serveurs KAFKA
-		producerProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, producerBootstrapServers);
+		producerProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, producerBootstrapServers
+				+ kafkaSimulator.getPublicPorts().get(0));
 		
 		// Positionnement de l'ID du client
 		producerProperties.put(ProducerConfig.CLIENT_ID_CONFIG, producerClientId);
@@ -273,7 +274,8 @@ public class DefaultPropertiesSimulatorInitializingTest {
 		Map<String, Object> consumerProperties = new HashMap<>();
 		
 		// Positionnement des URLs de serveurs KAFKA
-		consumerProperties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, consumerBootstrapServers);
+		consumerProperties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, consumerBootstrapServers 
+				+ kafkaSimulator.getPublicPorts().get(0));
 		
 		// Positionnement de l'ID du client
 		consumerProperties.put(ConsumerConfig.CLIENT_ID_CONFIG, consumerClientId);
