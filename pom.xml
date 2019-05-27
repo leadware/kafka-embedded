@@ -150,6 +150,9 @@
 		<!-- Apache RAT Plugin Version Property -->
 		<apache.rat.plugin.version>0.13</apache.rat.plugin.version>
 		
+		<!-- Git Commit Plugin ID version property -->
+		<git-commit-id-plugin.version>3.0.0</git-commit-id-plugin.version>
+		
 		<!-- GPG Version Property -->
 		<gpg.version>1.6</gpg.version>
 		
@@ -168,6 +171,15 @@
 		<!-- Bean Validation version property -->
 		<bean-validation.version>1.0.0-RC6</bean-validation.version>
 		
+		<!-- Spring Boot Admin Server Version Property -->
+		<spring-boot-admin-starter-server.version>2.1.5</spring-boot-admin-starter-server.version>
+		
+		<!-- Spring Boot Admin Client Version Property -->
+		<spring-boot-admin-starter-client.version>2.1.5</spring-boot-admin-starter-client.version>
+		
+		<!-- Spring Cloud Starter Parent Version Property -->
+		<spring-cloud.version>Greenwich.SR1</spring-cloud.version>
+		
 	</properties>
 	
 	<!-- Dependencies management -->
@@ -183,6 +195,29 @@
 				<version>${spring-boot.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
+			</dependency>
+			
+			<!-- Spring Cloud Atsrter Parent Dependencies Management Import -->
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			
+			<!-- Spring Boot Admin Server dependency -->
+			<dependency>
+				<groupId>de.codecentric</groupId>
+				<artifactId>spring-boot-admin-starter-server</artifactId>
+				<version>${spring-boot-admin-starter-server.version}</version>
+			</dependency>
+			
+			<!-- Spring Boot Admin Client dependency -->
+			<dependency>
+				<groupId>de.codecentric</groupId>
+				<artifactId>spring-boot-admin-starter-client</artifactId>
+				<version>${spring-boot-admin-starter-client.version}</version>
 			</dependency>
 			
 			<!-- Swagger dependency -->
@@ -439,6 +474,13 @@
 					<version>${spring-boot.version}</version>
 				</plugin>
 				
+				<!-- Git commit Plugin ID -->
+				<plugin>
+					<groupId>pl.project13.maven</groupId>
+					<artifactId>git-commit-id-plugin</artifactId>
+					<version>${git-commit-id-plugin.version}</version>
+				</plugin>
+				
 				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
@@ -595,6 +637,9 @@
 		
 		<!-- Kafka Embedded Sample -->
 		<module>kafka-embedded-spring-boot-sample</module>
+		
+		<!-- Kafka Embedded Sample Admin Server -->
+		<module>kafka-embedded-spring-boot-sample-admin-server</module>
 		
 	</modules>
 	

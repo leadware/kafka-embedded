@@ -34,7 +34,7 @@ import lombok.Setter;
 
 /**
  * Classe de configuration du consommateur Kafka
- * @author <a href="mailto:jean-jacques.etune-ngi@ratp.fr">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
+ * @author <a href="mailto:jetune@leadware.net">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
  * @since 27 avr. 2019 - 19:06:57
  */
 @Component

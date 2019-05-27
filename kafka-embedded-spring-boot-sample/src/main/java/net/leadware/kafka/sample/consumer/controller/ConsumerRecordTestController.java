@@ -26,6 +26,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -56,6 +57,12 @@ import net.leadware.kafka.sample.consumer.model.ConsumedRecord;
 		path = "/simulator/records/api/1.0", 
 		produces = { MediaType.APPLICATION_JSON_VALUE }, 
 		consumes = { MediaType.APPLICATION_JSON_VALUE }
+)
+@ConditionalOnProperty(
+		prefix = "net.leadware.kafka.sample.config.consumer",
+		name = "enabled",
+		havingValue = "true",
+		matchIfMissing = false
 )
 public class ConsumerRecordTestController {
 	

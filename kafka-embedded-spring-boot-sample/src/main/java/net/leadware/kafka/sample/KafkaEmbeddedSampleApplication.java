@@ -24,12 +24,14 @@ package net.leadware.kafka.sample;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 /**
  * Classe principale de l'application de sample KAFKA Embedded
  * @author <a href="mailto:jetune@leadware.net">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
  * @since 21 mars 2019 - 08:30:39
  */
+@EnableDiscoveryClient
 @SpringBootApplication
 public class KafkaEmbeddedSampleApplication {
 	

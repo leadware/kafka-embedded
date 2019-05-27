@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	
+	<!-- Pom model version -->
+	<modelVersion>4.0.0</modelVersion>
+	
+	<!-- Parent Project -->
+	<parent>
+		
+		<!-- Parent group ID -->
+		<groupId>net.leadware</groupId>
+		
+		<!-- Parent artifact ID -->
+		<artifactId>kafka-embedded</artifactId>
+		
+		<!-- Parent Version -->
+		<version>1.0.1-RC12-SNAPSHOT</version>
+		
+		<!-- Parent relative path -->
+		<relativePath>../pom.xml</relativePath>
+		
+	</parent>
+	
+	<!-- Project artifact ID -->
+	<artifactId>kafka-embedded-spring-boot-sample-admin-server</artifactId>
+	
+	<!-- Project name -->
+	<name>Apache Kafka Embedded Server :: Spring Boot Sample Admin Server project</name>
+	
+	<!-- Project description -->
+	<description>Apache KAFKA Embedded Server Spring Boot Sample Admin Server Project</description>
+	
+	<!-- Project Packaging -->
+	<packaging>jar</packaging>
+	
+	<!-- Dependencies -->
+	<dependencies>
+		
+		<!-- Spring Boot Admin Server dependency -->
+		<dependency>
+			<groupId>de.codecentric</groupId>
+			<artifactId>spring-boot-admin-starter-server</artifactId>
+		</dependency>
+		
+	</dependencies>
+	
+	<!-- Project build configuration -->
+	<build>
+		
+		<!-- Plugins -->
+		<plugins>
+			
+			<!-- Spring Boot Maven plugin -->
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			
+		</plugins>
+		
+	</build>
+	
+</project>
