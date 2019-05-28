@@ -399,10 +399,10 @@ public class KafkaSimulator {
 		//Port venant du fichier de configuration
 		int port = brokerProperties.getListener().getPort();
 		
-		//Si le port est <=0
+		//Si le port est inférieur ou égal à 0
 		if(port <= 0) {
 			
-			//Recherche et récupération d'un port libre
+			// Recherche et récupération d'un port libre sur le système
 			port = SimulatorUtils.findAvailablePortExcept(null);
 		}
 		
