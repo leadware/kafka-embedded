@@ -83,7 +83,7 @@ import net.leadware.kafka.embedded.tools.SimulatorUtils;
 /**
  * Classe représentant le simulateur KAFKA
  * @author <a href="mailto:jetune@leadware.net">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
- * 		   <a href="mailto:ltchatch@leadware.net">Guy Landry TCHATCHOUANG (Java EE Developer)</a>
+ * @author <a href="mailto:ltchatch@leadware.net">Guy Landry TCHATCHOUANG (Java EE Developer)</a>
  * @since 23 mars 2019 - 23:06:45
  */
 @RequiredArgsConstructor
