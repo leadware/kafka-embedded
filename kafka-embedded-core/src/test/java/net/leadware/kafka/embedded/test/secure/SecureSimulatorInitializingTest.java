@@ -43,6 +43,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.core.ConsumerFactory;
@@ -60,6 +61,8 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import net.leadware.bean.validation.ext.tools.FileUtils;
+import net.leadware.kafka.embedded.KafkaSimulator;
+import net.leadware.kafka.embedded.properties.SimulatorProperties;
 import net.leadware.kafka.embedded.test.KafkaSimulatorAutoConfiguration;
 import net.leadware.kafka.embedded.test.unsecure.data.User;
 
@@ -77,6 +80,12 @@ import net.leadware.kafka.embedded.test.unsecure.data.User;
 })
 @ContextConfiguration(classes = {KafkaSimulatorAutoConfiguration.class})
 public class SecureSimulatorInitializingTest {
+	
+	/**
+	 * Simulateur KAFKA
+	 */
+	@Autowired
+	private KafkaSimulator kafkaSimulator;
 	
 	/**
 	 * Bootstrap Servers du Producteur
@@ -211,11 +220,23 @@ public class SecureSimulatorInitializingTest {
 	@Before
 	public void before() {
 		
+		// Proprietes de simulation
+		SimulatorProperties properties = kafkaSimulator.getSimulatorProperties();
+		
+		// Verification du nombre de listener
+		assertThat(properties.getBrokerConfigs(), hasSize(1));
+								
+		// Verification du nombre de serveur
+		assertThat(kafkaSimulator.getKafkaServers(), hasSize(1));
+				
+		// Verification de l'URL publique
+		assertThat(kafkaSimulator.getPublicBrokersUrls(), equalTo("SSL://127.0.0.1:" + kafkaSimulator.getPublicPorts().get(0)));
+		
 		// Propriétés du producer
 		Map<String, Object> producerProperties = new HashMap<>();
 		
 		// Positionnement des URLs de serveurs KAFKA
-		producerProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, producerBootstrapServers);
+		producerProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, producerBootstrapServers+ kafkaSimulator.getPublicPorts().get(0));
 		
 		// Positionnement de l'ID du client
 		producerProperties.put(ProducerConfig.CLIENT_ID_CONFIG, producerClientId);
@@ -259,7 +280,7 @@ public class SecureSimulatorInitializingTest {
 		Map<String, Object> consumerProperties = new HashMap<>();
 		
 		// Positionnement des URLs de serveurs KAFKA
-		consumerProperties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, consumerBootstrapServers);
+		consumerProperties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, consumerBootstrapServers + kafkaSimulator.getPublicPorts().get(0));
 		
 		// Positionnement de l'ID du client
 		consumerProperties.put(ConsumerConfig.CLIENT_ID_CONFIG, consumerClientId);
@@ -321,7 +342,7 @@ public class SecureSimulatorInitializingTest {
 		try {
 			
 			// Wait for Listener container start
-			Thread.sleep(5000);
+			Thread.sleep(15000);
 			
 		} catch (InterruptedException e) {
 			
@@ -362,7 +383,7 @@ public class SecureSimulatorInitializingTest {
 		try {
 			
 			// Wait for Listener Process Message
-			Thread.sleep(5000);
+			Thread.sleep(15000);
 			
 		} catch (InterruptedException e) {
 			

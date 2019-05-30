@@ -1,4 +1,6 @@
-package net.leadware.kafka.embedded.test.defaultconfig;
+package net.leadware.kafka.embedded.test.unsecure;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /*-
  * #%L
@@ -60,26 +62,23 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import net.leadware.kafka.embedded.KafkaSimulator;
-import net.leadware.kafka.embedded.properties.BrokerProperties;
-import net.leadware.kafka.embedded.properties.ListenerProperties;
-import net.leadware.kafka.embedded.properties.SimulatorProperties;
 import net.leadware.kafka.embedded.test.KafkaSimulatorAutoConfiguration;
 import net.leadware.kafka.embedded.test.unsecure.data.User;
 
 /**
- * Classe de test de bon démarrage d'un simulateur non sécurisé
- * @author <a href="mailto:jetune@leadware.net">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
- * @since 31 mars 2019 - 11:06:05
+ * Classe de test de bon démarrage d'un simulateur non sécurisé avec port public généré 
+ * @author <a href="mailto:jean-jacques.etune-ngi@ratp.fr">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
+ * @since 30 mai 2019 - 12:17:14
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @TestPropertySource(locations = {
-		"classpath:load-simulator-default-properties/load-simulator-config-application.properties",
-		"classpath:load-simulator-default-properties/kafka-producer-application.properties",
-		"classpath:load-simulator-default-properties/kafka-consumer-application.properties"
+		"classpath:unsecure-simulator-withoutPort-tests/unsecure-simulator-config-application.properties",
+		"classpath:unsecure-simulator-withoutPort-tests/kafka-producer-application.properties",
+		"classpath:unsecure-simulator-withoutPort-tests/kafka-consumer-application.properties"
 })
 @ContextConfiguration(classes = {KafkaSimulatorAutoConfiguration.class})
-public class DefaultPropertiesSimulatorInitializingTest {
+public class UnsecureSimulatorInitializingWithoutPortTest {
 	
 	/**
 	 * Simulateur KAFKA
@@ -148,112 +147,19 @@ public class DefaultPropertiesSimulatorInitializingTest {
 	 * Before Test
 	 */
 	@Before
-	public void before() {}
-	
-	/**
-	 * After Test
-	 */
-	@After
-	public void after() {}
-	
-	/**
-	 * Méthode permettant de tester si le simulateur est bien demarre
-	 */
-	@Test
-	public void testSimulatorStarted() {
+	public void before() {
 		
-		// Proprietes de simulation
-		SimulatorProperties properties = kafkaSimulator.getSimulatorProperties();
+		// Vérifions qu'au moins un port public est généré 
+		assertThat(kafkaSimulator.getPublicPorts().size()).isGreaterThan(0);
 		
-		// Verification du nombre de listener
-		assertThat(properties.getBrokerConfigs(), hasSize(1));
-		
-		// Propertes du seul broker
-		BrokerProperties brokerProperties = properties.getBrokerConfigs().get(0);
-		
-		// Listener Properties
-		ListenerProperties listenerProperties = brokerProperties.getListener();
-		
-		// Verification du nombre de serveur
-		assertThat(kafkaSimulator.getKafkaServers(), hasSize(1));
-			
-		// Verification de l'URL publique
-		assertThat(kafkaSimulator.getPublicBrokersUrls(), equalTo("PLAINTEXT://127.0.0.1:" + kafkaSimulator.getPublicPorts().get(0)));
-		
-		// Verification de l'URL d'admin
-		assertThat(kafkaSimulator.getAdminBrokersUrls(), equalTo("ADMIN://127.0.0.1:" + listenerProperties.getAdminPort()));
-		
-		// Verification de l'URL du producer interne
-		assertThat(kafkaSimulator.getInternalProducerBrokersUrls(), equalTo("INTERNAL_PRODUCER://127.0.0.1:" + listenerProperties.getInternalProducerPort()));
-	}
-	
-	/**
-	 * Méthode permettant de tester l'envoie et la réception d'une chaine de caracteres
-	 * @throws InterruptedException Exception potentielle
-	 */
-	@Test
-	public void testSendReceiveString() throws InterruptedException {
-		
-		// Start Producer and Consumer
-		buildProducerAndCondumer();
-		
-		// Nombre de message a envoyer
-		int nbMessage = 500;
-		
-		// Instantiation d'un user
-		User user = new User("YASHIRO", "NANAKAZE", "nyashiro", "nyashiro123");
-		
-		for(int count = 0; count < nbMessage ; count++) {
-
-			// Envoi
-			kafkaProducerTemplate.send(topic, user);
-		}
-		
-		try {
-			
-			// Wait for Listener Process Message
-			Thread.sleep(10000);
-			
-		} catch (InterruptedException e) {
-			
-			// Print exception stack trace
-			e.printStackTrace();
-		}
-		
-		// Assert that Record is not null
-		assertThat(records, is(notNullValue()));
-		
-		// Assert that Record has one entry
-		assertThat(records, hasSize(nbMessage));
-		
-		// Obtention de l'utilisateur recu
-		User receivedUser = records.take().value();
-		
-		// Verification sur le nom
-		assertThat(receivedUser.getLogin(), is(equalTo(user.getLogin())));
-		
-		// Arret du listener
-		stopListener();
-	}
-	
-	private void stopListener() {
-		
-		// Si le listener est instancié
-		if(kafkaMessageListenerContainer != null && kafkaMessageListenerContainer.isRunning()) 
-			kafkaMessageListenerContainer.stop();
-	}
-	
-	/**
-	 * Méthode permettant de construire un producteur et un consomateur
-	 */
-	private void buildProducerAndCondumer() {
+		// Vérifions que l'adresse public est plus grand que 1024
+		assertThat(kafkaSimulator.getPublicPorts().get(0)).isGreaterThanOrEqualTo(1024);
 		
 		// Propriétés du producer
 		Map<String, Object> producerProperties = new HashMap<>();
 		
 		// Positionnement des URLs de serveurs KAFKA
-		producerProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, producerBootstrapServers
-				+ kafkaSimulator.getPublicPorts().get(0));
+		producerProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, producerBootstrapServers + kafkaSimulator.getPublicPorts().get(0));
 		
 		// Positionnement de l'ID du client
 		producerProperties.put(ProducerConfig.CLIENT_ID_CONFIG, producerClientId);
@@ -261,7 +167,7 @@ public class DefaultPropertiesSimulatorInitializingTest {
 		// Positionnement de la classe de secrialisation des clés
 		producerProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
 		
-		// Positionnement de la classe de secrialisation des données
+		// Positionnement de la classe de sérialisation des données
 		producerProperties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
 		
 		// Fabrique de producteurs
@@ -274,8 +180,7 @@ public class DefaultPropertiesSimulatorInitializingTest {
 		Map<String, Object> consumerProperties = new HashMap<>();
 		
 		// Positionnement des URLs de serveurs KAFKA
-		consumerProperties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, consumerBootstrapServers 
-				+ kafkaSimulator.getPublicPorts().get(0));
+		consumerProperties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, consumerBootstrapServers + kafkaSimulator.getPublicPorts().get(0));
 		
 		// Positionnement de l'ID du client
 		consumerProperties.put(ConsumerConfig.CLIENT_ID_CONFIG, consumerClientId);
@@ -321,5 +226,58 @@ public class DefaultPropertiesSimulatorInitializingTest {
 			// Print exception stack trace
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * After Test
+	 */
+	@After
+	public void after() {
+		
+		// Arret du listener
+		kafkaMessageListenerContainer.stop();
+	}
+	
+	/**
+	 * Méthode permettant de tester l'envoie et la réception d'une chaine de caracteres
+	 * @throws InterruptedException Exception potentielle
+	 */
+	@Test
+	public void testSendReceiveString() throws InterruptedException {
+		
+		// Nombre de message a envoyer
+		int nbMessage = 500;
+		
+		// Instantiation d'un user
+		User user = new User("YASHIRO", "NANAKAZE", "nyashiro", "nyashiro123");
+		
+		for(int count = 0; count < nbMessage ; count++) {
+
+			// Envoi
+			kafkaProducerTemplate.send(topic, user);
+		}
+
+		try {
+			
+			// Wait for Listener Process Message
+			Thread.sleep(10000);
+			
+		} catch (InterruptedException e) {
+			
+			// Print exception stack trace
+			e.printStackTrace();
+		}
+		
+		// Assert that Record is not null
+		assertThat(records, is(notNullValue()));
+		
+		// Assert that Record has one entry
+		assertThat(records, hasSize(nbMessage));
+		
+		// Obtention de l'utilisateur recu
+		User receivedUser = records.take().value();
+		
+		// Verification sur le nom
+		assertThat(receivedUser.getLogin(), is(equalTo(user.getLogin())));
 	}
 }
