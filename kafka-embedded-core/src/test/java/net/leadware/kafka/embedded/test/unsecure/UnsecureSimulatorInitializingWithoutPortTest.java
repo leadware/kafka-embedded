@@ -66,9 +66,9 @@ import net.leadware.kafka.embedded.test.KafkaSimulatorAutoConfiguration;
 import net.leadware.kafka.embedded.test.unsecure.data.User;
 
 /**
- * Classe de test de bon démarrage d'un simulateur non sécurisé avec port public généré
- * @author landry
- *
+ * Classe de test de bon démarrage d'un simulateur non sécurisé avec port public généré 
+ * @author <a href="mailto:jean-jacques.etune-ngi@ratp.fr">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
+ * @since 30 mai 2019 - 12:17:14
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -149,10 +149,10 @@ public class UnsecureSimulatorInitializingWithoutPortTest {
 	@Before
 	public void before() {
 		
-		//Vérifions qu'au moins un port public est généré 
+		// Vérifions qu'au moins un port public est généré 
 		assertThat(kafkaSimulator.getPublicPorts().size()).isGreaterThan(0);
 		
-		//Vérifions que l'adresse public est plus grand que 1024
+		// Vérifions que l'adresse public est plus grand que 1024
 		assertThat(kafkaSimulator.getPublicPorts().get(0)).isGreaterThanOrEqualTo(1024);
 		
 		// Propriétés du producer
