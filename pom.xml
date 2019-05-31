@@ -49,6 +49,15 @@
 	<!-- Packaging -->
 	<packaging>pom</packaging>
 	
+	<!-- Inception year -->
+	<inceptionYear>2019</inceptionYear>
+	
+	<!-- Project organisation -->
+	<organization>
+		<name>Leadware</name>
+		<url>http://www.leadware.net</url>
+	</organization>
+	
 	<!-- Project source URL -->
 	<url>https://github.com/leadware/kafka-embedded/</url>
 	
@@ -95,12 +104,6 @@
 			</roles>
 		</developer>
 	</developers>
-	
-	<!-- Project organisation -->
-	<organization>
-		<name>Leadware</name>
-		<url>http://www.leadware.net</url>
-	</organization>
 	
 	<!-- Project properties -->
 	<properties>
@@ -173,6 +176,9 @@
 		
 		<!-- Bean Validation version property -->
 		<bean-validation.version>1.0.0-RC6</bean-validation.version>
+		
+		<!-- Apache V2 Licence name -->
+		<license.licenseName>apache_v2</license.licenseName>
 		
 	</properties>
 	
@@ -375,8 +381,6 @@
 					<configuration>
 						<verbose>true</verbose>
 						<addSvnKeyWords>true</addSvnKeyWords>
-						<licenseName>apache_v2</licenseName>
-						<inceptionYear>2019</inceptionYear>
 						<excludes>
 							<exclude>**/META-INF/*.json</exclude>
 						</excludes>
@@ -519,6 +523,38 @@
 				<artifactId>maven-enforcer-plugin</artifactId>
 			</plugin>
 			
+			<!-- Licence Maven Plugin -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>update-project-license</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>update-project-license</goal>
+						</goals>
+						<configuration>
+							<generateBundle>true</generateBundle>
+							<force>true</force>
+							<verbose>true</verbose>
+						</configuration>
+					</execution>
+					<execution>
+						<id>update-header-sources</id>
+						<phase>process-sources</phase>
+						<goals>
+							<goal>update-file-header</goal>
+						</goals>
+						<configuration>
+							<roots>
+								<root>./</root>
+							</roots>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			
 			<!-- Maven Compiler plugin -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -569,26 +605,6 @@
 				
 				<!-- Profile plugins -->
 				<plugins>
-					
-					<!-- Licence Maven Plugin -->
-					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>license-maven-plugin</artifactId>
-						<executions>
-							<execution>
-								<id>update-header-sources</id>
-								<phase>process-sources</phase>
-								<goals>
-									<goal>update-file-header</goal>
-								</goals>
-								<configuration>
-									<roots>
-										<root>./</root>
-									</roots>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
 					
 					<!-- Maven Javadoc plugin -->
 					<plugin>
