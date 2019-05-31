@@ -1,5 +1,11 @@
 [![Leadware](http://leadware.net/medias/images/leadware/lw_logo_complet_sans_surlignement_2016_10_26_155X30.png)](http://www.leadware.net/) 
-![](markdown/version.svg) ![](markdown/snapshot.svg) ![](markdown/build-status.svg)
+
+[![Codeship Status for leadware/kafka-embedded](https://img.shields.io/codeship/28964a90-64f4-0137-4622-12e033059cd9/master.svg?label=Codeship%20build%20status&style=flat)](https://app.codeship.com/projects/344974)
+[![Maven Cantral for leadware/kafka-embedded](https://img.shields.io/maven-central/v/net.leadware/kafka-embedded.svg?style=flat)](https://search.maven.org/search?q=g:net.leadware%20AND%20a:kafka-embedded*)
+
+[![Github Tag for leadware/kafka-embedded](https://img.shields.io/github/tag-date/leadware/kafka-embedded.svg?label=tag&style=flat)](https://github.com/leadware/kafka-embedded)
+[![Github Pre-Release for leadware/kafka-embedded](https://img.shields.io/github/release-pre/leadware/kafka-embedded.svg?label=pre-release&style=flat)](https://github.com/leadware/kafka-embedded)
+[![Github Release for leadware/kafka-embedded](https://img.shields.io/github/release/leadware/kafka-embedded.svg?style=flat)](https://github.com/leadware/kafka-embedded)
 
 ![](http://www.pragma-innovation.fr/wp-content/uploads/2018/02/kafka-logo.png)
 
