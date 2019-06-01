@@ -295,7 +295,7 @@ embedded.kafka.simulator.broker-configs[0].listener.protocol.scheme = PLAINTEXT
         <!-- Spring Fox Swagger dependency -->
         <dependency>
             <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger</artifactId>
+            <artifactId>springfox-swagger2</artifactId>
             <version>2.9.2</version>
         </dependency>
         
