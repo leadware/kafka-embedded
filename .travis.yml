@@ -1,5 +1,9 @@
 language: java
 sudo: false
+addons:
+  apt:
+    packages:
+      - libssl1.0.2
 env:
   global:
     - CODECOV_TOKEN="88041e0f-52ec-4082-8ac6-87b5c6c66338"
