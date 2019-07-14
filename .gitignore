@@ -14,8 +14,6 @@ src/main/resources/application.properties
 src/main/resources/config/dmi/dmi-consumer.properties
 src/main/resources/config/dmi/dmi-topics.properties
 src/main/resources/config/logs/logback-spring.xml
-**.releaseBackup
-**release.properties
 
 
 # Cache of project
