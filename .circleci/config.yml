@@ -1,0 +1,24 @@
+version: 2 
+jobs: 
+  build: 
+    
+    working_directory: ~/kafka-embedded
+
+    docker: 
+      - image: openjdk:8u131-jdk
+
+    steps: 
+
+      - checkout: 
+
+      - restore_cache: 
+          
+          key: kafka-embedded-{{ checksum "pom.xml" }}
+      
+      - run: mvn clean install cobertura:cobertura
+      
+      - store_test_results: 
+      
+          path: target/surefire-reports
+      
+      
