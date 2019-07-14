@@ -7,8 +7,6 @@
 .factorypath
 bin/
 *APPLI_LOG_IS_UNDEFINED/
-.mvn
-.gradle
 **/*.DS_Store
 **/target
 # Fichier de configuration personnel
@@ -21,7 +19,6 @@ src/main/resources/config/logs/logback-spring.xml
 .gradletasknamecache
 
 ### Gradle template
-.gradle
 /build/
 .idea
 # Ignore Gradle GUI config
