@@ -50,7 +50,7 @@ Le projet KAFKA a été initié par la société LinkedIn en 2009, afin de mettr
 
 En 2012, le projet KAFKA a rejoint l'incubateur de la fondation Apache et a subit de grandes évolution. Aujourd'hui, Apache KAFKA est une plateforme de streaming temps réel proposant
 *  Des mécanismes de chargement/diffusion de données depuis ou vers la plateforme grâce à KAFKA CONNECT
-*  Des mécanismes de Transformation de données au fil de l'eau (temps réel) grâce à KAFKA Stram
+*  Des mécanismes de Transformation de données au fil de l'eau (temps réel) grâce à KAFKA Stream
 *  Des mécanismes de requêtage de données grâce à KAFKA SQL (KSQL).
 
 ## Positionnements de KAFKA
