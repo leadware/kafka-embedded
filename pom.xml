@@ -44,7 +44,7 @@
   	<description>Apache KAFKA Embedded Server for test purposes</description>
   	
 	<!-- Project Version -->
-  	<version>1.0.3-SNAPSHOT</version>  
+  	<version>1.0.3</version>  
   	
 	<!-- Packaging -->
 	<packaging>pom</packaging>
@@ -421,6 +421,9 @@
 	                        <exclude>**/.project</exclude>
 	                        <exclude>**/.classpath</exclude>
 	                        <exclude>**/META-INF/*.json</exclude>
+	                        <exclude>**.mvn/*</exclude>
+	                        <exclude>**.circleci/*</exclude>
+	                        <exclude>**.travis.yml</exclude>
 						</excludes>
 					</configuration>
 					<executions>
