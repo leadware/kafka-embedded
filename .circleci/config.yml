@@ -15,7 +15,7 @@ jobs:
           
           key: kafka-embedded-{{ checksum "pom.xml" }}
       
-      - run: mvn clean install cobertura:cobertura
+      - run: ./mvnw clean install cobertura:cobertura
       
       - store_test_results: 
       
