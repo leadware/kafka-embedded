@@ -1,5 +1,7 @@
 [![](http://leadware.net/medias/images/leadware/lw_logo_complet_sans_surlignement_2016_10_26_155X30.png)](http://www.leadware.net/) 
 
+[![](https://img.shields.io/travis/leadware/kafka-embedded.svg?label=Travis%20Ci&style=flat)](https://travis-ci.com/leadware/kafka-embedded)
+[![](https://img.shields.io/circleci/build/github/leadware/kafka-embedded.svg?label=Circle%20Ci&style=flat&token=04a6254bf3b43a7977a6cc93e5d5f93066c7e51f)](https://circleci.com/gh/leadware/kafka-embedded)
 [![](https://img.shields.io/codeship/28964a90-64f4-0137-4622-12e033059cd9/master.svg?label=Codeship%20build%20status&style=flat)](https://app.codeship.com/projects/344974)
 [![](https://img.shields.io/codecov/c/github/leadware/kafka-embedded.svg?label=Codecov%20Coverage&style=flat)](https://codecov.io/gh/leadware/kafka-embedded)
 [![](https://img.shields.io/maven-central/v/net.leadware/kafka-embedded.svg?style=flat)](https://search.maven.org/search?q=g:net.leadware%20AND%20a:kafka-embedded*)
