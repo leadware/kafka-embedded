@@ -168,6 +168,11 @@
 			<artifactId>bean-validation</artifactId>
 		</dependency>
 		
+		<!-- Awaitability -->
+		<dependency>
+			<groupId>org.awaitility</groupId>
+			<artifactId>awaitility</artifactId>
+		</dependency>
 	</dependencies>
 	
 </project>

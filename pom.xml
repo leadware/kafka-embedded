@@ -177,6 +177,9 @@
 		<!-- Bean Validation version property -->
 		<bean-validation.version>1.0.0-RC6</bean-validation.version>
 		
+		<!-- Awaitability version property -->
+		<awaitability.version>3.1.6</awaitability.version>
+		
 		<!-- Apache V2 Licence name -->
 		<license.licenseName>apache_v2</license.licenseName>
 		
@@ -237,6 +240,14 @@
 				<groupId>net.leadware</groupId>
 				<artifactId>bean-validation</artifactId>
 				<version>${bean-validation.version}</version>
+			</dependency>
+			
+			<!-- Awaitability -->
+			<dependency>
+				<groupId>org.awaitility</groupId>
+				<artifactId>awaitility</artifactId>
+				<version>${awaitability.version}</version>
+				<scope>test</scope>
 			</dependency>
 			
 		</dependencies>

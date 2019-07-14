@@ -1,5 +1,7 @@
 package net.leadware.kafka.embedded.test.unsecure;
 
+import static org.awaitility.Awaitility.await;
+
 /*-
  * #%L
  * Apache Kafka Embedded Server
@@ -32,6 +34,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -57,7 +60,9 @@ import org.springframework.kafka.support.serializer.JsonSerializer;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.util.CollectionUtils;
 
+import lombok.extern.slf4j.Slf4j;
 import net.leadware.kafka.embedded.test.KafkaSimulatorAutoConfiguration;
 import net.leadware.kafka.embedded.test.unsecure.data.User;
 
@@ -74,6 +79,7 @@ import net.leadware.kafka.embedded.test.unsecure.data.User;
 		"classpath:unsecure-simulator-tests/kafka-consumer-application.properties"
 })
 @ContextConfiguration(classes = {KafkaSimulatorAutoConfiguration.class})
+@Slf4j
 public class UnsecureSimulatorInitializingTest {
 	
 	/**
@@ -200,16 +206,11 @@ public class UnsecureSimulatorInitializingTest {
 		// Demarrage du listener
 		kafkaMessageListenerContainer.start();
 		
-		try {
-			
-			// Wait for Listener container start
-			Thread.sleep(10000);
-			
-		} catch (InterruptedException e) {
-			
-			// Print exception stack trace
-			e.printStackTrace();
-		}
+		// Wait for Listener container start
+		await().until( () -> !CollectionUtils.isEmpty(kafkaMessageListenerContainer.getAssignedPartitions()));
+		
+		// Log
+		log.debug("Kafka Message Listener Container is started");
 	}
 	
 	/**
@@ -230,7 +231,7 @@ public class UnsecureSimulatorInitializingTest {
 	public void testSendReceiveString() throws InterruptedException {
 		
 		// Nombre de message a envoyer
-		int nbMessage = 500;
+		int nbMessage = 10;
 		
 		// Instantiation d'un user
 		User user = new User("YASHIRO", "NANAKAZE", "nyashiro", "nyashiro123");
@@ -240,17 +241,9 @@ public class UnsecureSimulatorInitializingTest {
 			// Envoi
 			kafkaProducerTemplate.send(topic, user);
 		}
-
-		try {
-			
-			// Wait for Listener Process Message
-			Thread.sleep(10000);
-			
-		} catch (InterruptedException e) {
-			
-			// Print exception stack trace
-			e.printStackTrace();
-		}
+		
+		// Wait for Listener Process Message
+		await().until(() -> records.size() >= nbMessage);
 		
 		// Assert that Record is not null
 		assertThat(records, is(notNullValue()));
