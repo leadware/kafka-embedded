@@ -379,7 +379,6 @@ public class KafkaSimulator {
 	/**
 	 * Methode de recherche du port du producteur interne du broker
 	 * @param brokerProperties	Proprietes du Broker
-	 * @param excluded Ports à exclure de la recherche
 	 * @return Port du producteur interne
 	 */
 	private int findInternalProducerPort(BrokerProperties brokerProperties) {
@@ -428,7 +427,6 @@ public class KafkaSimulator {
 	/**
 	 * Methode de recherche du port d'administration du broker
 	 * @param brokerProperties	Proprietes du Broker
-	 * @param excluded Ports à exclure de la recherche
 	 * @return Port d'administration
 	 */
 	private int findAdminPort(BrokerProperties brokerProperties) {
