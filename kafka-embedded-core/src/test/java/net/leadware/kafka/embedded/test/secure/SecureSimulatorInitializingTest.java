@@ -34,7 +34,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -69,7 +68,6 @@ import net.leadware.bean.validation.ext.tools.FileUtils;
 import net.leadware.kafka.embedded.KafkaSimulator;
 import net.leadware.kafka.embedded.properties.SimulatorProperties;
 import net.leadware.kafka.embedded.test.KafkaSimulatorAutoConfiguration;
-import net.leadware.kafka.embedded.test.unsecure.UnsecureSimulatorInitializingWithoutPortTest;
 import net.leadware.kafka.embedded.test.unsecure.data.User;
 
 /**

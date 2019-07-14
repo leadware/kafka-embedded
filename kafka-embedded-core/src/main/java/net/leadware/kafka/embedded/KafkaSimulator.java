@@ -1155,7 +1155,7 @@ public class KafkaSimulator {
 		} catch (Exception e) {
 			
 			// Affichage de l'erreur
-			e.printStackTrace();
+			log.error("Exception Context", e);
 		}
 		
 		try {
@@ -1163,13 +1163,32 @@ public class KafkaSimulator {
 			// Tentative de fermeture du Client ZooKeeper
 			zookeeperClient.close();
 			
-		} catch (Exception e) {}
+		} catch (Exception e) {
+			
+			// Affichage de l'erreur
+			log.error("Exception Context", e);
+		}
 
 		try {
 			
 			// Tentative d'arret de ZooKeeper
 			zookeeper.shutdown();
 			
-		} catch (Exception e) {}
+		} catch (Exception e) {
+			
+			// Affichage de l'erreur
+			log.error("Exception Context", e);
+		}
+		
+		try {
+			
+			// Clear Kafka Server
+			this.getKafkaServers().clear();
+			
+		} catch (Exception e) {
+			
+			// Affichage de l'erreur
+			log.error("Exception Context", e);
+		}
 	}
 }
