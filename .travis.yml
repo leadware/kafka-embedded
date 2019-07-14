@@ -3,6 +3,8 @@ sudo: false
 env:
   global:
     - CODECOV_TOKEN="88041e0f-52ec-4082-8ac6-87b5c6c66338"
-script: mvn "clean install cobertura:cobertura"
+before_script:
+  - chmod a+x ./mvnw
+script: ./mvnw clean install cobertura:cobertura
 after_success:
   - bash <(curl -s https://codecov.io/bash) -t 88041e0f-52ec-4082-8ac6-87b5c6c66338
