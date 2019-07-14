@@ -1,7 +1,3 @@
-package net.leadware.kafka.embedded.test.unsecure;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
 /*-
  * #%L
  * Apache Kafka Embedded Server
@@ -24,6 +20,10 @@ import static org.assertj.core.api.Assertions.assertThat;
  * #L%
  */
 
+package net.leadware.kafka.embedded.test.unsecure;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.awaitility.Awaitility.await;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -60,7 +60,9 @@ import org.springframework.kafka.support.serializer.JsonSerializer;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.util.CollectionUtils;
 
+import lombok.extern.slf4j.Slf4j;
 import net.leadware.kafka.embedded.KafkaSimulator;
 import net.leadware.kafka.embedded.test.KafkaSimulatorAutoConfiguration;
 import net.leadware.kafka.embedded.test.unsecure.data.User;
@@ -78,6 +80,7 @@ import net.leadware.kafka.embedded.test.unsecure.data.User;
 		"classpath:unsecure-simulator-withoutPort-tests/kafka-consumer-application.properties"
 })
 @ContextConfiguration(classes = {KafkaSimulatorAutoConfiguration.class})
+@Slf4j
 public class UnsecureSimulatorInitializingWithoutPortTest {
 	
 	/**
@@ -145,9 +148,10 @@ public class UnsecureSimulatorInitializingWithoutPortTest {
 	
 	/**
 	 * Before Test
+	 * @throws InterruptedException 
 	 */
 	@Before
-	public void before() {
+	public void before() throws InterruptedException {
 		
 		// Vérifions qu'au moins un port public est généré 
 		assertThat(kafkaSimulator.getPublicPorts().size()).isGreaterThan(0);
@@ -216,16 +220,11 @@ public class UnsecureSimulatorInitializingWithoutPortTest {
 		// Demarrage du listener
 		kafkaMessageListenerContainer.start();
 		
-		try {
-			
-			// Wait for Listener container start
-			Thread.sleep(10000);
-			
-		} catch (InterruptedException e) {
-			
-			// Print exception stack trace
-			e.printStackTrace();
-		}
+		// Wait for Listener container start
+		await().until( () -> !CollectionUtils.isEmpty(kafkaMessageListenerContainer.getAssignedPartitions()));
+		
+		// Log
+		log.debug("Kafka Message Listener Container is started");
 	}
 	
 	/**
@@ -246,7 +245,7 @@ public class UnsecureSimulatorInitializingWithoutPortTest {
 	public void testSendReceiveString() throws InterruptedException {
 		
 		// Nombre de message a envoyer
-		int nbMessage = 500;
+		int nbMessage = 10;
 		
 		// Instantiation d'un user
 		User user = new User("YASHIRO", "NANAKAZE", "nyashiro", "nyashiro123");
@@ -256,17 +255,9 @@ public class UnsecureSimulatorInitializingWithoutPortTest {
 			// Envoi
 			kafkaProducerTemplate.send(topic, user);
 		}
-
-		try {
-			
-			// Wait for Listener Process Message
-			Thread.sleep(10000);
-			
-		} catch (InterruptedException e) {
-			
-			// Print exception stack trace
-			e.printStackTrace();
-		}
+		
+		// Wait for Listener Process Message
+		await().until(() -> records.size() >= nbMessage);
 		
 		// Assert that Record is not null
 		assertThat(records, is(notNullValue()));

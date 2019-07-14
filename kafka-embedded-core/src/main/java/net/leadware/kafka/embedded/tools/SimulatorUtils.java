@@ -23,6 +23,7 @@ package net.leadware.kafka.embedded.tools;
  */
 
 import java.util.Arrays;
+import java.util.Collection;
 
 import org.springframework.util.SocketUtils;
 
@@ -46,21 +47,41 @@ public class SimulatorUtils {
 	 * @param excludes	Tableau des ports exclus
 	 * @return	Port libre
 	 */
-	public static int findAvailablePortExcept(int...excludes) {
+	public static int findAvailablePortExcept(Integer...excludes) {
 		
 		// Log
-		log.debug("Recherche d'un port libre non compris dans la liste [{}]", Arrays.asList(excludes));
+		log.debug("Recherche d'un port libre non compris dans la liste [{}]", excludes == null ? "EMPTY" : Arrays.asList(excludes));
 		
 		// Si le tableau est vide
 		if(excludes == null || excludes.length == 0) return SocketUtils.findAvailableTcpPort(SIMULATOR_GENERATED_MIN_PORT);
 		
 		// Positionnement de la valeur minimale à générer par celle de la valeur maximum du tableau en paramètre
-		int generatedPortMinValue = Arrays.stream(excludes).sorted().max().getAsInt() + 1;
+		int generatedPortMinValue = Arrays.stream(excludes).sorted().mapToInt(p -> p).max().getAsInt() + 1;
 		
 		// Si la valeur max du tableau est inferieure à la valeur max que peut générer le Simulateur
 		if(generatedPortMinValue < SIMULATOR_GENERATED_MIN_PORT ) generatedPortMinValue = SIMULATOR_GENERATED_MIN_PORT;
 		
 		// On retourne un port supérieur à la valeur minimale
 		return SocketUtils.findAvailableTcpPort(generatedPortMinValue);
+	}
+
+	/**
+	 * Methode de recherche des ports libres excluant ceux du tableau en parametre
+	 * @param excludes	Tableau des ports exclus
+	 * @return	Port libre
+	 */
+	public static int findAvailablePortExcept(Collection<Integer> excludes) {
+		
+		// Log
+		log.debug("Recherche d'un port libre non compris dans la collection [{}]", excludes);
+		
+		// Si le tableau est vide
+		if(excludes == null || excludes.isEmpty()) return findAvailablePortExcept((Integer[]) null);
+		
+		// Obtention d'un tableau de Integer
+		Integer[] arraysExcludes = excludes.stream().toArray(Integer[]::new);
+		
+		// Calcul et renvoi du port
+		return findAvailablePortExcept(arraysExcludes);
 	}
 }

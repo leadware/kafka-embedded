@@ -23,7 +23,6 @@ package net.leadware.kafka.embedded.test;
  */
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -31,7 +30,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Scope;
 
 import net.leadware.kafka.embedded.KafkaSimulator;
 import net.leadware.kafka.embedded.properties.SimulatorProperties;
@@ -76,7 +74,6 @@ public class KafkaSimulatorAutoConfiguration {
 	)
 	@ConditionalOnMissingBean
 	@Bean
-	@Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
 	public KafkaSimulatorFactory kafkaSimulatorFactory() {
 		
 		// On retourne l'instance du Bean
@@ -96,7 +93,6 @@ public class KafkaSimulatorAutoConfiguration {
 	)	
 	@ConditionalOnMissingBean
 	@Bean
-	@Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
 	public KafkaSimulator kafkaSimulator(KafkaSimulatorFactory kafkaSimulatorFactory) {
 		
 		// On retourne l'instance du simulateur KAFKA

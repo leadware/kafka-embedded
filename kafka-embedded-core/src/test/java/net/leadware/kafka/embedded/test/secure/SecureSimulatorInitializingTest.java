@@ -1,5 +1,7 @@
 package net.leadware.kafka.embedded.test.secure;
 
+import static org.awaitility.Awaitility.await;
+
 /*-
  * #%L
  * Apache Kafka Embedded Server
@@ -59,7 +61,9 @@ import org.springframework.kafka.support.serializer.JsonSerializer;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.util.CollectionUtils;
 
+import lombok.extern.slf4j.Slf4j;
 import net.leadware.bean.validation.ext.tools.FileUtils;
 import net.leadware.kafka.embedded.KafkaSimulator;
 import net.leadware.kafka.embedded.properties.SimulatorProperties;
@@ -79,6 +83,7 @@ import net.leadware.kafka.embedded.test.unsecure.data.User;
 		"classpath:secure-simulator-tests/kafka-consumer-application.properties"
 })
 @ContextConfiguration(classes = {KafkaSimulatorAutoConfiguration.class})
+@Slf4j
 public class SecureSimulatorInitializingTest {
 	
 	/**
@@ -338,17 +343,12 @@ public class SecureSimulatorInitializingTest {
 		
 		// Demarrage du listener
 		kafkaMessageListenerContainer.start();
-
-		try {
-			
-			// Wait for Listener container start
-			Thread.sleep(15000);
-			
-		} catch (InterruptedException e) {
-			
-			// Print exception stack trace
-			e.printStackTrace();
-		}
+		
+		// Wait for Listener container start
+		await().until( () -> !CollectionUtils.isEmpty(kafkaMessageListenerContainer.getAssignedPartitions()));
+		
+		// Log
+		log.debug("Kafka Message Listener Container is started");
 	}
 	
 	/**
@@ -369,7 +369,7 @@ public class SecureSimulatorInitializingTest {
 	public void testSendReceiveString() throws InterruptedException {
 		
 		// Nombre de message a envoyer
-		int nbMessage = 500;
+		int nbMessage = 10;
 		
 		// Instantiation d'un user
 		User user = new User("YASHIRO", "NANAKAZE", "nyashiro", "nyashiro123");
@@ -379,17 +379,9 @@ public class SecureSimulatorInitializingTest {
 			// Envoi
 			kafkaProducerTemplate.send(producerTopic, user);
 		}
-		
-		try {
-			
-			// Wait for Listener Process Message
-			Thread.sleep(15000);
-			
-		} catch (InterruptedException e) {
-			
-			// Print exception stack trace
-			e.printStackTrace();
-		}
+
+		// Wait for Listener Process Message
+		await().until(() -> records.size() >= nbMessage);
 		
 		// Assert that Record is not null
 		assertThat(records, is(notNullValue()));
