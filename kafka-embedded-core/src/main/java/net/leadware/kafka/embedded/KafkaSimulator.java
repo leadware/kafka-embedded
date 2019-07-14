@@ -177,6 +177,11 @@ public class KafkaSimulator {
 	private Set<String> createdTopics = new HashSet<>();
 	
 	/**
+	 * Ensemble de ports deja générés pour les brokers
+	 */
+	private Set<Integer> generatedPorts = new HashSet<>();
+	
+	/**
 	 * Méthode permettant d'initialiser le simulateur KAFKA
 	 */
 	@PostConstruct
@@ -263,8 +268,12 @@ public class KafkaSimulator {
 		
 		// Si la liste des configurations de brokers est vide
 		if(simulatorProperties.getBrokerConfigs() == null || 
-				simulatorProperties.getBrokerConfigs().isEmpty()) 
+				simulatorProperties.getBrokerConfigs().isEmpty()) {
+			
+			// Levée d'une exception
 			throw new RuntimeException("Veuillez renseigner la configuration d'au moins un Broker");
+		}
+			
 		
 		// Log
 		log.trace("Parcours de la liste des configurations de brokers");
@@ -276,13 +285,13 @@ public class KafkaSimulator {
 			log.trace("Obtention de la configuration [{}]", index);
 			
 			// Obtention de la config
-			BrokerProperties brokerProperties = simulatorProperties.getBrokerConfigs().get(index);
+			BrokerProperties currentBrokerProperties = simulatorProperties.getBrokerConfigs().get(index);
 			
 			// Log
 			log.trace("Obtention du port public du Broker [{}]", index);
 			
 			// Port public du broker
-			int publicPort = findPublicPort(brokerProperties);
+			int publicPort = findPublicPort(currentBrokerProperties);
 			
 			// Log
 			log.trace("Port public du Broker [{}] : [{}]", index, publicPort);
@@ -291,7 +300,7 @@ public class KafkaSimulator {
 			log.trace("Calcul du port d'administration en fonction de la configuration");
 			
 			// Initialisation du port d'admin
-			int adminPort = findAdminPort(brokerProperties, publicPort);
+			int adminPort = findAdminPort(currentBrokerProperties);
 			
 			// Log
 			log.trace("Port d'administration du Broker [{}] : [{}]", index, adminPort);
@@ -300,7 +309,7 @@ public class KafkaSimulator {
 			log.trace("Calcul du port du producteur interne en fonction de la configuration");
 			
 			// Initialisation du port du producteur interne
-			int internalProducerPort = findInternalProducerPort(brokerProperties, publicPort, adminPort);
+			int internalProducerPort = findInternalProducerPort(currentBrokerProperties);
 			
 			// Log
 			log.trace("Port du producteur interne du Broker [{}] : [{}]", index, internalProducerPort);
@@ -309,25 +318,25 @@ public class KafkaSimulator {
 			log.trace("Mise à jour de la configuration du broker [{}] avec le port public[{}]", index, publicPort);
 						
 			// Positionnement du port public
-			brokerProperties.getListener().setPort(publicPort);
+			currentBrokerProperties.getListener().setPort(publicPort);
 			
 			// Log
 			log.trace("Mise à jour de la configuration du broker [{}] avec le port d'administration [{}]", index, adminPort);
 			
 			// Positionnement du port d'admin
-			brokerProperties.getListener().setAdminPort(adminPort);
+			currentBrokerProperties.getListener().setAdminPort(adminPort);
 			
 			// Log
 			log.trace("Mise à jour de la configuration du broker [{}] avec le port du producteur interne [{}]", index, internalProducerPort);
 			
 			// Positionnement du port du producteur interne
-			brokerProperties.getListener().setInternalProducerPort(internalProducerPort);
+			currentBrokerProperties.getListener().setInternalProducerPort(internalProducerPort);
 			
 			// Log
 			log.trace("Initialisation des propriétés de configuratio du Broker Kafka [{}]", index);
 			
 			// Construction des propriétés de base
-			Properties properties = createBrokerProperties(index, brokerProperties);
+			Properties properties = createBrokerProperties(index, currentBrokerProperties);
 			
 			// Log
 			log.trace("Création d'un serveur KAFKA sur la base de des propriétés initialisées [{}]", properties);
@@ -373,7 +382,7 @@ public class KafkaSimulator {
 	 * @param excluded Ports à exclure de la recherche
 	 * @return Port du producteur interne
 	 */
-	private int findInternalProducerPort(BrokerProperties brokerProperties, int...excluded) {
+	private int findInternalProducerPort(BrokerProperties brokerProperties) {
 		
 		// Port a retourner
 		int port = brokerProperties.getListener().getInternalProducerPort();
@@ -382,8 +391,11 @@ public class KafkaSimulator {
 		if(port <= 0) {
 			
 			// Recuperation du premier port libre autre que le port d'écoute public du broker
-			port = SimulatorUtils.findAvailablePortExcept(excluded);
+			port = SimulatorUtils.findAvailablePortExcept(generatedPorts);
 		}
+		
+		// Ajout du port généné dans la collection des ports déjà générés
+		generatedPorts.add(port);
 		
 		// On retourne le port
 		return port;
@@ -403,8 +415,11 @@ public class KafkaSimulator {
 		if(port <= 0) {
 			
 			// Recherche et récupération d'un port libre sur le système
-			port = SimulatorUtils.findAvailablePortExcept(null);
+			port = SimulatorUtils.findAvailablePortExcept(generatedPorts);
 		}
+		
+		// Ajout du port généné dans la collection des ports déjà générés
+		generatedPorts.add(port);
 		
 		//On retourne le port
 		return port;
@@ -416,8 +431,8 @@ public class KafkaSimulator {
 	 * @param excluded Ports à exclure de la recherche
 	 * @return Port d'administration
 	 */
-	private int findAdminPort(BrokerProperties brokerProperties, int...excluded) {
-
+	private int findAdminPort(BrokerProperties brokerProperties) {
+		
 		// Port a retourner
 		int port = brokerProperties.getListener().getAdminPort();
 		
@@ -425,8 +440,11 @@ public class KafkaSimulator {
 		if(port <= 0) {
 			
 			// Recuperation du premier port libre autre que le port d'écoute public du broker
-			port = SimulatorUtils.findAvailablePortExcept(excluded);
+			port = SimulatorUtils.findAvailablePortExcept(generatedPorts);
 		}
+		
+		// Ajout du port généné dans la collection des ports déjà générés
+		generatedPorts.add(port);
 		
 		// On retourne le port
 		return port;
