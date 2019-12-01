@@ -6,6 +6,6 @@ env:
     - CODECOV_TOKEN="88041e0f-52ec-4082-8ac6-87b5c6c66338"
 before_install:
   - chmod a+x ./mvnw
-script: ./mvnw clean install jacoco:prepare-agent jacoco:report
+script: ./mvnw clean install -DskipTests
 after_success:
   - bash <(curl -s https://codecov.io/bash) -t 88041e0f-52ec-4082-8ac6-87b5c6c66338
