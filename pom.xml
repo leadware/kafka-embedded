@@ -112,10 +112,10 @@
 		<maven-enforcer-plugin.version>1.4.1</maven-enforcer-plugin.version>
 		
 		<!-- JRE Source version Property -->
-		<jre-source.version>1.8</jre-source.version>
+		<jre-source.version>11</jre-source.version>
 		
 		<!-- JRE Target version Property  -->
-		<jre-target.version>1.8</jre-target.version>
+		<jre-target.version>11</jre-target.version>
 		
 		<!-- Required OS Family -->
 		<os.family>unix</os.family>
@@ -152,9 +152,6 @@
 		
 		<!-- Apache RAT Plugin Version Property -->
 		<apache.rat.plugin.version>0.13</apache.rat.plugin.version>
-		
-		<!-- Cobertura Maven Plugin Version -->
-		<cobertura-maven-plugin.version>2.7</cobertura-maven-plugin.version>
 		
 		<!-- Jacoco Maven Plugin Version -->
 		<jacoco-maven-plugin.version>0.8.4</jacoco-maven-plugin.version>
@@ -489,19 +486,6 @@
 					</configuration>
 				</plugin>
 				
-				<!-- Cobertura Maven Plugin -->
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>cobertura-maven-plugin</artifactId>
-					<version>${cobertura-maven-plugin.version}</version>
-					<configuration>
-						<formats>
-							<format>html</format>
-							<format>xml</format>
-						</formats>
-					</configuration>
-				</plugin>
-				
 				<!-- Jacoco Maven Plugin -->
 				<plugin>
 					<groupId>org.jacoco</groupId>
@@ -579,12 +563,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-			</plugin>
-			
-			<!-- Cobertura Maven Plugin -->
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>cobertura-maven-plugin</artifactId>
 			</plugin>
 			
 			<!-- Jacoco Maven Plugin -->
