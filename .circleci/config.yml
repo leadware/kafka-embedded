@@ -15,7 +15,7 @@ jobs:
           
           key: kafka-embedded-{{ checksum "pom.xml" }}
       
-      - run: ./mvnw clean install jacoco:prepare-agent jacoco:report
+      - run: ./mvnw clean install -DskipTests
       
       - store_test_results: 
       
