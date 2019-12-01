@@ -156,9 +156,7 @@ public class KafkaSimulatorSampleConsumerConfiguration {
 												   record.key(), record.value()));
 			
 			// Ajout dans la liste des recourds
-			System.out.println("==========================================");
 			System.out.println(record);
-			System.out.println("==========================================");
 		});
 		
 		// On retourne le listener
