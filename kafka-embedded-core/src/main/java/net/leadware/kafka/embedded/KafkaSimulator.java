@@ -60,6 +60,7 @@ import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 
 import kafka.common.KafkaException;
 import kafka.server.KafkaConfig;
@@ -886,6 +887,9 @@ public class KafkaSimulator {
 			
 		} catch (Exception e) {
 			
+			// Print exception stack trace
+			log.error("createTopics - Exception survenue", e);
+			
 			// On leve ue exception
 			throw new KafkaException(e);
 		}
@@ -902,9 +906,8 @@ public class KafkaSimulator {
 		
 		// Creation de la liste de topics
 		internalCreateTopics(
-
-				 // Stream sur la liste des noms de topics
-				 Arrays.stream(topicsNames).collect(Collectors.toList())
+				// Stream sur la liste des noms de topics
+				Arrays.stream(topicsNames).collect(Collectors.toList())
 		);
 	}
 	
@@ -935,7 +938,7 @@ public class KafkaSimulator {
 		} catch(Exception e) {
 			
 			// Print exception stack trace
-			e.printStackTrace();
+			log.error("getPublicPorts - Exception survenue", e);
 			
 			// On relance
 			throw new KafkaException(e);
@@ -979,7 +982,7 @@ public class KafkaSimulator {
 		} catch (Exception e) {
 			
 			// Print exception stack trace
-			e.printStackTrace();
+			log.error("listTopics - Exception survenue", e);
 			
 			// On relance
 			throw new KafkaException(e);
@@ -1017,7 +1020,7 @@ public class KafkaSimulator {
 		} catch (Exception e) {
 			
 			// Print exception stack trace
-			e.printStackTrace();
+			log.error("deleteTopics - Exception survenue", e);
 			
 			// On relance
 			throw new KafkaException(e);
@@ -1060,7 +1063,7 @@ public class KafkaSimulator {
 		} catch (Exception e) {
 			
 			// Print exception stack trace
-			e.printStackTrace();
+			log.error("listConsumerGroup - Exception survenue", e);
 			
 			// On relance
 			throw new KafkaException(e);
@@ -1102,7 +1105,7 @@ public class KafkaSimulator {
 		} catch (Exception e) {
 			
 			// Print exception stack trace
-			e.printStackTrace();
+			log.error("listConsumerGroupOffsets - Exception survenue", e);
 			
 			// On relance
 			throw new KafkaException(e);
@@ -1140,6 +1143,50 @@ public class KafkaSimulator {
 	}
 	
 	/**
+	 * Méthode permettant d'arreter l'ensemble des brokers
+	 */
+	private void stopBrokers() {
+		
+		// Log
+		log.debug("Arrêt des brokers");
+		
+		// Si la liste de brokers est vide
+		if(CollectionUtils.isEmpty(kafkaServers)) {
+			
+			// Sortie du traitement
+			return;
+		}
+		
+		// Parcours et arrêt des brokers de la liste
+		kafkaServers.forEach(this::stopBroker);
+		
+		// Vidage de la liste de brokers
+		kafkaServers.clear();
+	}
+	
+	/**
+	 * Méthode permettant d'arrêter un broker
+	 * @param broker	Broker à arreter
+	 */
+	private void stopBroker(KafkaServer broker) {
+		
+		// Si le broker est non null
+		if(broker != null) {
+			
+			try {
+				
+				// Tentative d'arret
+				broker.shutdown();
+				
+			} catch (Exception e) {
+				
+				// Affichage de l'erreur
+				log.error("stopBroker - Erreur survenue", e);
+			}
+		}
+	}
+	
+	/**
 	 * Méthode permettant de détruire le simulateur KAFKA
 	 */
 	@PreDestroy
@@ -1153,7 +1200,7 @@ public class KafkaSimulator {
 		} catch (Exception e) {
 			
 			// Affichage de l'erreur
-			log.error("Exception Context", e);
+			log.error("destroy - Erreur survenue lors de l'arrêt du client d'administration", e);
 		}
 		
 		try {
@@ -1164,9 +1211,12 @@ public class KafkaSimulator {
 		} catch (Exception e) {
 			
 			// Affichage de l'erreur
-			log.error("Exception Context", e);
+			log.error("destroy - Erreur survenue lors de l'arrêt du client zookeeper", e);
 		}
 
+		// Arret des Kafka Servers
+		this.stopBrokers();
+		
 		try {
 			
 			// Tentative d'arret de ZooKeeper
@@ -1175,18 +1225,7 @@ public class KafkaSimulator {
 		} catch (Exception e) {
 			
 			// Affichage de l'erreur
-			log.error("Exception Context", e);
-		}
-		
-		try {
-			
-			// Clear Kafka Server
-			this.getKafkaServers().clear();
-			
-		} catch (Exception e) {
-			
-			// Affichage de l'erreur
-			log.error("Exception Context", e);
+			log.error("destroy - Erreur survenue lors de l'arrêt du serveur zookeeper", e);
 		}
 	}
 }
