@@ -5,7 +5,7 @@ jobs:
     working_directory: ~/kafka-embedded
 
     docker: 
-      - image: openjdk:8u131-jdk
+      - image: openjdk:11.0.5-jdk
 
     steps: 
 
@@ -15,7 +15,7 @@ jobs:
           
           key: kafka-embedded-{{ checksum "pom.xml" }}
       
-      - run: ./mvnw clean install cobertura:cobertura
+      - run: ./mvnw clean install jacoco:prepare-agent jacoco:report
       
       - store_test_results: 
       
