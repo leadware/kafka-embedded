@@ -172,7 +172,7 @@
 		<hibernate-validator.version>6.0.16.Final</hibernate-validator.version>
 		
 		<!-- Bouncy Castle version property -->
-		<bouncy-castle.version>1.61</bouncy-castle.version>
+		<bouncy-castle.version>1.64</bouncy-castle.version>
 		
 		<!-- Bean Validation version property -->
 		<bean-validation.version>1.0.0-RC6</bean-validation.version>
