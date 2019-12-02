@@ -80,6 +80,7 @@ import net.leadware.kafka.embedded.properties.ListenerProperties;
 import net.leadware.kafka.embedded.properties.ListenerProtocolProperties;
 import net.leadware.kafka.embedded.properties.SimulatorProperties;
 import net.leadware.kafka.embedded.tools.SimulatorUtils;
+import scala.collection.JavaConverters;
 
 /**
  * Classe représentant le simulateur KAFKA
@@ -1213,9 +1214,20 @@ public class KafkaSimulator {
 			// Affichage de l'erreur
 			log.error("destroy - Erreur survenue lors de l'arrêt du client zookeeper", e);
 		}
-
-		// Arret des Kafka Servers
-		this.stopBrokers();
+		
+		try {
+			
+			// Arret des serveurs KAFKA
+			TestUtils.shutdownServers(JavaConverters.asScalaIteratorConverter(kafkaServers.iterator()).asScala().toSeq());
+			
+			// Arret forcé des brokers
+			stopBrokers();
+			
+		} catch (Exception e) {
+			
+			// Affichage de l'erreur
+			log.error("destroy - Erreur survenue lors de l'arrêt des brokers KAFKA", e);
+		}
 		
 		try {
 			
