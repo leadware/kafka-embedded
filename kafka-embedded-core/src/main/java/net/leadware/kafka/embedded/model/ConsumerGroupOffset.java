@@ -25,9 +25,8 @@ package net.leadware.kafka.embedded.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import io.swagger.annotations.ApiModelProperty.AccessMode;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.AccessMode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,7 +38,7 @@ import lombok.ToString;
  * @author <a href="mailto:jetune@leadware.net">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
  * @since 3 avr. 2019 - 07:59:25
  */
-@ApiModel(description = "Information sur l'offset d'un groupe de consommateurs du simulateur KAFKA")
+@Schema(description = "Information sur l'offset d'un groupe de consommateurs du simulateur KAFKA")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -50,7 +49,7 @@ public class ConsumerGroupOffset {
 	/**
 	 * Nom du topic
 	 */
-	@ApiModelProperty(accessMode = AccessMode.READ_ONLY, name = "topicName", required = true, value = "Nom du topic")
+	@Schema(accessMode = AccessMode.READ_ONLY, name = "topicName", required = true, description = "Nom du topic")
 	@JsonProperty(required = true, value = "topicName")
 	@JsonPropertyDescription("Nom du topic KAFKA")
 	private String topicName;
@@ -58,7 +57,7 @@ public class ConsumerGroupOffset {
 	/**
 	 * Numero de partition du topic
 	 */
-	@ApiModelProperty(accessMode = AccessMode.READ_ONLY, name = "partitionId", required = true, value = "ID de la partition du topic")
+	@Schema(accessMode = AccessMode.READ_ONLY, name = "partitionId", required = true, description = "ID de la partition du topic")
 	@JsonProperty(required = true, value = "partitionId")
 	@JsonPropertyDescription("ID de la partition du topic")
 	private Integer partitionId;
@@ -66,7 +65,7 @@ public class ConsumerGroupOffset {
 	/**
 	 * Offset de la partition
 	 */
-	@ApiModelProperty(accessMode = AccessMode.READ_ONLY, name = "offset", required = true, value = "Offset de la partition")
+	@Schema(accessMode = AccessMode.READ_ONLY, name = "offset", required = true, description = "Offset de la partition")
 	@JsonProperty(required = true, value = "offset")
 	@JsonPropertyDescription("Offset de la partition")
 	private Long offset;
@@ -74,7 +73,7 @@ public class ConsumerGroupOffset {
 	/**
 	 * Meta donnees de l'offset
 	 */
-	@ApiModelProperty(accessMode = AccessMode.READ_ONLY, name = "offsetMetadata", required = false, value = "Metadonnées")
+	@Schema(accessMode = AccessMode.READ_ONLY, name = "offsetMetadata", required = false, description = "Metadonnées")
 	@JsonProperty(required = true, value = "offsetMetadata")
 	@JsonPropertyDescription("Offset de la partition")
 	private String offsetMetadata;

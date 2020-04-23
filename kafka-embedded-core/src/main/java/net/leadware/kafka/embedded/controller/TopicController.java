@@ -38,14 +38,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import net.leadware.kafka.embedded.KafkaSimulator;
 import net.leadware.kafka.embedded.model.Topic;
@@ -57,7 +58,7 @@ import net.leadware.kafka.embedded.utils.KafkaSimulatorFactory;
  * @author <a href="mailto:jetune@leadware.net">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
  * @since 2 avr. 2019 - 22:22:52
  */
-@Api(description = "Service Rest de gestion des topics", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+@Tag(name = "Gestion de topics", description = "Service Rest de gestion des topics")
 @ConditionalOnClass({
 	KafkaSimulator.class,
 	KafkaSimulatorFactory.class
@@ -87,10 +88,13 @@ public class TopicController {
 	 * Méthode permettant de créer un topic dans le simulateur
 	 * @param topicName	Nom du topic a creer
 	 */
-	@ApiOperation(value = "Opération de création d'un topic")
+	@Operation(
+		description = "Opération de création d'un topic", 
+		method = "PUT"
+	)
 	@PutMapping(path = "/{topicName}")
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public void createTopicByName(@ApiParam(name = "topicName", required = true, value = "Nom du topic à créer") 
+	public void createTopicByName(@Parameter(name = "topicName", required = true, description = "Nom du topic à créer") 
 								  @PathVariable("topicName")
 								  @NotEmpty(message = "Le paramètre 'topicName' doit être renseigné")
 								  String topicName) {
@@ -107,12 +111,18 @@ public class TopicController {
 	 * @param internal Etat de visibilité (interne ou non du topic)
 	 * @return	Liste des topics
 	 */
-	@ApiOperation(value = "Opération de listage des topics en fonction de leur état de visibilité")
-	@ApiResponse(message = "Liste des topics trouvés", code = 200)
+	@Operation(
+		description = "Opération de listage des topics en fonction de leur état de visibilité", 
+		method = "GET",
+		responses = {
+			@ApiResponse(description = "Liste des topics trouvés", responseCode = "200"),
+			@ApiResponse(description = "Erreur survenue lors de l'opération", responseCode = "500")
+		}
+	)
 	@GetMapping(path = "/{internal}")
 	@ResponseBody
-	public List<Topic> listTopic(@ApiParam(name = "internal", required = true, value = "Topic interne ?") 
-								 @PathVariable(name = "internal") 
+	public List<Topic> listTopic(@Parameter(name = "internal", required = true, description = "Topic interne ?") 
+								 @RequestParam(name = "internal", required = true, defaultValue = "false") 
 								 @NotNull(message = "Le paramètre 'internal' doit être renseigné")
 								 Boolean internal) {
 		
@@ -127,10 +137,13 @@ public class TopicController {
 	 * Méthode permettant de supprimer un topic 
 	 * @param topicName	Nom du topic
 	 */
-	@ApiOperation(value = "Opération de suppression d'un topic à partir de son nom")
+	@Operation(
+		description = "Opération de suppression d'un topic à partir de son nom", 
+		method = "DELETE"
+	)
 	@DeleteMapping(path = "/{topicName}")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
-	public void deleteTopic(@ApiParam(name = "topicName", required = true, value = "Nom du topic à supprimer") 
+	public void deleteTopic(@Parameter(name = "topicName", required = true, description = "Nom du topic à supprimer") 
 						    @PathVariable("topicName")
 							@NotEmpty(message = "Le paramètre 'topicName' doit être renseigné")
 							String topicName) {

@@ -168,6 +168,9 @@
 		<!-- Swagger version propery -->
 		<springfox-swagger.version>2.9.2</springfox-swagger.version>
 		
+		<!-- Spring doc Open API UI version property -->
+		<springdoc-openapi-ui.version>1.2.32</springdoc-openapi-ui.version>
+		
 		<!-- Hibernate validator version propery -->
 		<hibernate-validator.version>6.0.16.Final</hibernate-validator.version>
 		
@@ -200,25 +203,11 @@
 				<scope>import</scope>
 			</dependency>
 			
-			<!-- Swagger dependency -->
+			<!-- Spring doc OpenAPI UI -->
 			<dependency>
-				<groupId>io.springfox</groupId>
-				<artifactId>springfox-swagger2</artifactId>
-				<version>${springfox-swagger.version}</version>
-			</dependency>
-			
-			<!-- Swagger dependency -->
-			<dependency>
-				<groupId>io.springfox</groupId>
-				<artifactId>springfox-swagger-ui</artifactId>
-				<version>${springfox-swagger.version}</version>
-			</dependency>
-			
-			<!-- Swagger dependency -->
-			<dependency>
-				<groupId>io.springfox</groupId>
-				<artifactId>springfox-bean-validators</artifactId>
-				<version>${springfox-swagger.version}</version>
+			    <groupId>org.springdoc</groupId>
+			    <artifactId>springdoc-openapi-ui</artifactId>
+			    <version>${springdoc-openapi-ui.version}</version>
 			</dependency>
 			
 			<!-- Bouncy Castle BCProv -->
