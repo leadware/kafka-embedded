@@ -413,6 +413,7 @@
 	                        <exclude>**.mvn/*</exclude>
 	                        <exclude>**.circleci/*</exclude>
 	                        <exclude>**.travis.yml</exclude>
+	                        <exclude>**codecov.yml</exclude>
 						</excludes>
 					</configuration>
 					<executions>
