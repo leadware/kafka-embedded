@@ -117,24 +117,10 @@
 			<optional>true</optional>
 		</dependency>
 		
-		<!-- Swagger dependency -->
+		<!-- Spring doc OpenAPI UI -->
 		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger2</artifactId>
-			<optional>true</optional>
-		</dependency>
-		
-		<!-- Swagger dependency -->
-		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger-ui</artifactId>
-		</dependency>
-		
-		<!-- Swagger dependency -->
-		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-bean-validators</artifactId>
-			<optional>true</optional>
+		    <groupId>org.springdoc</groupId>
+		    <artifactId>springdoc-openapi-ui</artifactId>
 		</dependency>
 		
 		<!-- Lombok dependency -->

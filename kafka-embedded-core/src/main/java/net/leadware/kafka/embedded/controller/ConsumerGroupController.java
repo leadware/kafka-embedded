@@ -37,10 +37,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import net.leadware.kafka.embedded.KafkaSimulator;
 import net.leadware.kafka.embedded.model.ConsumerGroup;
 import net.leadware.kafka.embedded.model.ConsumerGroupOffset;
@@ -52,7 +52,7 @@ import net.leadware.kafka.embedded.utils.KafkaSimulatorFactory;
  * @author <a href="mailto:jetune@leadware.net">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
  * @since 3 avr. 2019 - 07:26:54
  */
-@Api(description = "Service Rest de gestion des groupes de consommateurs", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+@Tag(name = "Gestion des groupes de consomateurs", description = "Service Rest de gestion des groupes de consommateurs")
 @ConditionalOnClass({
 	KafkaSimulator.class,
 	KafkaSimulatorFactory.class
@@ -81,8 +81,14 @@ public class ConsumerGroupController {
 	 * Méthode permettant de lister les groupes de consommateurs du simulateur
 	 * @return	Liste des consommateurs
 	 */
-	@ApiOperation(value = "Opération de listage des groupes de consommateurs Kafka")
-	@ApiResponse(message = "Liste des groupes de consommateurs trouvés", code = 200)
+	@Operation(
+		description = "Opération de listage des groupes de consommateurs Kafka", 
+		method = "GET",
+		responses = {
+			@ApiResponse(description = "Liste des groupes de consommateurs trouvés", responseCode = "200"),
+			@ApiResponse(description = "Erreur survenue lors de l'opération", responseCode = "500")
+		}
+	)
 	@GetMapping
 	@ResponseBody
 	public List<ConsumerGroup> listConsumerGroup() {
@@ -96,11 +102,17 @@ public class ConsumerGroupController {
 	 * @param groupId ID du groupe source
 	 * @return	Liste des offsets d'un groupe de consommateurs du simulateur
 	 */
-	@ApiOperation(value = "Opération de listage des offsets d'un groupe de consommateurs Kafka")
-	@ApiResponse(message = "Liste des offsets d'un groupe de consommateurs trouvés", code = 200)
+	@Operation(
+		description = "Opération de listage des offsets d'un groupe de consommateurs Kafka", 
+		method = "GET",
+		responses = {
+			@ApiResponse(description = "Liste des offsets d'un groupe de consommateurs trouvés", responseCode = "200"),
+			@ApiResponse(description = "Erreur survenue lors de l'opération", responseCode = "500")
+		}
+	)
 	@GetMapping(path = "/{groupId}/offsets")
 	@ResponseBody
-	public List<ConsumerGroupOffset> listConsumerGroupOffsets(@ApiParam(name = "groupId", required = true) 
+	public List<ConsumerGroupOffset> listConsumerGroupOffsets(@Parameter(name = "groupId", required = true, allowEmptyValue = false) 
 														      @PathVariable("groupId")
 															  @NotEmpty(message = "Le paramètre 'groupId' doit être renseigné")
 															  String groupId) {

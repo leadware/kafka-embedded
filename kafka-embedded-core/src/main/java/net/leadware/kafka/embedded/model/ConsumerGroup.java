@@ -25,9 +25,8 @@ package net.leadware.kafka.embedded.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import io.swagger.annotations.ApiModelProperty.AccessMode;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.AccessMode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,7 +38,7 @@ import lombok.ToString;
  * @author <a href="mailto:jetune@leadware.net">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
  * @since 2 avr. 2019 - 22:37:59
  */
-@ApiModel(description = "Information sur un groupe de consommateur KAFKA")
+@Schema(description = "Information sur un groupe de consommateur KAFKA")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -50,7 +49,7 @@ public class ConsumerGroup {
 	/**
 	 * Nom du groupe
 	 */
-	@ApiModelProperty(accessMode = AccessMode.READ_WRITE, name = "consumerGroupId", required = true, value = "ID du groupe de consommateurs")
+	@Schema(accessMode = AccessMode.READ_WRITE, name = "consumerGroupId", required = true, description = "ID du groupe de consommateurs")
 	@JsonProperty(required = true, value = "consumerGroupId")
 	@JsonPropertyDescription("ID du groupe de consommateurs")
 	private String id;
@@ -58,7 +57,7 @@ public class ConsumerGroup {
 	/**
 	 * Le groupe est-il simple
 	 */
-	@ApiModelProperty(accessMode = AccessMode.READ_WRITE, name = "consumerGroupId", required = true, value = "ID du groupe de consommateurs")
+	@Schema(accessMode = AccessMode.READ_WRITE, name = "consumerGroupId", required = true, description = "ID du groupe de consommateurs")
 	@JsonProperty(required = true, value = "simpleGroup", defaultValue = "true")
 	@JsonPropertyDescription("Type de groupe (simple ou non)")
 	private Boolean simpleGroup;

@@ -31,6 +31,7 @@ import java.util.regex.Pattern;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.config.SslConfigs;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.springdoc.core.GroupedOpenApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
@@ -46,11 +47,6 @@ import org.springframework.kafka.support.serializer.JsonDeserializer;
 import lombok.extern.slf4j.Slf4j;
 import net.leadware.bean.validation.ext.tools.FileUtils;
 import net.leadware.kafka.sample.consumer.model.ConsumedRecord;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  * Classe de configuration du consommateur de test pour demo swagger
@@ -58,7 +54,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * @since 4 avr. 2019
  */
 @Configuration
-@EnableSwagger2
 @Slf4j
 public class KafkaSimulatorSampleConsumerConfiguration {
 	
@@ -168,17 +163,15 @@ public class KafkaSimulatorSampleConsumerConfiguration {
 	 * @return	Configuration de documentation d'API
 	 */
 	@Bean
-	public Docket sampleApi() {
+	public GroupedOpenApi sampleApi() {
 		
 		// Log
 		log.debug("Création du Bean swagger d'exposition de la documentation de l'API Kafka Embedded");
-		
-		// Construction d
-		return new Docket(DocumentationType.SWAGGER_2)
-				.groupName("KafkaSampleConsumer")
-				.select()
-				.apis(RequestHandlerSelectors.basePackage("net.leadware.kafka.sample"))
-				.paths(PathSelectors.any())
+
+		// Construction du groupe d'api
+		return GroupedOpenApi.builder()
+				.setGroup("kafka-sample-consumer")
+				.packagesToScan("net.leadware.kafka.sample")
 				.build();
 	}
 }

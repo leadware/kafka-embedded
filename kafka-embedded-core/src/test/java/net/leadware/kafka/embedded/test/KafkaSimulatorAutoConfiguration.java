@@ -1,5 +1,7 @@
 package net.leadware.kafka.embedded.test;
 
+import org.springdoc.core.GroupedOpenApi;
+
 /*-
  * #%L
  * Apache Kafka Embedded Server
@@ -29,17 +31,10 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 import net.leadware.kafka.embedded.KafkaSimulator;
 import net.leadware.kafka.embedded.properties.SimulatorProperties;
 import net.leadware.kafka.embedded.utils.KafkaSimulatorFactory;
-import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  * Classe de condiguration automatique du simulateur KAFKA
@@ -52,8 +47,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 	KafkaSimulatorFactory.class
 })
 @EnableConfigurationProperties(SimulatorProperties.class)
-@EnableSwagger2
-@Import(BeanValidatorPluginsConfiguration.class)
 public class KafkaSimulatorAutoConfiguration {
 	
 	/**
@@ -98,9 +91,7 @@ public class KafkaSimulatorAutoConfiguration {
 		// On retourne l'instance du simulateur KAFKA
 		return kafkaSimulatorFactory.getInstance();
 	}
-	
-	
-	
+
 	/**
 	 * Methode de construction de la configuration de documentation d'API
 	 * @return	Configuration de documentation d'API
@@ -113,13 +104,12 @@ public class KafkaSimulatorAutoConfiguration {
 	)
 	@ConditionalOnMissingBean
 	@Bean
-	public Docket api() {
+	public GroupedOpenApi api() {
 		
-		// Construction d
-		return new Docket(DocumentationType.SWAGGER_2)
-				.select()
-				.apis(RequestHandlerSelectors.basePackage("net.leadware.kafka.embedded"))
-				.paths(PathSelectors.any())
+		// Construction du groupe d'api
+		return GroupedOpenApi.builder()
+				.setGroup("kafka-simulator-test")
+				.packagesToScan("net.leadware.kafka.embedded")
 				.build();
 	}
 }

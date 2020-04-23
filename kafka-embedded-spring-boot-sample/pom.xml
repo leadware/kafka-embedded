@@ -99,16 +99,10 @@
 			<artifactId>spring-kafka-test</artifactId>
 		</dependency>
 		
-		<!-- Swagger dependency -->
+		<!-- Spring doc OpenAPI UI -->
 		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger2</artifactId>
-		</dependency>
-		
-		<!-- Swagger dependency -->
-		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-bean-validators</artifactId>
+		    <groupId>org.springdoc</groupId>
+		    <artifactId>springdoc-openapi-ui</artifactId>
 		</dependency>
 		
 	</dependencies>

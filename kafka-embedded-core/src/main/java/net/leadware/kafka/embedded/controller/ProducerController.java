@@ -37,8 +37,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import net.leadware.bean.validation.ext.annotations.json.FormatType;
 import net.leadware.bean.validation.ext.annotations.json.StringFormatValidator;
 import net.leadware.kafka.embedded.KafkaSimulator;
@@ -50,7 +51,7 @@ import net.leadware.kafka.embedded.utils.KafkaSimulatorFactory;
  * @author <a href="mailto:jetune@leadware.net">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
  * @since 3 avr. 2019 - 08:26:44
  */
-@Api(description = "Service Rest de production de message Kafka sur le simulateur", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+@Tag(name = "Gestion de la production de messages", description = "Service Rest de production de message Kafka sur le simulateur")
 @ConditionalOnClass({
 	KafkaSimulator.class,
 	KafkaSimulatorFactory.class
@@ -81,22 +82,26 @@ public class ProducerController {
 	 * @param messageKey	Clé du message
 	 * @param message	Contenu du message
 	 */
+	@Operation(
+		description = "Opération de diffusion de messages dans un topic Kafka (clé de message fournie)", 
+		method = "POST"
+	)
 	@PostMapping(
 			path = "/send/{topicName}/{messageKey}", 
 			consumes = MediaType.APPLICATION_JSON_VALUE
 	)
 	@ResponseStatus(value = HttpStatus.OK, reason = "Message envoyé dans la file")
-	public void sendMessage(@ApiParam(name = "topicName", value = "Nom du topic d'envoi", required = true) 
+	public void sendMessage(@Parameter(name = "topicName", description = "Nom du topic d'envoi", required = true, allowEmptyValue = false) 
 							@PathVariable("topicName") 
 							@NotEmpty(message = "Le paramètre 'topicName' doit être renseigné")
 							String topicName, 
 							
-							@ApiParam(name = "messageKey", value = "Clé du message KAFKA" ,required = true) 
+							@Parameter(name = "messageKey", description = "Clé du message KAFKA", required = true, allowEmptyValue = false) 
 							@PathVariable("messageKey") 
 							@NotEmpty(message = "Le paramètre 'messageKey' doit être renseigné")
 							String messageKey,
 							
-							@ApiParam(name = "message", value = "Contenu du message au format JSON", required = true)
+							@Parameter(name = "message", description = "Contenu du message au format JSON", required = true, allowEmptyValue = false)
 							@RequestBody(required = true)
 							@StringFormatValidator(format = FormatType.JSON, message = "Le contenu du message doit être au format JSON")
 							String message) {
@@ -110,17 +115,21 @@ public class ProducerController {
 	 * @param topicName	Nom du topic d'envoie
 	 * @param message	Contenu du message
 	 */
+	@Operation(
+		description = "Opération de diffusion de messages dans un topic Kafka (clé de message générée)", 
+		method = "POST"
+	)
 	@PostMapping(
 			path = "/send/{topicName}", 
 			consumes = MediaType.APPLICATION_JSON_VALUE
 	)
 	@ResponseStatus(value = HttpStatus.OK, reason = "Message envoyé dans la file")
-	public void sendMessage(@ApiParam(name = "topicName", value = "Nom du topic d'envoi", required = true) 
+	public void sendMessage(@Parameter(name = "topicName", description = "Nom du topic d'envoi", required = true, allowEmptyValue = false) 
 							@PathVariable("topicName") 
 							@NotEmpty(message = "Le paramètre 'topicName' doit être renseigné")
 							String topicName, 
 							
-							@ApiParam(name = "message", value = "Contenu du message au format JSON", required = true)
+							@Parameter(name = "message", description = "Contenu du message au format JSON", required = true, allowEmptyValue = false)
 							@RequestBody(required = true)
 							@StringFormatValidator(format = FormatType.JSON) String message) {
 		

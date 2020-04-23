@@ -25,9 +25,8 @@ package net.leadware.kafka.embedded.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import io.swagger.annotations.ApiModelProperty.AccessMode;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.AccessMode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,7 +38,7 @@ import lombok.ToString;
  * @author <a href="mailto:jetune@leadware.net">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
  * @since 2 avr. 2019 - 22:32:33
  */
-@ApiModel(description = "Information sur un topic du simulateur KAFKA")
+@Schema(description = "Information sur un topic du simulateur KAFKA")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -50,7 +49,7 @@ public class Topic {
 	/**
 	 * Nom du topic
 	 */
-	@ApiModelProperty(accessMode = AccessMode.READ_WRITE, name = "topicName", required = true, value = "Nom du topic")
+	@Schema(accessMode = AccessMode.READ_WRITE, name = "topicName", required = true, description = "Nom du topic")
 	@JsonProperty(required = true, value = "topicName")
 	@JsonPropertyDescription("Nom du topic KAFKA")
 	private String name;
@@ -58,7 +57,7 @@ public class Topic {
 	/**
 	 * Etat interne ou classique du topic
 	 */
-	@ApiModelProperty(accessMode = AccessMode.READ_WRITE, name = "topicInternal", required = true, value = "État interne ou non du topic (Interne : groupe de consommateurs, partitions, etc...)")
+	@Schema(accessMode = AccessMode.READ_WRITE, name = "topicInternal", required = true, description = "État interne ou non du topic (Interne : groupe de consommateurs, partitions, etc...)")
 	@JsonProperty(required = true, value = "topicInternal", defaultValue = "false")
 	@JsonPropertyDescription("État interne ou non du topic (Interne : groupe de consommateurs, partitions, etc...)")
 	private boolean internal;

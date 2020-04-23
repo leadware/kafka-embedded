@@ -24,7 +24,7 @@ package net.leadware.kafka.sample.consumer.model;
 
 import org.apache.kafka.common.record.TimestampType;
 
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,7 +36,7 @@ import lombok.ToString;
  * @author <a href="mailto:jetune@leadware.net">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
  * @since 4 avr. 2019 - 08:29:15
  */
-@ApiModel(description = "Information sur un enregistrement consommé sur KAFKA (ONLY FOR DEMO)")
+@Schema(description = "Information sur un enregistrement consommé sur KAFKA (ONLY FOR DEMO)")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

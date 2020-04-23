@@ -25,9 +25,8 @@ package net.leadware.kafka.embedded.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import io.swagger.annotations.ApiModelProperty.AccessMode;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.AccessMode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -41,7 +40,7 @@ import net.leadware.bean.validation.ext.annotations.json.StringFormatValidator;
  * @author <a href="mailto:jetune@leadware.net">Jean-Jacques ETUNE NGI (Java EE Technical Lead / Enterprise Architect)</a>
  * @since 3 avr. 2019
  */
-@ApiModel(description = "Message d'envoie sur le simulateur KAFKA")
+@Schema(description = "Message d'envoie sur le simulateur KAFKA")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -52,7 +51,7 @@ public class JSonMessage {
 	/**
 	 * Topic d'envoi
 	 */
-	@ApiModelProperty(accessMode = AccessMode.READ_WRITE, name = "topicName", required = true, value = "Nom du topic")
+	@Schema(accessMode = AccessMode.READ_WRITE, name = "topicName", required = true, description = "Nom du topic")
 	@JsonProperty(required = true, value = "topicName")
 	@JsonPropertyDescription("Nom du topic KAFKA")
 	private String topicName;
@@ -60,7 +59,7 @@ public class JSonMessage {
 	/**
 	 * Cle du message
 	 */
-	@ApiModelProperty(accessMode = AccessMode.READ_WRITE, name = "messageKey", required = true, value = "Clé du message à envoyer")
+	@Schema(accessMode = AccessMode.READ_WRITE, name = "messageKey", required = true, description = "Clé du message à envoyer")
 	@JsonProperty(required = true, value = "messageKey")
 	@JsonPropertyDescription("Clé du message")
 	private String messageKey;
@@ -69,7 +68,7 @@ public class JSonMessage {
 	 * Corps du message
 	 */
 	@StringFormatValidator(format = FormatType.JSON)
-	@ApiModelProperty(accessMode = AccessMode.READ_WRITE, name = "messageBody", required = true, value = "Contenu du message à envoyer")
+	@Schema(accessMode = AccessMode.READ_WRITE, name = "messageBody", required = true, description = "Contenu du message à envoyer")
 	@JsonProperty(required = true, value = "messageBody")
 	@JsonPropertyDescription("Contenu du message")
 	private String messageBody;

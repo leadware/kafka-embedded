@@ -1,5 +1,7 @@
 package net.leadware.kafka.embedded.autoconfigure;
 
+import org.springdoc.core.GroupedOpenApi;
+
 /*-
  * #%L
  * Apache Kafka Embedded Server
@@ -31,24 +33,17 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Scope;
 import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.kafka.core.KafkaTemplate;
 
-import io.swagger.annotations.ApiModelProperty.AccessMode;
+import io.swagger.v3.oas.annotations.media.Schema.AccessMode;
 import kafka.server.KafkaServer;
 import kafka.zk.EmbeddedZookeeper;
 import lombok.extern.slf4j.Slf4j;
 import net.leadware.kafka.embedded.KafkaSimulator;
 import net.leadware.kafka.embedded.properties.SimulatorProperties;
 import net.leadware.kafka.embedded.utils.KafkaSimulatorFactory;
-import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  * Classe de condiguration automatique du simulateur KAFKA
@@ -59,7 +54,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @ConditionalOnClass({
 	KafkaSimulator.class,
 	KafkaSimulatorFactory.class,
-	BeanValidatorPluginsConfiguration.class,
 	AccessMode.class,
 	KafkaTemplate.class,
 	KafkaAdmin.class,
@@ -67,8 +61,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 	EmbeddedZookeeper.class
 })
 @EnableConfigurationProperties(SimulatorProperties.class)
-@EnableSwagger2
-@Import(BeanValidatorPluginsConfiguration.class)
 @ComponentScan(basePackageClasses = KafkaSimulator.class)
 @Slf4j
 public class KafkaEmbeddedAutoConfiguration {
@@ -135,17 +127,15 @@ public class KafkaEmbeddedAutoConfiguration {
 			matchIfMissing = false
 	)
 	@Bean
-	public Docket kafkaEmbeddedApi() {
+	public GroupedOpenApi kafkaEmbeddedApi() {
 		
 		// Log
 		log.debug("Création du Bean swagger d'exposition de la documentation de l'API Kafka Embedded");
 		
-		// Construction d
-		return new Docket(DocumentationType.SWAGGER_2)
-				.groupName("KafkaEmbeddedApi")
-				.select()
-				.apis(RequestHandlerSelectors.basePackage("net.leadware.kafka.embedded"))
-				.paths(PathSelectors.any())
+		// Construction du groupe d'api
+		return GroupedOpenApi.builder()
+				.setGroup("kafka-embedded-api")
+				.packagesToScan("net.leadware.kafka.embedded")
 				.build();
 	}
 }
