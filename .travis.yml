@@ -6,11 +6,8 @@ env:
     - CODECOV_TOKEN="88041e0f-52ec-4082-8ac6-87b5c6c66338"
 dist: xenial
 jdk:
-  - oraclejdk8
-addons:
-  apt:
-    packages:
-      - oracle-java8-installer
+  - openjdk8
+install: true
 before_install:
   - chmod a+x ./mvnw
 script: ./mvnw clean install cobertura:cobertura -DskipTests
