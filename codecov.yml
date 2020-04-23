@@ -1,11 +1,9 @@
 codecov:
   token: "88041e0f-52ec-4082-8ac6-87b5c6c66338"
-  require_ci_to_pass: true
+  require_ci_to_pass: false
   ci:
     - "travis.org"
   status:
-    patch:
-      default:
-        enabled: false
+    patch: off
 notify:
-  wait_for_ci: true
+  wait_for_ci: false
